@@ -1,11 +1,13 @@
-package org.ua.project.controller.validation;
+package org.ua.project.controller.util.validation;
+
+import org.ua.project.controller.constants.Parameter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public final class ValidationResult {
     private boolean isSuccessful = true;
-    private final List<String> invalidParameters = new ArrayList<>();
+    private final List<Parameter> invalidParameters = new ArrayList<>();
 
     protected ValidationResult(){};
 
@@ -17,11 +19,11 @@ public final class ValidationResult {
         isSuccessful = successful;
     }
 
-    public List<String> getInvalidParameters() {
+    public List<Parameter> getInvalidParameters() {
         return invalidParameters;
     }
 
-    public void addInvalidParameter(String parameter) {
+    public void addInvalidParameter(Parameter parameter) {
        invalidParameters.add(parameter);
     }
 }

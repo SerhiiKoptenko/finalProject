@@ -1,4 +1,4 @@
-package org.ua.project.controller.validation;
+package org.ua.project.controller.util.validation;
 
 import org.ua.project.controller.constants.Parameter;
 import org.ua.project.model.dto.RegistrationData;
@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public final class Validator {
-    private static final String VALIDATION_PROPERTIES = "validation.properties";
+ private static final String VALIDATION_PROPERTIES = "validation.properties";
     private final Properties properties = new Properties();
 
     private static volatile Validator instance;
@@ -32,22 +32,22 @@ public final class Validator {
     public ValidationResult validateRegData(RegistrationData data) {
         ValidationResult result = new ValidationResult();
 
-        if (!validate(data.getFirstName(), ValidatedParameter.FIRST_NAME)) {
+        if (!validate(data.getFirstName(), Parameter.FIRST_NAME)) {
             result.setSuccessful(false);
             result.addInvalidParameter(Parameter.FIRST_NAME);
         }
 
-        if (!validate(data.getLastName(), ValidatedParameter.LAST_NAME)) {
+        if (!validate(data.getLastName(), Parameter.LAST_NAME)) {
             result.setSuccessful(false);
             result.addInvalidParameter(Parameter.LAST_NAME);
         }
 
-        if (!validate(data.getLogin(), ValidatedParameter.LOGIN)) {
+        if (!validate(data.getLogin(), Parameter.LOGIN)) {
             result.setSuccessful(false);
             result.addInvalidParameter(Parameter.LOGIN);
         }
 
-        if (!validate(data.getPassword(), ValidatedParameter.PASSWORD)) {
+        if (!validate(data.getPassword(), Parameter.PASSWORD)) {
             result.setSuccessful(false);
             result.addInvalidParameter(Parameter.PASSWORD);
         }
@@ -55,40 +55,17 @@ public final class Validator {
         return result;
     }
 
-    private boolean validate(String value, ValidatedParameter parameter) {
-        int minLength = Integer.parseInt(properties.getProperty(parameter.getMinLengthProperty()));
-        int maxLength = Integer.parseInt(properties.getProperty(parameter.getMaxLengthProperty()));
-        String regex = properties.getProperty(parameter.getRegexProperty());
+    private boolean validate(String value, Parameter parameter) {
+        String minLengthProp = properties.getProperty(parameter.getValue() + ".minLength");
+        String maxLengthProp = properties.getProperty(parameter.getValue() + ".maxLength");
+        int minLength = Integer.parseInt(minLengthProp);
+        int maxLength = Integer.parseInt(maxLengthProp);
+        String regex = properties.getProperty(parameter.getValue() + ".regex");
 
         if (value.length() < minLength || value.length() > maxLength) {
             return false;
         }
 
         return value.matches(regex);
-    }
-
-    private enum ValidatedParameter {
-        LOGIN(Parameter.LOGIN),
-        PASSWORD(Parameter.PASSWORD),
-        FIRST_NAME(Parameter.PASSWORD),
-        LAST_NAME(Parameter.LAST_NAME);
-
-        String parameterName;
-
-        ValidatedParameter (String parameterName) {
-            this.parameterName = parameterName;
-        }
-
-        String getMinLengthProperty() {
-            return parameterName + ".minLength";
-        }
-
-        String getMaxLengthProperty() {
-            return parameterName + ".maxLength";
-        }
-
-        String getRegexProperty() {
-            return parameterName + ".regex";
-        }
     }
 }

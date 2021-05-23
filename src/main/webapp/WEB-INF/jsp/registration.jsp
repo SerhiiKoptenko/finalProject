@@ -54,9 +54,9 @@
             <c:if test="${\"success\" ne regResult}">
                 <!--Registration form-->
                 <div class="registrationForm container mx-auto p-5 rounded ">
+                    <h3 class="text-center">Registration</h3>
                     <form action="registration_page" method="post">
-                        <input type="hidden" name="command" value="register">
-                        <h3 class="text-center">Registration</h3>
+                        <input type="hidden" name="command" value="login">
                         <div class="mb-3">
                             <label for="firstName" class="form-label ">First name</label>
                             <input type="text" class="form-control" name="firstName" id="firstName" required
@@ -111,41 +111,16 @@
                     <div class="alert alert-danger d-flex align-items-center" role="alert">
                         <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
                         <div>
-                            <c:set var="invalidParameters" scope="page" value="${pageContext.request.getParameterValues(\"invalidParameter\")}"/>
-                            <c:set var="contains" value="false" />
-                                <c:forEach var="item" items="${invalidParameters}">
-                                    <c:if test="${item eq \"firstName\"}">
-                                        <c:set var="contains" value="true" />
-                                    </c:if>
-                                </c:forEach>
-                            <c:if test="${contains}">
+                            <c:if test="${pageContext.request.getParameter(\"invalid_firstName\") ne null}">
                                 Invalid first name.<br>
                             </c:if>
-                            <c:set var="contains" value="false" />
-                            <c:forEach var="item" items="${invalidParameters}">
-                                <c:if test="${item eq \"lastName\"}">
-                                    <c:set var="contains" value="true" />
-                                </c:if>
-                            </c:forEach>
-                            <c:if test="${contains}">
+                            <c:if test="${pageContext.request.getParameter(\"invalid_lastName\") ne null}">
                                 Invalid last name.<br>
                             </c:if>
-                            <c:set var="contains" value="false" />
-                            <c:forEach var="item" items="${invalidParameters}">
-                                <c:if test="${item eq \"login\"}">
-                                    <c:set var="contains" value="true" />
-                                </c:if>
-                            </c:forEach>
-                            <c:if test="${contains}">
+                            <c:if test="${pageContext.request.getParameter(\"invalid_login\") ne null}">
                                 Invalid login.<br>
                             </c:if>
-                            <c:set var="contains" value="false" />
-                            <c:forEach var="item" items="${invalidParameters}">
-                                <c:if test="${item eq \"password\"}">
-                                    <c:set var="contains" value="true" />
-                                </c:if>
-                            </c:forEach>
-                            <c:if test="${contains}">
+                            <c:if test="${pageContext.request.getParameter(\"invalid_password\") ne null}">
                                 Invalid password.<br>
                             </c:if>
                         </div>

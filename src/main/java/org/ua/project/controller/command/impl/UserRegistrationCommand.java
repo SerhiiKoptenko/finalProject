@@ -5,18 +5,20 @@ import org.apache.logging.log4j.Logger;
 import org.ua.project.controller.command.Command;
 import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.constants.Parameter;
-import org.ua.project.controller.validation.ValidationResult;
-import org.ua.project.controller.validation.Validator;
+import org.ua.project.service.exception.EncryptionException;
+import org.ua.project.service.util.encryption.EncryptionUtil;
+import org.ua.project.controller.util.validation.ValidationResult;
+import org.ua.project.controller.util.validation.Validator;
 import org.ua.project.model.dto.RegistrationData;
 import org.ua.project.model.exception.DBException;
 import org.ua.project.model.exception.EntityAlreadyExistsException;
 import org.ua.project.service.ServiceContainer;
 import org.ua.project.service.UserService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class UserRegistrationCommand implements Command {
@@ -29,19 +31,20 @@ public class UserRegistrationCommand implements Command {
     private static final String GO_TO_REG_PAGE = "/registration_page?";
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String redirectUrl = ControllerConstants.REDIRECT_PREFIX + GO_TO_REG_PAGE + REG_RESULT;
 
-        String firstName = req.getParameter(Parameter.FIRST_NAME);
-        String lastName = req.getParameter(Parameter.LAST_NAME);
-        String login = req.getParameter(Parameter.LOGIN);
-        String password = req.getParameter(Parameter.PASSWORD);
+        String firstName = req.getParameter(Parameter.FIRST_NAME.getValue());
+        String lastName = req.getParameter(Parameter.LAST_NAME.getValue());
+        String login = req.getParameter(Parameter.LOGIN.getValue());
+        String password = req.getParameter(Parameter.PASSWORD.getValue());
 
         RegistrationData data = new RegistrationData();
         data.setFirstName(firstName);
         data.setLastName(lastName);
         data.setLogin(login);
         data.setPassword(password);
+
 
         logger.trace("Attempting to register user with following data: " + data);
         Validator validator = Validator.getInstance();
@@ -50,10 +53,10 @@ public class UserRegistrationCommand implements Command {
             logger.trace("Validation failed.");
             redirectUrl += REG_FAILED_INVALID_DATA;
             redirectUrl = includePreviousValues(redirectUrl, data);
-            List<String> invalidParameters = validationResult.getInvalidParameters();
+            List<Parameter> invalidParameters = validationResult.getInvalidParameters();
             StringBuilder sb = new StringBuilder(redirectUrl);
-            for (String parameter : invalidParameters) {
-                sb.append("&invalidParameter=").append(parameter);
+            for (Parameter parameter : invalidParameters) {
+                sb.append("&invalid_").append(parameter.getValue());
             }
             return sb.toString();
         }
@@ -69,6 +72,8 @@ public class UserRegistrationCommand implements Command {
             redirectUrl = includePreviousValues(redirectUrl, data);
             logger.trace("Registration failed: user already exists.");
         } catch (DBException e) {
+            //TODO: handle
+        } catch (EncryptionException e) {
             //TODO: handle
         }
         return redirectUrl;

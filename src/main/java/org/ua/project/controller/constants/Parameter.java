@@ -1,8 +1,18 @@
 package org.ua.project.controller.constants;
 
-public abstract class Parameter {
-    public static final String FIRST_NAME = "firstName";
-    public static final String LAST_NAME = "lastName";
-    public static final String LOGIN = "login";
-    public static final String PASSWORD = "password";
+public enum Parameter {
+    FIRST_NAME("firstName"),
+    LAST_NAME("lastName"),
+    LOGIN("login"),
+    PASSWORD("password");
+
+    private String value;
+
+    Parameter(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }
