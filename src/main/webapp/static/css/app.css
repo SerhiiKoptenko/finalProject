@@ -1,3 +1,4 @@
-#reg_page #reg_button {
+#reg_page #reg_button,
+#sign_in_page #sign_in_button {
     display: none;
 }

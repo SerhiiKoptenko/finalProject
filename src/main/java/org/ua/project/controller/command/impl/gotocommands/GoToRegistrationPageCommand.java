@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class goToRegistrationPageCommand implements Command {
+public class GoToRegistrationPageCommand implements Command {
 
     private static final String REGISTRATION_PAGE = "/WEB-INF/jsp/registration.jsp";
 

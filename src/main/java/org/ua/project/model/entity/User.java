@@ -10,48 +10,127 @@ public class User implements Entity, Serializable {
     private int id;
     private String firstName;
     private String lastName;
-    private String login;
     private LocalDate birthDate;
-    private UserRole role;
+    private String login;
+    private String password;
+    private Role role;
 
-    public int getId() {
-        return id;
-    }
-
+    @Override
     public void setId(int id) {
         this.id = id;
     }
-
-    public String getFirstName() {
-        return firstName;
+    @Override
+    public int getId() {
+        return id;
     }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+    
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public String getLogin() {
         return login;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
     public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public User(){}
+    
+    public User(int id, String firstName, String lastName, LocalDate birthDate, String login, String password, Role role) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.birthDate = birthDate;
+        this.login = login;
+        this.password = password;
+        this.role = role;
+    }
+
+    public static class Builder {
+        private int id;
+        private String firstName;
+        private String lastName;
+        private LocalDate birthDate;
+        private String login;
+        private String password;
+        private Role role;
+
+        public Builder setId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setFirstName(String firstName) {
+            this.firstName = firstName;
+            return this;
+        }
+
+        public Builder setLastName(String lastName) {
+            this.lastName = lastName;
+            return this;
+        }
+
+        public Builder setBirthDate(LocalDate birthDate) {
+            this.birthDate = birthDate;
+            return this;
+        }
+
+        public Builder setLogin(String login) {
+            this.login = login;
+            return this;
+        }
+
+        public Builder setPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder setRole(Role role) {
+            this.role = role;
+            return this;
+        }
+
+        public User build() {
+            return new User(id,  firstName, lastName, birthDate, login, password, role);
+        }
     }
 
     @Override
@@ -59,7 +138,12 @@ public class User implements Entity, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(login, user.login) && Objects.equals(birthDate, user.birthDate) && role == user.role;
+        return id == user.id
+                && Objects.equals(firstName, user.firstName)
+                && Objects.equals(lastName, user.lastName)
+                && Objects.equals(login, user.login)
+                && Objects.equals(birthDate, user.birthDate)
+                && role == user.role;
     }
 
     @Override
@@ -77,5 +161,9 @@ public class User implements Entity, Serializable {
                 ", birthDate=" + birthDate +
                 ", role=" + role +
                 '}';
+    }
+
+    public enum Role {
+        USER, TUTOR, ADMIN, GUEST;
     }
 }

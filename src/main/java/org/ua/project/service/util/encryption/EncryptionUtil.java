@@ -5,10 +5,14 @@ import java.security.NoSuchAlgorithmException;
 
 public class EncryptionUtil {
 
-    public static String encrypt(String line) throws NoSuchAlgorithmException {
-        MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-        byte[] bytes = messageDigest.digest(line.getBytes());
-        return toHexString(bytes);
+    public static String encrypt(String line) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            byte[] bytes = messageDigest.digest(line.getBytes());
+            return toHexString(bytes);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static String toHexString(byte[] bytes) {

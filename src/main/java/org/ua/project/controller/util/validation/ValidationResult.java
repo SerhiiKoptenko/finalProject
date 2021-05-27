@@ -26,4 +26,12 @@ public final class ValidationResult {
     public void addInvalidParameter(Parameter parameter) {
        invalidParameters.add(parameter);
     }
+
+    public String  getInvalidParametersString() {
+        StringBuilder sb = new StringBuilder();
+        for (Parameter parameter : invalidParameters) {
+            sb.append("&invalid_").append(parameter.getValue());
+        }
+        return sb.toString();
+    }
 }

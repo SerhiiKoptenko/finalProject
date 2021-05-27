@@ -4,7 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ua.project.controller.command.Command;
 import org.ua.project.controller.command.impl.UserRegistrationCommand;
-import org.ua.project.controller.command.impl.gotocommands.goToRegistrationPageCommand;
+import org.ua.project.controller.command.impl.UserSignInCommand;
+import org.ua.project.controller.command.impl.UserSignOutCommand;
+import org.ua.project.controller.command.impl.gotocommands.*;
 import org.ua.project.controller.constants.ControllerConstants;
 
 import javax.servlet.ServletConfig;
@@ -15,22 +17,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
-import java.util.logging.Level;
 
 @WebServlet("/")
-public class Controller extends HttpServlet {
-    private Map<String, Command> commands = new HashMap<>();
-    private Logger logger = LogManager.getLogger(Controller.class);
-    private static final String COMMAND_PARAMETER = "command";
+public class ControllerServlet extends HttpServlet {
+    private static final Map<String, Command> commands = new HashMap<>();
+    private static final Logger logger = LogManager.getLogger(ControllerServlet.class);
 
     public void init(ServletConfig servletConfig){
-       /* servletConfig.getServletContext()
-                .setAttribute("loggedUsers", new HashSet<String>());*/
+       servletConfig.getServletContext()
+                .setAttribute(ControllerConstants.LOGGED_USERS_ATTR, new HashSet<String>());
 
         commands.put("/registration_page?command=register", new UserRegistrationCommand());
-        commands.put("/registration_page", new goToRegistrationPageCommand());
+        commands.put("/signIn_page?command=signIn", new UserSignInCommand());
+        commands.put("/signOut", new UserSignOutCommand());
+
+        commands.put("/registration_page", new GoToRegistrationPageCommand());
+        commands.put("/sign_in_page", new GoToSignInPageCommand());
+        commands.put("/admin/manage_courses", new GoToManageCoursesPageCommand());
+        commands.put("/main_page", new GoToMainPageCommand());
+        commands.put("/admin/admin_basis", new GoToAdminBasisCommand());
     }
 
     @Override
@@ -53,7 +60,6 @@ public class Controller extends HttpServlet {
         Command command = commands.get(path);
         if (command != null) {
             String page = command.execute(req, resp);
-            page = appendQueryString(req, page);
             if (page.startsWith(ControllerConstants.REDIRECT_PREFIX)) {
                 logger.trace("Redirecting to: " + page);
                 resp.sendRedirect(page.replaceFirst(ControllerConstants.REDIRECT_PREFIX, ""));
@@ -64,14 +70,5 @@ public class Controller extends HttpServlet {
         } else {
             logger.error("unknown command: " + path);
         }
-    }
-
-    public String appendQueryString(HttpServletRequest req, String path) {
-        String result = path;
-        String query = req.getQueryString();
-        if (query != null) {
-            result += "?" + query;
-        }
-        return result;
     }
 }

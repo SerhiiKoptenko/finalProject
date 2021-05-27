@@ -3,6 +3,6 @@
 <!DOCTYPE html>
 <html>
 <body>
-<c:redirect url="registration_page"/>
+<c:redirect url="main_page"/>
 </body>
 </html>

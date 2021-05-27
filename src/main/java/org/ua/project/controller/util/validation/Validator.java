@@ -2,6 +2,8 @@ package org.ua.project.controller.util.validation;
 
 import org.ua.project.controller.constants.Parameter;
 import org.ua.project.model.dto.RegistrationData;
+import org.ua.project.model.dto.SignInData;
+import org.ua.project.model.entity.User;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,43 +31,35 @@ public final class Validator {
         return instance;
     }
 
-    public ValidationResult validateRegData(RegistrationData data) {
+    public ValidationResult validateUser(User user) {
         ValidationResult result = new ValidationResult();
 
-        if (!validate(data.getFirstName(), Parameter.FIRST_NAME)) {
-            result.setSuccessful(false);
-            result.addInvalidParameter(Parameter.FIRST_NAME);
-        }
-
-        if (!validate(data.getLastName(), Parameter.LAST_NAME)) {
-            result.setSuccessful(false);
-            result.addInvalidParameter(Parameter.LAST_NAME);
-        }
-
-        if (!validate(data.getLogin(), Parameter.LOGIN)) {
-            result.setSuccessful(false);
-            result.addInvalidParameter(Parameter.LOGIN);
-        }
-
-        if (!validate(data.getPassword(), Parameter.PASSWORD)) {
-            result.setSuccessful(false);
-            result.addInvalidParameter(Parameter.PASSWORD);
-        }
-
+        validateParameter(user.getFirstName(), Parameter.FIRST_NAME, result);
+        validateParameter(user.getLastName(), Parameter.LAST_NAME, result);
+        validateParameter(user.getLogin(), Parameter.LOGIN, result);
+        validateParameter(user.getPassword(), Parameter.PASSWORD, result);
         return result;
     }
 
-    private boolean validate(String value, Parameter parameter) {
+    public ValidationResult validateSignInData(String login, String password) {
+        ValidationResult result = new ValidationResult();
+
+        validateParameter(login, Parameter.LOGIN, result);
+        validateParameter(password, Parameter.PASSWORD, result);
+        return result;
+    }
+
+    private void validateParameter(String value, Parameter parameter, ValidationResult result) {
         String minLengthProp = properties.getProperty(parameter.getValue() + ".minLength");
         String maxLengthProp = properties.getProperty(parameter.getValue() + ".maxLength");
         int minLength = Integer.parseInt(minLengthProp);
         int maxLength = Integer.parseInt(maxLengthProp);
         String regex = properties.getProperty(parameter.getValue() + ".regex");
 
-        if (value.length() < minLength || value.length() > maxLength) {
-            return false;
+        if (value.length() < minLength || value.length() > maxLength
+                || !value.matches(regex)) {
+            result.setSuccessful(false);
+            result.addInvalidParameter(parameter);
         }
-
-        return value.matches(regex);
     }
 }
