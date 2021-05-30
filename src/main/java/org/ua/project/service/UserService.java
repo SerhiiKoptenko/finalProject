@@ -8,7 +8,6 @@ import org.ua.project.model.entity.User;
 import org.ua.project.model.exception.DBException;
 import org.ua.project.model.exception.EntityAlreadyExistsException;
 import org.ua.project.model.exception.EntityNotFoundException;
-import org.ua.project.service.exception.NoSuchUserException;
 import org.ua.project.service.exception.ServiceException;
 import org.ua.project.service.exception.UserAlreadyExistsException;
 import org.ua.project.service.exception.WrongPasswordException;
@@ -39,14 +38,17 @@ public class UserService {
                throw new WrongPasswordException();
            }
            return user;
-       }
+       } catch (DBException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public List<User> getUsersByRole(User.Role role) {
         DaoFactory daoFactory = new JDBCDaoFactory();
-
         try (UserDao userDao = daoFactory.createUserDao()) {
             return userDao.getUsersByRole(role);
+        } catch (DBException e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -1,15 +1,16 @@
 package org.ua.project.controller.util.validation;
 
 import org.ua.project.controller.constants.Parameter;
-import org.ua.project.model.dto.RegistrationData;
-import org.ua.project.model.dto.SignInData;
+import org.ua.project.model.entity.Course;
 import org.ua.project.model.entity.User;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Properties;
 
-public final class Validator {
+public class Validator {
  private static final String VALIDATION_PROPERTIES = "validation.properties";
     private final Properties properties = new Properties();
 
@@ -23,9 +24,12 @@ public final class Validator {
     }
 
     public static Validator getInstance() throws IOException {
-        synchronized (Validator.class) {
-            if (instance == null) {
-                instance = new Validator();
+        if (instance == null) {
+            synchronized (Validator.class) {
+                if (instance == null) {
+                    Validator temp = new Validator();
+                    instance = temp;
+                }
             }
         }
         return instance;
@@ -41,6 +45,14 @@ public final class Validator {
         return result;
     }
 
+    public ValidationResult validateCourse(Course course) {
+        ValidationResult result = new ValidationResult();
+
+        validateParameter(course.getName(), Parameter.COURSE_NAME, result);
+        validateCourseDate(course, result);
+        return result;
+    }
+
     public ValidationResult validateSignInData(String login, String password) {
         ValidationResult result = new ValidationResult();
 
@@ -49,17 +61,29 @@ public final class Validator {
         return result;
     }
 
-    private void validateParameter(String value, Parameter parameter, ValidationResult result) {
+    public void validateParameter(String value, Parameter parameter, ValidationResult result) {
         String minLengthProp = properties.getProperty(parameter.getValue() + ".minLength");
         String maxLengthProp = properties.getProperty(parameter.getValue() + ".maxLength");
         int minLength = Integer.parseInt(minLengthProp);
         int maxLength = Integer.parseInt(maxLengthProp);
         String regex = properties.getProperty(parameter.getValue() + ".regex");
 
-        if (value.length() < minLength || value.length() > maxLength
+        if (value == null
+                || value.length() < minLength
+                || value.length() > maxLength
                 || !value.matches(regex)) {
             result.setSuccessful(false);
             result.addInvalidParameter(parameter);
+        }
+    }
+
+    private void validateCourseDate(Course course, ValidationResult validationResult) {
+        LocalDate startDate = course.getStartDate();
+        LocalDate endDate = course.getEndDate();
+
+        if (startDate.isAfter(endDate) || startDate.isEqual(endDate)) {
+            validationResult.addInvalidParameter(Parameter.COURSE_START_DATE_OR_END_DATE);
+            validationResult.setSuccessful(false);
         }
     }
 }

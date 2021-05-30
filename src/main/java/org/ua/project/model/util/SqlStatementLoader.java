@@ -10,9 +10,25 @@ import java.util.Properties;
 
 public final class SqlStatementLoader {
     private static final Logger logger = LogManager.getLogger(SqlStatementLoader.class);
-    private final Properties properties = new Properties();
 
-    public SqlStatementLoader(String propertiesPath) {
+    private static volatile SqlStatementLoader instance;
+
+    private final Properties properties = new Properties();
+    private static final String PROPERTIES_PATH = "sqlStatements.properties";
+
+    public static SqlStatementLoader getInstance() {
+        if (instance == null) {
+            synchronized (SqlStatementLoader.class) {
+                if (instance == null) {
+                    SqlStatementLoader temp = new SqlStatementLoader(PROPERTIES_PATH);
+                    instance = temp;
+                }
+            }
+        }
+        return instance;
+    }
+
+    private SqlStatementLoader(String propertiesPath) {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         try (InputStream inputStream = loader.getResourceAsStream(propertiesPath))  {
             properties.load(inputStream);

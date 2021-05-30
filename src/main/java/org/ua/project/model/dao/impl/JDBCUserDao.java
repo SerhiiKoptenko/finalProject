@@ -25,7 +25,7 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     private static final long serialVersionUID = 3008758863898750550L;
 
     static {
-        SqlStatementLoader sqlStatementLoader = new SqlStatementLoader("sqlStatements.properties");
+        SqlStatementLoader sqlStatementLoader = SqlStatementLoader.getInstance();
         INSERT_NEW_USER = sqlStatementLoader.getSqlStatement("insertNewUser");
         GET_AUTHORIZATION_DATA = sqlStatementLoader.getSqlStatement("getAuthorizationData");
         GET_USERS_BY_ROLE = sqlStatementLoader.getSqlStatement("getUsersByRole");
@@ -60,7 +60,7 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new EntityAlreadyExistsException();
         } catch (SQLException e) {
-            logger.warn(e);
+            logger.error(e);
             throw new DBException("Unexpected database error", e);
         }
     }

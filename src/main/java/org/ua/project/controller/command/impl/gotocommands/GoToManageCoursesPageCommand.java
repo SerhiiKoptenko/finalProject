@@ -1,19 +1,20 @@
 package org.ua.project.controller.command.impl.gotocommands;
 
 import org.ua.project.controller.command.Command;
+import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.model.entity.Course;
 import org.ua.project.model.entity.Theme;
 import org.ua.project.model.entity.User;
 import org.ua.project.service.CourseService;
+import org.ua.project.service.ThemeService;
 import org.ua.project.service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 public class GoToManageCoursesPageCommand implements Command {
 
@@ -21,15 +22,34 @@ public class GoToManageCoursesPageCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        CourseService courseService = new CourseService();
         UserService userService = new UserService();
-        List<Course> coursesList = courseService.getAllCourses();
-        Set<Theme> themesSet = new LinkedHashSet<>();
-        coursesList.forEach(course -> themesSet.add(course.getTheme()));
+        ThemeService themeService = new ThemeService();
+        CourseService courseService = new CourseService();
+
+        List<Theme> themeList = themeService.findAllThemes();
         List<User> tutorsList = userService.getUsersByRole(User.Role.TUTOR);
-        req.setAttribute("themes", themesSet);
+        req.setAttribute("themes", themeList);
         req.setAttribute("tutors", tutorsList);
-        req.setAttribute("courses", coursesList);
+
+        Optional<String> currentPageOpt = Optional.ofNullable(req.getParameter("page"));
+        int currentPage = Integer.parseInt(currentPageOpt.orElse("1"));
+
+        int courseCount = courseService.getCourseCount();
+        int pageCount = courseCount / ControllerConstants.ITEMS_PER_PAGE;
+
+        if (courseCount % pageCount != 0) {
+            pageCount++;
+        }
+
+        if (currentPage > pageCount || currentPage < 1) {
+            currentPage = 1;
+        }
+
+        List<Course> coursesPage = courseService.getCoursesPage(currentPage, ControllerConstants.ITEMS_PER_PAGE);
+
+        req.setAttribute("currentPage", currentPage);
+        req.setAttribute("pageCount", pageCount);
+        req.setAttribute("coursesPage", coursesPage);
         return MANAGE_COURSES_PAGE;
     }
 }

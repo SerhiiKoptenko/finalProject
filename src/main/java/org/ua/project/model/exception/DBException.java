@@ -1,6 +1,6 @@
 package org.ua.project.model.exception;
 
-public class DBException extends RuntimeException {
+public class DBException extends Exception {
 
     public DBException(){}
 

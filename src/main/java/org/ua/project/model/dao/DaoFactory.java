@@ -5,4 +5,6 @@ public interface DaoFactory {
     UserDao createUserDao();
 
     CourseDao createCourseDao();
+
+    ThemeDao createThemeDao();
 }

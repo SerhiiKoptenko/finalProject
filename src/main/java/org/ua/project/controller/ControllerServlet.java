@@ -3,9 +3,7 @@ package org.ua.project.controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ua.project.controller.command.Command;
-import org.ua.project.controller.command.impl.UserRegistrationCommand;
-import org.ua.project.controller.command.impl.UserSignInCommand;
-import org.ua.project.controller.command.impl.UserSignOutCommand;
+import org.ua.project.controller.command.impl.*;
 import org.ua.project.controller.command.impl.gotocommands.*;
 import org.ua.project.controller.constants.ControllerConstants;
 
@@ -15,34 +13,46 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 
 @WebServlet("/")
 public class ControllerServlet extends HttpServlet {
     private static final Map<String, Command> commands = new HashMap<>();
     private static final Logger logger = LogManager.getLogger(ControllerServlet.class);
 
-    public void init(ServletConfig servletConfig){
-       servletConfig.getServletContext()
+    public void init(ServletConfig servletConfig) {
+        servletConfig.getServletContext()
                 .setAttribute(ControllerConstants.LOGGED_USERS_ATTR, new HashSet<String>());
 
+        commands.put("/admin/admin_basis", new GoToAdminBasisCommand());
+        commands.put("/admin/manage_courses", new GoToManageCoursesPageCommand());
+        commands.put("/admin/manage_courses?command=addCourse", new AddCourseCommand());
+        commands.put("/admin/manage_courses?command=addTheme", new AddThemeCommand());
+        commands.put("/admin/manage_courses?command=removeTheme", new RemoveThemeCommand());
+        commands.put("/admin/edit_course", new GoToEditCourseCommand());
+        commands.put("/admin/edit_course?command=updateCourse", new UpdateCourseCommand());
+        commands.put("/admin/delete_course", new GoToDeleteCourseCommand());
+        commands.put("/admin/manage_courses?command=deleteCourse", new DeleteCourseCommand());
+
+        commands.put("/registration_page", new GoToRegistrationPageCommand());
+        commands.put("/sign_in_page", new GoToSignInPageCommand());
         commands.put("/registration_page?command=register", new UserRegistrationCommand());
         commands.put("/signIn_page?command=signIn", new UserSignInCommand());
         commands.put("/signOut", new UserSignOutCommand());
 
-        commands.put("/registration_page", new GoToRegistrationPageCommand());
-        commands.put("/sign_in_page", new GoToSignInPageCommand());
-        commands.put("/admin/manage_courses", new GoToManageCoursesPageCommand());
+
         commands.put("/main_page", new GoToMainPageCommand());
-        commands.put("/admin/admin_basis", new GoToAdminBasisCommand());
+
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-       processRequest(req, resp);
+        processRequest(req, resp);
     }
 
     @Override
@@ -52,11 +62,11 @@ public class ControllerServlet extends HttpServlet {
 
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = req.getRequestURI();
-        logger.trace("received path " + path);
         String commandName = req.getParameter("command");
         if (commandName != null) {
             path += "?command=" + commandName;
         }
+        logger.trace("received path " + path);
         Command command = commands.get(path);
         if (command != null) {
             String page = command.execute(req, resp);

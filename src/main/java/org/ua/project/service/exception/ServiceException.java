@@ -1,6 +1,6 @@
 package org.ua.project.service.exception;
 
-public class ServiceException extends Exception {
+public class ServiceException extends RuntimeException {
     public ServiceException() {
         super();
     }

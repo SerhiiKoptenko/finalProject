@@ -9,13 +9,13 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
-public class CourseMapper implements ObjectMapper {
+public class CourseMapper implements EntityMapper<Course> {
 
     @Override
     public Course extractFromResultSet(ResultSet resultSet) throws SQLException {
-        int id = resultSet.getInt("course_id");
+        int id = resultSet.getInt("id");
         String courseName = resultSet.getString("name");
         LocalDate startDate = resultSet.getDate("start_date").toLocalDate();
         LocalDate endDate = resultSet.getDate("end_date").toLocalDate();
@@ -23,15 +23,22 @@ public class CourseMapper implements ObjectMapper {
 
         Theme theme = new Theme.Builder()
                 .setName(resultSet.getString("theme_name"))
+                .setId(resultSet.getInt("theme_id"))
                 .build();
 
-        User tutor = new User.Builder()
-                .setLogin(resultSet.getString("login"))
-                .setFirstName(resultSet.getString("first_name"))
-                .setLastName(resultSet.getString("last_name"))
-                .build();
+        Optional<String> tutorLogin = Optional.ofNullable(resultSet.getString("login"));
 
-        return  new Course.Builder()
+        User tutor = null;
+        if (tutorLogin.isPresent()) {
+            tutor = new User.Builder()
+                    .setId(resultSet.getInt("user_id"))
+                    .setLogin(tutorLogin.get())
+                    .setFirstName(resultSet.getString("first_name"))
+                    .setLastName(resultSet.getString("last_name"))
+                    .build();
+        }
+
+        return new Course.Builder()
                 .setId(id)
                 .setName(courseName)
                 .setStartDate(startDate)
@@ -42,7 +49,7 @@ public class CourseMapper implements ObjectMapper {
                 .build();
     }
 
-    public List<Course> extractCoursesAsList(ResultSet resultSet) throws SQLException {
+    public List<Course> extractAsList(ResultSet resultSet) throws SQLException {
         List<Course> courses = new ArrayList<>();
         while (resultSet.next()) {
             courses.add(extractFromResultSet(resultSet));

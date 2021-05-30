@@ -17,7 +17,7 @@ public class ShowAllCoursesCommand implements Command {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         CourseService courseService = new CourseService();
-        List<Course> coursesList = courseService.getAllCourses();
+        List<Course> coursesList = courseService.findAllCourses();
         req.setAttribute("coursesList", coursesList);
         return MANAGE_COURSES_PAGE;
     }

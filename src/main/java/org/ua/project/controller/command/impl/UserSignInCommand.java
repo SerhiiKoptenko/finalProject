@@ -8,15 +8,10 @@ import org.ua.project.controller.constants.Parameter;
 import org.ua.project.controller.util.authorization.AuthorizationUtility;
 import org.ua.project.controller.util.validation.ValidationResult;
 import org.ua.project.controller.util.validation.Validator;
-import org.ua.project.model.dto.SignInData;
 import org.ua.project.model.entity.User;
-import org.ua.project.model.exception.DBException;
 import org.ua.project.model.exception.EntityNotFoundException;
 import org.ua.project.service.UserService;
-import org.ua.project.service.exception.NoSuchUserException;
-import org.ua.project.service.exception.ServiceException;
 import org.ua.project.service.exception.WrongPasswordException;
-import org.ua.project.service.util.encryption.EncryptionUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

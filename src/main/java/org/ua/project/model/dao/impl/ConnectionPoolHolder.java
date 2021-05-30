@@ -3,6 +3,7 @@ package org.ua.project.model.dao.impl;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import javax.xml.crypto.Data;
 
 public class ConnectionPoolHolder {
     private static volatile DataSource dataSource;
@@ -12,7 +13,8 @@ public class ConnectionPoolHolder {
             synchronized (ConnectionPoolHolder.class) {
                 try {
                     InitialContext initialContext = new InitialContext();
-                    dataSource = (DataSource) initialContext.lookup("java:comp/env/jdbc/TestDB");
+                    DataSource temp = (DataSource) initialContext.lookup("java:comp/env/jdbc/TestDB");
+                    dataSource = temp;
                 } catch (NamingException e) {
                     throw new RuntimeException(e);
                 }

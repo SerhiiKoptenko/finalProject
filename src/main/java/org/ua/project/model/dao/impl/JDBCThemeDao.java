@@ -1,24 +1,33 @@
 package org.ua.project.model.dao.impl;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ua.project.model.dao.ThemeDao;
+import org.ua.project.model.dao.impl.mapper.ThemeMapper;
 import org.ua.project.model.entity.Theme;
 import org.ua.project.model.exception.DBException;
+import org.ua.project.model.exception.EntityAlreadyExistsException;
+import org.ua.project.model.exception.EntityNotFoundException;
+import org.ua.project.model.exception.IllegalDeletionException;
 import org.ua.project.model.util.SqlStatementLoader;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 public class JDBCThemeDao implements ThemeDao {
+    private static final Logger logger = LogManager.getLogger(JDBCThemeDao.class);
+
     private Connection connection;
 
     private static final String FIND_ALL_THEMES;
+    private static final String CREATE_THEME;
+    private static final String DELETE_THEME;
 
     static {
-        SqlStatementLoader loader = new SqlStatementLoader("sqlStatements.properties");
+        SqlStatementLoader loader = SqlStatementLoader.getInstance();
         FIND_ALL_THEMES = loader.getSqlStatement("findAllThemes");
+        CREATE_THEME = loader.getSqlStatement("createTheme");
+        DELETE_THEME = loader.getSqlStatement("deleteTheme");
     }
 
     public JDBCThemeDao(Connection connection) {
@@ -26,8 +35,16 @@ public class JDBCThemeDao implements ThemeDao {
     }
 
     @Override
-    public void create(Theme entity) throws DBException {
-
+    public void create(Theme theme) throws DBException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(CREATE_THEME)) {
+            preparedStatement.setString(1, theme.getName());
+            preparedStatement.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new EntityAlreadyExistsException();
+        } catch (SQLException e) {
+            logger.error(e);
+            throw new DBException(e);
+        }
     }
 
     @Override
@@ -36,22 +53,38 @@ public class JDBCThemeDao implements ThemeDao {
     }
 
     @Override
-    public List<Theme> findAll() {
-       return null;
+    public List<Theme> findAll() throws DBException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_THEMES)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return new ThemeMapper().extractAsList(resultSet);
+        } catch (SQLException e) {
+            logger.error(e);
+            throw new DBException(e);
+        }
     }
 
     @Override
     public void update(Theme entity) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public void delete(int id) {
-
+    public void delete(int id) throws DBException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_THEME)) {
+            preparedStatement.setInt(1, id);
+            if (preparedStatement.executeUpdate() == 0) {
+                throw new EntityNotFoundException();
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new IllegalDeletionException();
+        } catch (SQLException e) {
+            logger.error(e);
+            throw new DBException(e);
+        }
     }
 
     @Override
-    public void close() {
+    public void close() throws DBException {
         try {
             connection.close();
         } catch (SQLException e) {

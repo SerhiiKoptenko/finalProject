@@ -9,13 +9,13 @@ public interface GenericDao<T> extends AutoCloseable {
 
     void create (T entity) throws DBException;
 
-    T findById(int id);
+    T findById(int id) throws DBException;
 
-    List<T> findAll();
+    List<T> findAll() throws DBException;
 
-    void update(T entity);
+    void update(T entity) throws DBException;
 
-    void delete(int id);
+    void delete(int id) throws DBException;
 
-    void close();
+    void close() throws DBException;
 }

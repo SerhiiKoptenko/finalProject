@@ -9,11 +9,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserMapper implements ObjectMapper {
+public class UserMapper implements EntityMapper<User> {
 
     @Override
     public User extractFromResultSet(ResultSet resultSet) throws SQLException {
-        int id = resultSet.getInt("user_id");
+        int id = resultSet.getInt("id");
         String firstName = resultSet.getString("first_name");
         String lastName = resultSet.getString("last_name");
         String login = resultSet.getString("login");

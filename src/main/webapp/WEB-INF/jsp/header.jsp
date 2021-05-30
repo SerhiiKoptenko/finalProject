@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <link rel="stylesheet" href="static/css/app.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/app.css">
 
 </head>
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light bg-gradient">
         <div class="container-fluid">
-            <a class="navbar-brand text-center" href="#">University</a>
+            <a class="navbar-brand text-center" href="#">MyUniversity</a>
             <div>
             <c:choose>
                 <c:when test="${sessionScope.get(\"userRole\") eq \"GUEST\"}">
