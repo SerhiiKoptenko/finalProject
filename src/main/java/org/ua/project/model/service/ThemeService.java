@@ -1,4 +1,4 @@
-package org.ua.project.service;
+package org.ua.project.model.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,7 +9,7 @@ import org.ua.project.model.exception.DBException;
 import org.ua.project.model.exception.EntityAlreadyExistsException;
 import org.ua.project.model.exception.EntityNotFoundException;
 import org.ua.project.model.exception.IllegalDeletionException;
-import org.ua.project.service.exception.ServiceException;
+import org.ua.project.model.service.exception.ServiceException;
 
 import java.util.List;
 

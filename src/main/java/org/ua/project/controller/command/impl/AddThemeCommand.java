@@ -5,7 +5,7 @@ import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.util.PaginationUtil;
 import org.ua.project.model.entity.Theme;
 import org.ua.project.model.exception.EntityAlreadyExistsException;
-import org.ua.project.service.ThemeService;
+import org.ua.project.model.service.ThemeService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

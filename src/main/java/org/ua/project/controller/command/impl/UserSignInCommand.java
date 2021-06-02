@@ -10,8 +10,8 @@ import org.ua.project.controller.util.validation.ValidationResult;
 import org.ua.project.controller.util.validation.Validator;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.exception.EntityNotFoundException;
-import org.ua.project.service.UserService;
-import org.ua.project.service.exception.WrongPasswordException;
+import org.ua.project.model.service.UserService;
+import org.ua.project.model.service.exception.WrongPasswordException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -69,7 +69,7 @@ public class UserSignInCommand implements Command {
             return url;
         }
 
-        AuthorizationUtility.assignRole(req, user.getLogin(), user.getRole());
+        AuthorizationUtility.saveUserToSession(req, user);
         logger.trace("User successfully signed in.");
         return url + GO_TO_MAIN_PAGE;
     }

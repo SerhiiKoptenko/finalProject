@@ -44,9 +44,10 @@ public class ControllerServlet extends HttpServlet {
         commands.put("/signOut", new UserSignOutCommand());
 
 
-        commands.put("/main_page", new GoToMainPageCommand());
-        commands.put("/main_page?command=enroll", new EnrollCommand());
 
+        commands.put("/main_page", new GoToMainPageCommand());
+        commands.put("/users/enroll?command=enroll", new EnrollCommand());
+        commands.put("/user/personal_cabinet", new GoToPersonalCabinetCommand());
     }
 
     @Override

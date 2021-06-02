@@ -2,14 +2,10 @@ package org.ua.project.model.dao.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.ua.project.model.dao.CourseDao;
-import org.ua.project.model.dao.DaoFactory;
-import org.ua.project.model.dao.ThemeDao;
-import org.ua.project.model.dao.UserDao;
+import org.ua.project.model.dao.*;
 import org.ua.project.model.exception.DBException;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 public class JDBCDaoFactory implements DaoFactory {
@@ -34,6 +30,16 @@ public class JDBCDaoFactory implements DaoFactory {
         } catch (SQLException e) {
             logger.error(e);
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public StudentCourseDao createStudentCourseDao() throws DBException {
+        try {
+            return new JDBCStudentCourseDao(dataSource.getConnection());
+        } catch (SQLException e) {
+            logger.error(e);
+            throw new DBException(e);
         }
     }
 

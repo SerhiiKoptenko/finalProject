@@ -6,7 +6,7 @@ import org.ua.project.controller.constants.Parameter;
 import org.ua.project.controller.util.PaginationUtil;
 import org.ua.project.model.exception.EntityNotFoundException;
 import org.ua.project.model.exception.IllegalDeletionException;
-import org.ua.project.service.ThemeService;
+import org.ua.project.model.service.ThemeService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

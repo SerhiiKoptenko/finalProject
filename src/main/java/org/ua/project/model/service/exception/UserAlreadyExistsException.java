@@ -1,4 +1,4 @@
-package org.ua.project.service.exception;
+package org.ua.project.model.service.exception;
 
 public class UserAlreadyExistsException extends Exception {
 }

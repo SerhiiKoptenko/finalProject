@@ -17,7 +17,7 @@ import java.sql.Date;
 import java.util.*;
 
 public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
-    private static Logger logger = LogManager.getLogger(JDBCCourseDao.class);
+    private static final Logger logger = LogManager.getLogger(JDBCCourseDao.class);
 
     private static final String FIND_ALL_COURSES;
     private static final String FIND_COURSE_BY_ID;
@@ -28,10 +28,8 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
     private static final String DELETE_COURSE_BY_ID;
     private static final String FIND_COURSE_NAME_BY_ID;
 
-    private static final String GET_PAGE_UNFILTERED;
+    private static final String GET_FILTERED_COURSE_PAGE;
     private static final String GET_PAGE_FILTER_BY_THEME;
-    private static final String GET_PAGE_FILTER_BY_TUTOR;
-    private static final String GET_PAGE_FILTER_BY_THEME_AND_TUTOR;
 
     private static final String SORT_BY_NAME_ASC;
     private static final String SORT_BY_NAME_DESC;
@@ -41,9 +39,10 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
     private static final String SORT_BY_DURATION_DESC;
 
     private static final String COUNT_ALL_COURSES;
-    private static final String COUNT_COURSES_BY_TUTOR;
-    private static final String COUNT_COURSES_BY_THEME;
-    private static final String COUNT_COURSES_BY_THEME_AND_TUTOR;
+    private static final String COUNT_COURSES_FILTERED;
+    public static final String FIND_ONGOING;
+    public static final String FIND_NOT_STARTED;
+    public static final String FIND_COMPLETED;
 
 
     static {
@@ -52,7 +51,6 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
         CREATE_COURSE = loader.getSqlStatement("createCourse");
         CREATE_COURSE_WITH_TUTOR = loader.getSqlStatement("createCourseWithTutor");
 
-        COUNT_ALL_COURSES = loader.getSqlStatement("countAllCourses");
         FIND_COURSE_BY_ID = loader.getSqlStatement("findCourseById");
         UPDATE_COURSE = loader.getSqlStatement("updateCourse");
         UPDATE_COURSE_WITH_TUTOR = loader.getSqlStatement("updateCourseWithTutor");
@@ -60,9 +58,6 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
         FIND_COURSE_NAME_BY_ID = loader.getSqlStatement("findCourseNameById");
 
         GET_PAGE_FILTER_BY_THEME = loader.getSqlStatement("getPageFilterByTheme");
-        GET_PAGE_FILTER_BY_TUTOR = loader.getSqlStatement("getPageFilterByTutor");
-        GET_PAGE_FILTER_BY_THEME_AND_TUTOR = loader.getSqlStatement("getPageFilterByThemeAndTutor");
-        GET_PAGE_UNFILTERED = loader.getSqlStatement("getPageUnfiltered");
 
         SORT_BY_NAME_ASC = loader.getSqlStatement("sortByNameAsc");
         SORT_BY_NAME_DESC = loader.getSqlStatement("sortByNameDesc");
@@ -71,9 +66,14 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
         SORT_BY_DURATION_ASC = loader.getSqlStatement("sortByDurationAsc");
         SORT_BY_DURATION_DESC = loader.getSqlStatement("sortByDurationDesc");
 
-        COUNT_COURSES_BY_THEME = loader.getSqlStatement("countCoursesByTheme");
-        COUNT_COURSES_BY_TUTOR = loader.getSqlStatement("countCoursesByTutor");
-        COUNT_COURSES_BY_THEME_AND_TUTOR = loader.getSqlStatement("countCoursesByThemeAndTutor");
+        COUNT_ALL_COURSES = loader.getSqlStatement("countAllCourses");
+        COUNT_COURSES_FILTERED = loader.getSqlStatement("countCoursesFiltered");
+
+        GET_FILTERED_COURSE_PAGE = loader.getSqlStatement("getAvailableCoursesPage");
+
+        FIND_ONGOING = loader.getSqlStatement("findOngoing");
+        FIND_NOT_STARTED = loader.getSqlStatement("findNotStarted");
+        FIND_COMPLETED = loader.getSqlStatement("findCompleted");
     }
 
     protected JDBCCourseDao(Connection connection) {
@@ -226,33 +226,93 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
     @Override
     public List<Course> getFilteredCoursePage(int offset, int numberOfItems,
                                               CourseSortParameter sortParameter, CourseFilterOption filterOption) throws DBException {
-       List<Course> page = new ArrayList<>();
-        String orderByStatement =  getOrderByStatement(sortParameter);
-       try (PreparedStatement preparedStatement = prepareFilteredPageStatement(offset, numberOfItems, filterOption, orderByStatement)) {
+        List<Course> page = new ArrayList<>();
+        String filterByStatus = getFilterByStatusStatement(filterOption);
+        String sql = String.format(GET_FILTERED_COURSE_PAGE, filterByStatus, getOrderByStatement(sortParameter));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            int themeId = 0;
+            int tutorId = 0;
+            int studId = 0;
+
+            Optional<Theme> themeOpt = Optional.ofNullable(filterOption.getTheme());
+            Optional<User> tutorOpt = Optional.ofNullable(filterOption.getTutor());
+            Optional<User> studOpt = Optional.ofNullable(filterOption.getStudent());
+
+            if (themeOpt.isPresent()) {
+                themeId = themeOpt.get().getId();
+            }
+            if (tutorOpt.isPresent()) {
+                tutorId = tutorOpt.get().getId();
+            }
+            if (studOpt.isPresent()) {
+                studId = studOpt.get().getId();
+            }
+
+            preparedStatement.setInt(1, themeId);
+            preparedStatement.setInt(2, themeId);
+            preparedStatement.setInt(3, tutorId);
+            preparedStatement.setInt(4, tutorId);
+            preparedStatement.setInt(5, studId);
+            preparedStatement.setInt(6, studId);
+
+            preparedStatement.setInt(7, offset);
+            preparedStatement.setInt(8, numberOfItems);
+
             ResultSet resultSet = preparedStatement.executeQuery();
+            CourseMapper courseMapper = new CourseMapper();
             UserMapper userMapper = new UserMapper();
             ThemeMapper themeMapper = new ThemeMapper();
-            CourseMapper courseMapper = new CourseMapper();
+
             Map<Integer, Theme> themeCache = new HashMap<>();
-            Map<Integer, User> userCache = new HashMap<>();
+            Map<Integer, User> tutorCache = new HashMap<>();
             while (resultSet.next()) {
                 Course course = courseMapper.extractFromResultSet(resultSet);
-                User tutor = userMapper.makeUnique(userCache, course.getTutor());
+                User tutor = userMapper.makeUnique(tutorCache, course.getTutor());
                 Theme theme = themeMapper.makeUnique(themeCache, course.getTheme());
                 course.setTheme(theme);
                 course.setTutor(tutor);
                 page.add(course);
             }
-           return page;
-       } catch (SQLException e) {
-           logger.error(e);
-           throw new DBException(e);
-       }
+            return page;
+        } catch (SQLException e) {
+            logger.error(e);
+            throw new DBException(e);
+        }
+    }
+
+
+    private String getFilterByStatusStatement(CourseFilterOption courseFilterOption) {
+        CourseFilterOption.CourseStatus courseStatus = courseFilterOption.getCourseStatus();
+        if (CourseFilterOption.CourseStatus.COMPLETED.equals(courseStatus)) {
+            return FIND_COMPLETED;
+        } else if (CourseFilterOption.CourseStatus.NOT_STARTED.equals(courseStatus)) {
+            return FIND_NOT_STARTED;
+        } else if (CourseFilterOption.CourseStatus.ONGOING.equals(courseStatus)) {
+            return FIND_ONGOING;
+        }
+        return "0 = 0";
     }
 
     @Override
-    public int getFilteredCoursesCount(CourseFilterOption courseFilterOption) throws DBException{
-        try (PreparedStatement preparedStatement = prepareFilteredCoursesCountStatement(courseFilterOption)) {
+    public int getFilteredCoursesCount(CourseFilterOption courseFilterOption) throws DBException {
+        String filterByStatusStatement = getFilterByStatusStatement(courseFilterOption);
+        String sql = String.format(COUNT_COURSES_FILTERED, filterByStatusStatement);
+        logger.debug("constructed query: {}", sql);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            Optional<Theme> themeOpt = Optional.ofNullable(courseFilterOption.getTheme());
+            Optional<User> tutorOpt = Optional.ofNullable(courseFilterOption.getTutor());
+            int themeId = 0;
+            int tutorId = 0;
+            if (themeOpt.isPresent()) {
+                themeId = themeOpt.get().getId();
+            }
+            if (tutorOpt.isPresent()) {
+                tutorId = tutorOpt.get().getId();
+            }
+            preparedStatement.setInt(1, themeId);
+            preparedStatement.setInt(2, themeId);
+            preparedStatement.setInt(3, tutorId);
+            preparedStatement.setInt(4, tutorId);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return resultSet.getInt(1);
@@ -260,88 +320,6 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
             logger.error(e);
             throw new DBException(e);
         }
-    }
-
-    private PreparedStatement prepareFilteredCoursesCountStatement(CourseFilterOption courseFilterOption) throws SQLException {
-        PreparedStatement preparedStatement = null;
-        try {
-            Optional<Theme> themeOpt = Optional.ofNullable(courseFilterOption.getTheme());
-            Optional<User> tutorOpt = Optional.ofNullable(courseFilterOption.getTutor());
-
-
-            if (themeOpt.isPresent() && tutorOpt.isPresent()) {
-                preparedStatement = connection.prepareStatement(COUNT_COURSES_BY_THEME_AND_TUTOR);
-                preparedStatement.setInt(1, themeOpt.get().getId());
-                preparedStatement.setInt(2, tutorOpt.get().getId());
-                return preparedStatement;
-            }
-            if (themeOpt.isPresent()) {
-                preparedStatement = connection.prepareStatement(COUNT_COURSES_BY_THEME);
-                preparedStatement.setInt(1, themeOpt.get().getId());
-                return preparedStatement;
-            }
-            if (tutorOpt.isPresent()) {
-                preparedStatement = connection.prepareStatement(COUNT_COURSES_BY_TUTOR);
-                preparedStatement.setInt(1, tutorOpt.get().getId());
-                return preparedStatement;
-            }
-            preparedStatement = connection.prepareStatement(COUNT_ALL_COURSES);
-        } catch (SQLException e) {
-            logger.error(e);
-            if (preparedStatement != null) {
-                preparedStatement.close();
-                throw e;
-            }
-        }
-        return preparedStatement;
-    }
-
-    private PreparedStatement prepareFilteredPageStatement(int offset, int numberOfItems, CourseFilterOption courseFilterOption, String orderByStatement) throws SQLException {
-        Optional<User> tutorOpt = Optional.ofNullable(courseFilterOption.getTutor());
-        Optional<Theme> themeOpt = Optional.ofNullable(courseFilterOption.getTheme());
-
-        String sql;
-        PreparedStatement preparedStatement = null;
-
-        try {
-            if (tutorOpt.isPresent() && themeOpt.isPresent()) {
-                sql = String.format(GET_PAGE_FILTER_BY_THEME_AND_TUTOR, orderByStatement);
-                preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setInt(1, themeOpt.get().getId());
-                preparedStatement.setInt(2, tutorOpt.get().getId());
-                preparedStatement.setInt(3, offset);
-                preparedStatement.setInt(4, numberOfItems);
-                return preparedStatement;
-            }
-            if (themeOpt.isPresent()) {
-                sql = String.format(GET_PAGE_FILTER_BY_THEME, orderByStatement);
-                preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setInt(1, themeOpt.get().getId());
-                preparedStatement.setInt(2, offset);
-                preparedStatement.setInt(3, numberOfItems);
-                return preparedStatement;
-            }
-            if (tutorOpt.isPresent()) {
-                sql = String.format(GET_PAGE_FILTER_BY_TUTOR, orderByStatement);
-                preparedStatement = connection.prepareStatement(sql);
-                preparedStatement.setInt(1, tutorOpt.get().getId());
-                preparedStatement.setInt(2, offset);
-                preparedStatement.setInt(3, numberOfItems);
-                return preparedStatement;
-            }
-
-            sql = String.format(GET_PAGE_UNFILTERED, orderByStatement);
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, offset);
-            preparedStatement.setInt(2, numberOfItems);
-        } catch (SQLException e) {
-            logger.error(e);
-            if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-            throw  e;
-        }
-        return preparedStatement;
     }
 
     private String getOrderByStatement(CourseSortParameter sortParameter) {

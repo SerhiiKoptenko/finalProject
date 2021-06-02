@@ -13,7 +13,6 @@
     <h2 class="text-center">Available courses</h2>
     <div class="row">
         <div class="p-1 ">
-
             <div>
                 <form action="main_page" method="GET">
                     <input type="hidden" name="page" value="1">
@@ -78,11 +77,9 @@
                     <th>Start date</th>
                     <th>End date</th>
                     <th>Description</th>
-                    <th>Tutor login</th>
                     <th>Tutor first name</th>
                     <th>Tutor last name</th>
                     <th>Students enrolled</th>
-                    <td>Status</td>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -100,31 +97,16 @@
                         <td>${course.startDate}</td>
                         <td>${course.endDate}</td>
                         <td>${course.description}</td>
-                        <td>${course.tutor.login}</td>
                         <td>${course.tutor.firstName}</td>
                         <td>${course.tutor.lastName}</td>
-                        <td>${fn:length(course.students)}</td>
+                        <td>${course.studentCount}</td>
                         <td>
-                            <c:if test="${!isStartDateAfterToday}">
-                                <c:if test="${isEndDateAfterToday}">
-                                    Ongoing
-                                </c:if>
-                                <c:if test="${!isEndDateAfterToday}">
-                                    <p class="text-secondary">Completed</p>
-                                </c:if>
-                            </c:if>
-                            <c:if test="${isStartDateAfterToday}">
-                                Not started
-                            </c:if>
-                        </td>
-                        <td>
-                            <form action="main_page" class="text-center" method="POST">
+                            <form action="users/enroll" class="text-center" method="POST">
                                 <input type="hidden" name="command" value="enroll">
-                                <input type="hidden" name="page" value="${currentPage}">
                                 <input type="hidden" name="courseId" value="${course.id}">
+                                <input type="hidden" name="courseName" value="${course.name}">
 
-                                <button type="submit" class="btn btn-outline-info"
-                                        <c:if test="${!isStartDateAfterToday}">disabled</c:if>>
+                                <button type="submit" class="btn btn-outline-info">
                                     Enroll
                                 </button>
                             </form>

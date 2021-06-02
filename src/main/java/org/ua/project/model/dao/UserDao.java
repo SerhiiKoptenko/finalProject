@@ -9,13 +9,9 @@ import java.util.List;
 
 public interface UserDao extends GenericDao<User> {
 
-
-
-    User getAuthenticationData(String login) throws DBException;
-
     List<User> getUsersByRole(User.Role role) throws DBException;
 
-    User enrollStudent(String login, Course course) throws DBException;
+    void enrollStudent(User user, Course course) throws DBException;
 
-    public User getUserByLogin(String login) throws DBException;
+    User getUserByLogin(String login) throws DBException;
 }

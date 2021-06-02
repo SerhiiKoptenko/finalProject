@@ -3,9 +3,9 @@ package org.ua.project.controller.command.impl.gotocommands;
 import org.ua.project.controller.command.Command;
 import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.model.entity.*;
-import org.ua.project.service.CourseService;
-import org.ua.project.service.ThemeService;
-import org.ua.project.service.UserService;
+import org.ua.project.model.service.CourseService;
+import org.ua.project.model.service.ThemeService;
+import org.ua.project.model.service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +32,7 @@ public class GoToManageCoursesPageCommand implements Command {
         Optional<String> currentPageOpt = Optional.ofNullable(req.getParameter("page"));
         int currentPage = Integer.parseInt(currentPageOpt.orElse("1"));
 
-        int courseCount = courseService.getAvailiableCoursesCount(new CourseFilterOption());
+        int courseCount = courseService.getAvailableCoursesCount(new CourseFilterOption());
         int pageCount = courseCount / ControllerConstants.ITEMS_PER_PAGE;
 
         if (courseCount % pageCount != 0) {

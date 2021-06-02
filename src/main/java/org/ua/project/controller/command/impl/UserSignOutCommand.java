@@ -20,9 +20,9 @@ public class UserSignOutCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String login = Optional.ofNullable((String) req.getSession().getAttribute(ControllerConstants.USER_LOGIN_ATTR))
+        User user = Optional.ofNullable((User) req.getSession().getAttribute(ControllerConstants.USER_ATTR))
                 .orElseThrow(IllegalStateException::new);
-        AuthorizationUtility.signOutUser(req, login);
+        AuthorizationUtility.signOutUser(req, user.getLogin());
         return ControllerConstants.REDIRECT_PREFIX + GO_TO_MAIN_PAGE;
     }
 }

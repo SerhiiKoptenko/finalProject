@@ -7,8 +7,6 @@ import org.ua.project.model.entity.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class CourseMapper implements EntityMapper<Course> {
@@ -20,7 +18,7 @@ public class CourseMapper implements EntityMapper<Course> {
         LocalDate startDate = resultSet.getDate("start_date").toLocalDate();
         LocalDate endDate = resultSet.getDate("end_date").toLocalDate();
         String description = resultSet.getString("description");
-        int studentsCount = resultSet.getInt("students_count");
+        int studentCount = resultSet.getInt("students_count");
         Theme theme = new Theme.Builder()
                 .setName(resultSet.getString("theme_name"))
                 .setId(resultSet.getInt("theme_id"))
@@ -38,12 +36,6 @@ public class CourseMapper implements EntityMapper<Course> {
                     .build();
         }
 
-        List<User> studentsList = new ArrayList<>();
-
-        for (int i = 0; i < studentsCount; i++) {
-            studentsList.add(new User());
-        }
-
         return new Course.Builder()
                 .setId(id)
                 .setName(courseName)
@@ -52,7 +44,7 @@ public class CourseMapper implements EntityMapper<Course> {
                 .setDescription(description)
                 .setTutor(tutor)
                 .setTheme(theme)
-                .setStudents(studentsList)
+                .setStudentCount(studentCount)
                 .build();
     }
 }

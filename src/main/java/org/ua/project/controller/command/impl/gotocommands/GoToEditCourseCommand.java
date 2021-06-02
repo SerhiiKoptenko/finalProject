@@ -9,9 +9,9 @@ import org.ua.project.model.entity.Course;
 import org.ua.project.model.entity.Theme;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.exception.EntityNotFoundException;
-import org.ua.project.service.CourseService;
-import org.ua.project.service.ThemeService;
-import org.ua.project.service.UserService;
+import org.ua.project.model.service.CourseService;
+import org.ua.project.model.service.ThemeService;
+import org.ua.project.model.service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

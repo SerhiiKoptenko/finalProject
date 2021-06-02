@@ -4,7 +4,7 @@ public class ControllerConstants {
     public static final String REDIRECT_PREFIX = "redirect:";
 
 
-    public static final String USER_LOGIN_ATTR = "userLogin";
+    public static final String USER_ATTR = "user";
     public static final String USER_ROLE_ATTR = "userRole";
     public static final String LOGGED_USERS_ATTR = "loggedUsers";
 
@@ -12,6 +12,8 @@ public class ControllerConstants {
     public static final String REDIRECT_TO_EDIT_COURSE_PAGE = REDIRECT_PREFIX + "/admin/edit_course";
     public static final String REDIRECT_TO_MAIN_PAGE = REDIRECT_PREFIX + "/main_page";
 
+    public static final String FORWARD_TO_PERSONAL_CABINET = "/WEB-INF/jsp/user/personal_cabinet.jsp";
+    public static final String FORWARD_TO_ENROLL_PAGE = "/WEB-INF/jsp/user/enroll.jsp";
     public static final String FORWARD_TO_MAIN_PAGE = "/WEB-INF/jsp/main.jsp";
     public static final String FORWARD_TO_EDIT_COURSE_PAGE = "/WEB-INF/jsp/admin/edit_course.jsp";
     public static final String FORWARD_TO_DELETE_COURSE_PAGE = "/WEB-INF/jsp/admin/delete_course.jsp";

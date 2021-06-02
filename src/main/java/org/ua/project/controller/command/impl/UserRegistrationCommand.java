@@ -8,10 +8,10 @@ import org.ua.project.controller.constants.Parameter;
 import org.ua.project.controller.util.validation.ValidationResult;
 import org.ua.project.controller.util.validation.Validator;
 import org.ua.project.model.entity.User;
-import org.ua.project.service.UserService;
-import org.ua.project.service.exception.ServiceException;
-import org.ua.project.service.exception.UserAlreadyExistsException;
-import org.ua.project.service.util.encryption.EncryptionUtil;
+import org.ua.project.model.service.UserService;
+import org.ua.project.model.service.exception.ServiceException;
+import org.ua.project.model.service.exception.UserAlreadyExistsException;
+import org.ua.project.model.service.util.encryption.EncryptionUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

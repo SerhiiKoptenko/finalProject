@@ -1,4 +1,4 @@
-package org.ua.project.service.util.encryption;
+package org.ua.project.model.service.util.encryption;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

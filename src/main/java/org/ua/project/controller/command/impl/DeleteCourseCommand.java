@@ -5,12 +5,10 @@ import org.apache.logging.log4j.Logger;
 import org.ua.project.controller.command.Command;
 import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.constants.Parameter;
-import org.ua.project.controller.util.ControllerUtil;
 import org.ua.project.controller.util.PaginationUtil;
-import org.ua.project.model.entity.Course;
 import org.ua.project.model.exception.EntityNotFoundException;
 import org.ua.project.model.exception.IllegalDeletionException;
-import org.ua.project.service.CourseService;
+import org.ua.project.model.service.CourseService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

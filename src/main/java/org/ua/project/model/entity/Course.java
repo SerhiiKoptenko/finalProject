@@ -17,6 +17,7 @@ public class Course implements Entity, Serializable {
     private User tutor;
     private String description;
     private List<User> students;
+    private int studentCount;
 
     @Override
     public int getId() {
@@ -26,6 +27,14 @@ public class Course implements Entity, Serializable {
     @Override
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getStudentCount() {
+        return studentCount;
+    }
+
+    public void setStudentCount(int studentCount) {
+        this.studentCount = studentCount;
     }
 
     public List<User> getStudents() {
@@ -87,7 +96,7 @@ public class Course implements Entity, Serializable {
     public Course() {
     }
 
-    private Course(int id, String name, Theme theme, LocalDate startDate, LocalDate endDate, User tutor, String description, List<User> students) {
+    private Course(int id, String name, Theme theme, LocalDate startDate, LocalDate endDate, User tutor, String description, List<User> students, int studentCount) {
         this.id = id;
         this.name = name;
         this.theme = theme;
@@ -129,6 +138,7 @@ public class Course implements Entity, Serializable {
         private User tutor;
         private String description;
         private List<User> students;
+        private int studentCount;
 
         public Builder setId(int id) {
             this.id = id;
@@ -169,8 +179,17 @@ public class Course implements Entity, Serializable {
             this.students = students;
             return this;
         }
+
+        public Builder setStudentCount(int studentCount) {
+            if (students != null) {
+                this.studentCount = students.size();
+            } else {
+                this.studentCount = studentCount;
+            }
+            return this;
+        }
         public Course build() {
-            return new Course(id, name, theme, startDate, endDate, tutor, description, students);
+            return new Course(id, name, theme, startDate, endDate, tutor, description, students, studentCount);
         }
     }
 

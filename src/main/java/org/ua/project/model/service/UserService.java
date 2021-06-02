@@ -1,20 +1,18 @@
-package org.ua.project.service;
+package org.ua.project.model.service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ua.project.model.dao.DaoFactory;
 import org.ua.project.model.dao.UserDao;
 import org.ua.project.model.dao.impl.JDBCDaoFactory;
-import org.ua.project.model.dao.impl.JDBCUserDao;
 import org.ua.project.model.entity.Course;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.exception.DBException;
 import org.ua.project.model.exception.EntityAlreadyExistsException;
 import org.ua.project.model.exception.EntityNotFoundException;
-import org.ua.project.service.exception.FailedToEnrollStudentException;
-import org.ua.project.service.exception.ServiceException;
-import org.ua.project.service.exception.UserAlreadyExistsException;
-import org.ua.project.service.exception.WrongPasswordException;
-import org.ua.project.service.util.encryption.EncryptionUtil;
+import org.ua.project.model.service.exception.ServiceException;
+import org.ua.project.model.service.exception.UserAlreadyExistsException;
+import org.ua.project.model.service.exception.WrongPasswordException;
+import org.ua.project.model.service.util.encryption.EncryptionUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,13 +31,13 @@ public class UserService {
         }
     }
 
-    public User enrollUser(String login, Course course) {
+    public void enrollStudent(User student, Course course) {
         try (UserDao userDao = new JDBCDaoFactory().createUserDao()) {
             if (course.getStartDate().compareTo(LocalDate.now()) < 0) {
                 logger.error("user attempted to enroll on completed course");
                 throw new ServiceException("");
             }
-            return userDao.enrollStudent(login, course);
+            userDao.enrollStudent(student, course);
         } catch (DBException e) {
             logger.error(e);
             throw new ServiceException(e);
@@ -50,13 +48,16 @@ public class UserService {
         String encryptedPassword = EncryptionUtil.encrypt(password);
         logger.trace("User attempts to sign in with  the following data: {} {} ",login, encryptedPassword);
         try (UserDao dao = new JDBCDaoFactory().createUserDao()) {
-           User user = dao.getAuthenticationData(login);
+           User user = dao.getUserByLogin(login);
            if (!user.getPassword().equals(encryptedPassword)) {
                throw new WrongPasswordException();
            }
            return user;
-       } catch (DBException e) {
-            throw new RuntimeException(e);
+       } catch (EntityNotFoundException e) {
+            throw e;
+        } catch (DBException e) {
+            logger.error(e);
+            throw new ServiceException();
         }
     }
 

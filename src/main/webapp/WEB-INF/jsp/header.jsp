@@ -15,7 +15,7 @@
             <a class="navbar-brand text-center" href="#">MyUniversity</a>
             <div>
             <c:choose>
-                <c:when test="${sessionScope.get(\"userRole\") eq \"GUEST\"}">
+                <c:when test="${userRole eq \"GUEST\"}">
                     <a id="reg_button" class="btn btn-outline-primary" href="registration_page">Register</a>
                         <a id="sign_in_button" class="btn btn-primary" href="sign_in_page" role="button">Sign in</a>
                 </c:when>
@@ -24,7 +24,7 @@
                     <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
                     <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
                 </svg>
-                <a href="#">${userLogin}</a>
+                <a href="#">${user.login}</a>
                 <a id="sign_out_button" class="btn btn-danger" href="signOut" role="button">Sign out</a>
             </c:otherwise>
             </c:choose>
@@ -47,10 +47,13 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Pricing</a>
                     </li>
-                    <c:if test="${sessionScope.get(\"userRole\") eq \"ADMIN\"}">
+                    <c:if test="${userRole eq \"ADMIN\"}">
                         <li class="nav-item">
                             <a class="nav-link" href="admin/admin_basis">Admin page</a>
                         </li>
+                    </c:if>
+                    <c:if test="${userRole eq \"USER\" || userRole eq \"TUTOR\"}">
+                        <a class="nav-link" href="user/personal_cabinet">Personal cabinet</a>
                     </c:if>
                 </ul>
             </div>

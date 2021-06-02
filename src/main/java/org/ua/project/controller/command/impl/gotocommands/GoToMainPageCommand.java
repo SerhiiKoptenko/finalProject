@@ -7,9 +7,9 @@ import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.constants.Parameter;
 import org.ua.project.controller.util.PaginationUtil;
 import org.ua.project.model.entity.*;
-import org.ua.project.service.CourseService;
-import org.ua.project.service.ThemeService;
-import org.ua.project.service.UserService;
+import org.ua.project.model.service.CourseService;
+import org.ua.project.model.service.ThemeService;
+import org.ua.project.model.service.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +38,7 @@ public class GoToMainPageCommand implements Command {
 
         Optional<String> tutorFilter = Optional.ofNullable(req.getParameter(Parameter.COURSE_TUTOR_ID.getValue()));
         Optional<String> themeFilter = Optional.ofNullable(req.getParameter(Parameter.COURSE_THEME_ID.getValue()));
+        Optional<User> userFilter = Optional.ofNullable((User) req.getSession().getAttribute(ControllerConstants.USER_ATTR));
 
         User tutor = null;
         Theme theme = null;
@@ -63,9 +64,10 @@ public class GoToMainPageCommand implements Command {
                 logger.error(e);
             }
         }
-        CourseFilterOption filterOption = new CourseFilterOption(tutor, theme);
 
-        int pageCount = PaginationUtil.getPagesCount(courseService.getAvailiableCoursesCount(filterOption));
+        CourseFilterOption filterOption = new CourseFilterOption(tutor, theme, userFilter.orElse(null), CourseFilterOption.CourseStatus.ONGOING);
+
+        int pageCount = PaginationUtil.getPagesCount(courseService.getAvailableCoursesCount(filterOption));
         int currentPage = PaginationUtil.getCurrentPage(req, pageCount);
         List<Course> coursesPage = courseService.getAvailableCoursePage(currentPage, ControllerConstants.ITEMS_PER_PAGE, sortParameter, filterOption);
         req.setAttribute("pageCount", pageCount);

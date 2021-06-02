@@ -2,6 +2,7 @@ package org.ua.project.model.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class User implements Entity, Serializable {
@@ -14,6 +15,7 @@ public class User implements Entity, Serializable {
     private String login;
     private String password;
     private Role role;
+    private List<Course> courses;
 
     @Override
     public void setId(int id) {
@@ -72,9 +74,17 @@ public class User implements Entity, Serializable {
         this.role = role;
     }
 
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
     public User(){}
-    
-    public User(int id, String firstName, String lastName, LocalDate birthDate, String login, String password, Role role) {
+
+    public User(int id, String firstName, String lastName, LocalDate birthDate, String login, String password, Role role, List<Course> courses) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -82,6 +92,7 @@ public class User implements Entity, Serializable {
         this.login = login;
         this.password = password;
         this.role = role;
+        this.courses = courses;
     }
 
     public static class Builder {
@@ -92,6 +103,7 @@ public class User implements Entity, Serializable {
         private String login;
         private String password;
         private Role role;
+        private List<Course> courses;
 
         public Builder setId(int id) {
             this.id = id;
@@ -128,8 +140,13 @@ public class User implements Entity, Serializable {
             return this;
         }
 
+        public Builder setCourses(List<Course> courses) {
+            this.courses = courses;
+            return this;
+        }
+
         public User build() {
-            return new User(id,  firstName, lastName, birthDate, login, password, role);
+            return new User(id,  firstName, lastName, birthDate, login, password, role, courses);
         }
     }
 
