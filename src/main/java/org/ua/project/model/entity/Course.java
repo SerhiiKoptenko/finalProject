@@ -1,7 +1,11 @@
 package org.ua.project.model.entity;
 
+import org.ua.project.controller.constants.Parameter;
+import org.ua.project.model.exception.IllegalDeletionException;
+
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class Course implements Entity, Serializable {
@@ -12,6 +16,7 @@ public class Course implements Entity, Serializable {
     private LocalDate endDate;
     private User tutor;
     private String description;
+    private List<User> students;
 
     @Override
     public int getId() {
@@ -21,6 +26,14 @@ public class Course implements Entity, Serializable {
     @Override
     public void setId(int id) {
         this.id = id;
+    }
+
+    public List<User> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<User> students) {
+        this.students = students;
     }
 
     public String getName() {
@@ -74,7 +87,7 @@ public class Course implements Entity, Serializable {
     public Course() {
     }
 
-    private Course(int id, String name, Theme theme, LocalDate startDate, LocalDate endDate, User tutor, String description) {
+    private Course(int id, String name, Theme theme, LocalDate startDate, LocalDate endDate, User tutor, String description, List<User> students) {
         this.id = id;
         this.name = name;
         this.theme = theme;
@@ -82,6 +95,7 @@ public class Course implements Entity, Serializable {
         this.endDate = endDate;
         this.tutor = tutor;
         this.description = description;
+        this.students = students;
     }
 
     @Override
@@ -114,6 +128,7 @@ public class Course implements Entity, Serializable {
         private LocalDate endDate;
         private User tutor;
         private String description;
+        private List<User> students;
 
         public Builder setId(int id) {
             this.id = id;
@@ -150,8 +165,13 @@ public class Course implements Entity, Serializable {
             return this;
         }
 
+        public Builder setStudents(List<User> students) {
+            this.students = students;
+            return this;
+        }
         public Course build() {
-            return new Course(id, name, theme, startDate, endDate, tutor, description);
+            return new Course(id, name, theme, startDate, endDate, tutor, description, students);
         }
     }
+
 }

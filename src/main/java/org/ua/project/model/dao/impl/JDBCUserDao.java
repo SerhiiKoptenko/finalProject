@@ -3,7 +3,8 @@ package org.ua.project.model.dao.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ua.project.model.dao.UserDao;
-import org.ua.project.model.dao.impl.mapper.UserMapper;
+import org.ua.project.model.dao.mapper.UserMapper;
+import org.ua.project.model.entity.Course;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.exception.DBException;
 import org.ua.project.model.exception.EntityAlreadyExistsException;
@@ -21,6 +22,9 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     private static final String INSERT_NEW_USER;
     private static final String GET_AUTHORIZATION_DATA;
     private static final String GET_USERS_BY_ROLE;
+    private static final String GET_USER_ID_BY_LOGIN;
+    private static final String ENROLL_USER;
+    private static final String CREATE_USER_JOURNAl;
 
     private static final long serialVersionUID = 3008758863898750550L;
 
@@ -29,6 +33,9 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
         INSERT_NEW_USER = sqlStatementLoader.getSqlStatement("insertNewUser");
         GET_AUTHORIZATION_DATA = sqlStatementLoader.getSqlStatement("getAuthorizationData");
         GET_USERS_BY_ROLE = sqlStatementLoader.getSqlStatement("getUsersByRole");
+        GET_USER_ID_BY_LOGIN = sqlStatementLoader.getSqlStatement("getUserIdByLogin");
+        ENROLL_USER = sqlStatementLoader.getSqlStatement("enrollUser");
+        CREATE_USER_JOURNAl = sqlStatementLoader.getSqlStatement("createUserJournal");
     }
 
     protected JDBCUserDao(Connection connection) {
@@ -66,24 +73,33 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     }
 
     @Override
-    public User findByLogin(String login) throws DBException {
-        return null;
+    public User getUserByLogin(String login) throws DBException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_ID_BY_LOGIN)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (!resultSet.next()) {
+                throw new EntityNotFoundException();
+            }
+            return new UserMapper().extractFromResultSet(resultSet);
+        } catch (SQLException e) {
+            logger.error(e);
+            throw new DBException(e);
+        }
     }
 
     @Override
     public User getAuthenticationData(String login) throws DBException, EntityNotFoundException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_AUTHORIZATION_DATA)) {
-           preparedStatement.setString(1, login);
+            preparedStatement.setString(1, login);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-           if (!resultSet.next()) {
-               throw new EntityNotFoundException();
-           }
+            if (!resultSet.next()) {
+                throw new EntityNotFoundException();
+            }
 
-           UserMapper mapper = new UserMapper();
-           User user = mapper.extractAuthorizationData(resultSet);
-           user.setLogin(login);
-           return user;
+            UserMapper mapper = new UserMapper();
+            User user = mapper.extractAuthorizationData(resultSet);
+            user.setLogin(login);
+            return user;
         } catch (SQLException e) {
             logger.error(e.getMessage());
             throw new DBException("Unexpected database error", e);
@@ -91,8 +107,39 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     }
 
     @Override
-    public User findById(int id) {
-        return null;
+    public User findById(int id) throws DBException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("")) {
+            preparedStatement.setInt(1, id);
+            return null;
+        } catch (SQLException e) {
+            logger.error(e);
+            throw new DBException(e);
+        }
+    }
+
+    @Override
+    public User enrollStudent(String login, Course course) throws DBException {
+        try (PreparedStatement enrollStudentStatement = connection.prepareStatement(ENROLL_USER);
+             PreparedStatement createJournalStatement = connection.prepareStatement(CREATE_USER_JOURNAl)) {
+            connection.setAutoCommit(false);
+            User user = getUserByLogin(login);
+            enrollStudentStatement.setInt(1, user.getId());
+            enrollStudentStatement.setInt(2, course.getId());
+            createJournalStatement.setInt(1, user.getId());
+            createJournalStatement.setInt(2, course.getId());
+            enrollStudentStatement.executeUpdate();
+            createJournalStatement.executeUpdate();
+            return user;
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+                connection.setAutoCommit(true);
+                throw new DBException(e);
+            } catch (SQLException ex) {
+                logger.error(ex);
+                throw new DBException(ex);
+            }
+        }
     }
 
     @Override

@@ -1,9 +1,14 @@
 package org.ua.project.model.entity;
 
+import com.sun.istack.internal.NotNull;
+
 import java.util.Objects;
 
 public class Theme implements Entity{
+    @NotNull
     private int id;
+
+    @NotNull
     private String name;
 
     public Theme(){}

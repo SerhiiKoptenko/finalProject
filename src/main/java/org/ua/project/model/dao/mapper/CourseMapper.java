@@ -1,4 +1,4 @@
-package org.ua.project.model.dao.impl.mapper;
+package org.ua.project.model.dao.mapper;
 
 import org.ua.project.model.entity.Course;
 import org.ua.project.model.entity.Theme;
@@ -20,7 +20,7 @@ public class CourseMapper implements EntityMapper<Course> {
         LocalDate startDate = resultSet.getDate("start_date").toLocalDate();
         LocalDate endDate = resultSet.getDate("end_date").toLocalDate();
         String description = resultSet.getString("description");
-
+        int studentsCount = resultSet.getInt("students_count");
         Theme theme = new Theme.Builder()
                 .setName(resultSet.getString("theme_name"))
                 .setId(resultSet.getInt("theme_id"))
@@ -38,6 +38,12 @@ public class CourseMapper implements EntityMapper<Course> {
                     .build();
         }
 
+        List<User> studentsList = new ArrayList<>();
+
+        for (int i = 0; i < studentsCount; i++) {
+            studentsList.add(new User());
+        }
+
         return new Course.Builder()
                 .setId(id)
                 .setName(courseName)
@@ -46,14 +52,7 @@ public class CourseMapper implements EntityMapper<Course> {
                 .setDescription(description)
                 .setTutor(tutor)
                 .setTheme(theme)
+                .setStudents(studentsList)
                 .build();
-    }
-
-    public List<Course> extractAsList(ResultSet resultSet) throws SQLException {
-        List<Course> courses = new ArrayList<>();
-        while (resultSet.next()) {
-            courses.add(extractFromResultSet(resultSet));
-        }
-        return courses;
     }
 }

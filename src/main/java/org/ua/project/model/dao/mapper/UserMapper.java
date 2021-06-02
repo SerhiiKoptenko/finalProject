@@ -1,4 +1,4 @@
-package org.ua.project.model.dao.impl.mapper;
+package org.ua.project.model.dao.mapper;
 
 import org.ua.project.model.entity.User;
 

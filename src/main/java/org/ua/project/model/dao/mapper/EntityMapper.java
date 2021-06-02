@@ -1,17 +1,24 @@
-package org.ua.project.model.dao.impl.mapper;
+package org.ua.project.model.dao.mapper;
 
 import org.ua.project.model.entity.Entity;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Map;
 
 public interface EntityMapper<T extends Entity> {
 
-    T extractFromResultSet(ResultSet resultSet) throws SQLException;
+    default T makeUnique(Map<Integer, T> cache,
+                             T entity) {
+        if (entity != null) {
+            cache.putIfAbsent(entity.getId(), entity);
+            return cache.get(entity.getId());
+        }
+        return null;
+    }
 
-    List<T> extractAsList(ResultSet resultSet) throws SQLException;
+    T extractFromResultSet(ResultSet resultSet) throws SQLException;
 
     default T setGeneratedId(PreparedStatement preparedStatement, T entity) throws SQLException{
         ResultSet keys = preparedStatement.getGeneratedKeys();

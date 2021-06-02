@@ -4,15 +4,19 @@ import org.apache.logging.log4j.Logger;
 import org.ua.project.model.dao.DaoFactory;
 import org.ua.project.model.dao.UserDao;
 import org.ua.project.model.dao.impl.JDBCDaoFactory;
+import org.ua.project.model.dao.impl.JDBCUserDao;
+import org.ua.project.model.entity.Course;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.exception.DBException;
 import org.ua.project.model.exception.EntityAlreadyExistsException;
 import org.ua.project.model.exception.EntityNotFoundException;
+import org.ua.project.service.exception.FailedToEnrollStudentException;
 import org.ua.project.service.exception.ServiceException;
 import org.ua.project.service.exception.UserAlreadyExistsException;
 import org.ua.project.service.exception.WrongPasswordException;
 import org.ua.project.service.util.encryption.EncryptionUtil;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class UserService {
@@ -23,6 +27,19 @@ public class UserService {
             dao.create(user);
         } catch (EntityAlreadyExistsException e) {
             throw new UserAlreadyExistsException();
+        } catch (DBException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+    }
+
+    public User enrollUser(String login, Course course) {
+        try (UserDao userDao = new JDBCDaoFactory().createUserDao()) {
+            if (course.getStartDate().compareTo(LocalDate.now()) < 0) {
+                logger.error("user attempted to enroll on completed course");
+                throw new ServiceException("");
+            }
+            return userDao.enrollStudent(login, course);
         } catch (DBException e) {
             logger.error(e);
             throw new ServiceException(e);
@@ -49,6 +66,14 @@ public class UserService {
             return userDao.getUsersByRole(role);
         } catch (DBException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public User findUserById(int id) {
+        try (UserDao userDao = new JDBCDaoFactory().createUserDao()) {
+            return userDao.findById(id);
+        } catch (DBException e) {
+            throw new ServiceException(e);
         }
     }
 }

@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ua.project.model.dao.ThemeDao;
 import org.ua.project.model.dao.impl.JDBCDaoFactory;
-import org.ua.project.model.dao.impl.JDBCThemeDao;
 import org.ua.project.model.entity.Theme;
 import org.ua.project.model.exception.DBException;
 import org.ua.project.model.exception.EntityAlreadyExistsException;
@@ -39,12 +38,21 @@ public class ThemeService {
         }
     }
 
+    public Theme findThemeById(int id) throws ServiceException, EntityNotFoundException {
+        try (ThemeDao themeDao = new JDBCDaoFactory().createThemeDao()) {
+            return themeDao.findById(id);
+        } catch (EntityNotFoundException e) {
+            throw e;
+        } catch (DBException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+    }
+
     public void deleteTheme(int id) throws EntityNotFoundException, IllegalDeletionException {
         try (ThemeDao themeDao = new JDBCDaoFactory().createThemeDao()) {
             themeDao.delete(id);
-        } catch (EntityNotFoundException e) {
-            throw e;
-        } catch (IllegalDeletionException e) {
+        } catch (EntityNotFoundException | IllegalDeletionException e) {
             throw e;
         } catch (DBException e) {
             logger.error(e);

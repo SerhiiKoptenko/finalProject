@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 import java.util.Properties;
 
 
@@ -38,6 +39,7 @@ public final class SqlStatementLoader {
     }
 
     public String getSqlStatement(String propertyValue) {
-        return properties.getProperty(propertyValue);
+        Optional<String> sqlOpt = Optional.ofNullable(properties.getProperty(propertyValue));
+        return sqlOpt.orElseThrow(IllegalStateException::new);
     }
 }

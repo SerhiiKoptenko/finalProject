@@ -3,10 +3,8 @@ package org.ua.project.service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ua.project.model.dao.CourseDao;
-import org.ua.project.model.dao.impl.JDBCCourseDao;
 import org.ua.project.model.dao.impl.JDBCDaoFactory;
-import org.ua.project.model.entity.Course;
-import org.ua.project.model.entity.User;
+import org.ua.project.model.entity.*;
 import org.ua.project.model.exception.DBException;
 import org.ua.project.model.exception.EntityNotFoundException;
 import org.ua.project.model.exception.IllegalDeletionException;
@@ -44,21 +42,21 @@ public class CourseService {
         }
     }
 
-    public int getCourseCount() {
+    public int getAvailiableCoursesCount(CourseFilterOption courseFilterOption) {
         try (CourseDao courseDao = new JDBCDaoFactory().createCourseDao()) {
-            return courseDao.countCourses();
+            return courseDao.getFilteredCoursesCount(courseFilterOption);
         } catch (DBException e) {
             logger.error(e);
             throw new ServiceException(e);
         }
     }
 
-    public List<Course> getCoursesPage(int currentPage, int itemsPerPage) {
+    public List<Course> getAvailableCoursePage(int currentPage, int itemsPerPage,
+                                               CourseSortParameter sortParameter, CourseFilterOption filterOption) {
         int offset = itemsPerPage * (currentPage - 1);
         try (CourseDao courseDao = new JDBCDaoFactory().createCourseDao()) {
-            return courseDao.getPageSortedByThemeName(offset, itemsPerPage);
+            return courseDao.getFilteredCoursePage(offset, itemsPerPage, sortParameter, filterOption);
         } catch (DBException e) {
-            logger.error(e);
             throw new ServiceException(e);
         }
     }
