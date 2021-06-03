@@ -42,9 +42,12 @@ public class CourseService {
         }
     }
 
-    public int getAvailableCoursesCount(CourseFilterOption courseFilterOption) {
+    public int getAvailableCoursesCount(CourseFilterOption filterOption) {
         try (CourseDao courseDao = new JDBCDaoFactory().createCourseDao()) {
-            return courseDao.getFilteredCoursesCount(courseFilterOption);
+            logger.debug("getting courses count with following filter option: {}", filterOption);
+            int courseCount =  courseDao.getFilteredCoursesCount(filterOption);
+            logger.debug("courses count: {}", courseCount);
+            return courseCount;
         } catch (DBException e) {
             logger.error(e);
             throw new ServiceException(e);
@@ -54,8 +57,11 @@ public class CourseService {
     public List<Course> getAvailableCoursePage(int currentPage, int itemsPerPage,
                                                CourseSortParameter sortParameter, CourseFilterOption filterOption) {
         int offset = itemsPerPage * (currentPage - 1);
+        logger.debug("getting courses page with following filter option{}", filterOption);
         try (CourseDao courseDao = new JDBCDaoFactory().createCourseDao()) {
-            return courseDao.getFilteredCoursePage(offset, itemsPerPage, sortParameter, filterOption);
+            List<Course> courses = courseDao.getFilteredCoursePage(offset, itemsPerPage, sortParameter, filterOption);
+            logger.debug("received courses page: {}", courses);
+            return courses;
         } catch (DBException e) {
             throw new ServiceException(e);
         }

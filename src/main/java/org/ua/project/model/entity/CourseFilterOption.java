@@ -85,4 +85,14 @@ public class CourseFilterOption {
         COMPLETED,
         NOT_STARTED,
     }
+
+    @Override
+    public String toString() {
+        return "CourseFilterOption{" +
+                "tutor=" + tutor +
+                ", theme=" + theme +
+                ", student=" + student +
+                ", courseStatus=" + courseStatus +
+                '}';
+    }
 }

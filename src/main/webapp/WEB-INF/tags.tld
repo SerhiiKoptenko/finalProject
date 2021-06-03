@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<taglib>
+    <tlib-version>l.0</tlib-version>
+    <jsp-version>2.3</jsp-version>
+    <short-name>tags</short-name>
+    <tag>
+        <name>isDateAfterToday</name>
+        <tag-class>org.ua.project.view.tag.IsDateAfterToday</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+            <name>date</name>
+            <required>true</required>
+            <type>java.time.LocalDate</type>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+</taglib>

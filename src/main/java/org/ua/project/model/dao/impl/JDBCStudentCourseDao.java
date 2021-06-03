@@ -21,14 +21,14 @@ import java.util.List;
 public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCourseDao {
     private static final Logger logger = LogManager.getLogger(JDBCStudentCourseDao.class);
 
-    private static final String FIND_COURSES_MARKS_BY_STUDENT;
+    private static final String FIND_COURSES_BY_STUDENT;
 
     private static final String FIND_ONGOING;
     public static final String FIND_COMPLETED;
     public static final String FIND_NOT_STARTED;
     static {
         SqlStatementLoader loader = SqlStatementLoader.getInstance();
-        FIND_COURSES_MARKS_BY_STUDENT = loader.getSqlStatement("findCoursesMarksByStudent");
+        FIND_COURSES_BY_STUDENT = loader.getSqlStatement("findCoursesByStudent");
         FIND_ONGOING = loader.getSqlStatement("findOngoing");
         FIND_COMPLETED = loader.getSqlStatement("findCompleted");
         FIND_NOT_STARTED = loader.getSqlStatement("findNotStarted");
@@ -74,7 +74,7 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
             filterByCourseStatus = FIND_ONGOING;
         }
 
-        String sql = String.format(FIND_COURSES_MARKS_BY_STUDENT, filterByCourseStatus);
+        String sql = String.format(FIND_COURSES_BY_STUDENT, filterByCourseStatus);
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, student.getId());
             ResultSet resultSet = preparedStatement.executeQuery();

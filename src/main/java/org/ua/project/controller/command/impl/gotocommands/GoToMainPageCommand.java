@@ -65,7 +65,7 @@ public class GoToMainPageCommand implements Command {
             }
         }
 
-        CourseFilterOption filterOption = new CourseFilterOption(tutor, theme, userFilter.orElse(null), CourseFilterOption.CourseStatus.ONGOING);
+        CourseFilterOption filterOption = new CourseFilterOption(tutor, theme, userFilter.orElse(null), CourseFilterOption.CourseStatus.NOT_STARTED);
 
         int pageCount = PaginationUtil.getPagesCount(courseService.getAvailableCoursesCount(filterOption));
         int currentPage = PaginationUtil.getCurrentPage(req, pageCount);

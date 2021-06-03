@@ -1,7 +1,5 @@
 package org.ua.project.model.entity;
 
-import org.ua.project.controller.constants.Parameter;
-import org.ua.project.model.exception.IllegalDeletionException;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -105,6 +103,7 @@ public class Course implements Entity, Serializable {
         this.tutor = tutor;
         this.description = description;
         this.students = students;
+        this.studentCount = studentCount;
     }
 
     @Override

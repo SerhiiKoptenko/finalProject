@@ -1,8 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="cust" uri="/WEB-INF/tags.tld" %>
 <!DOCTYPE html>
 <html lang="en">
 <%@ include file="header.jsp" %>
@@ -85,10 +82,10 @@
                 </thead>
                 <tbody>
                 <c:set var="currentPage" value="${pageContext.request.getParameter(\"page\")}"/>
-                <c:set var="count" value="${5 * (currentPage - 1)}"></c:set>
+                <c:set var="count" value="${5 * (currentPage - 1)}"/>
                 <c:forEach items="${coursesPage}" var="course">
                     <tr>
-                        <c:set var="count" value="${count + 1}"></c:set>
+                        <c:set var="count" value="${count + 1}"/>
                         <c:set var="isStartDateAfterToday"><cust:isDateAfterToday date="${course.startDate}"/></c:set>
                         <c:set var="isEndDateAfterToday"><cust:isDateAfterToday date="${course.endDate}"/></c:set>
                         <td>${count}</td>
@@ -147,6 +144,7 @@
                 </ul>
             </nav>
         </div>
+    </div>
 </main>
 <script src="${pageContext.request.contextPath}/static/js/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"

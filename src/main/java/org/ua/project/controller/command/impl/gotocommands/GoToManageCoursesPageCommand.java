@@ -2,6 +2,7 @@ package org.ua.project.controller.command.impl.gotocommands;
 
 import org.ua.project.controller.command.Command;
 import org.ua.project.controller.constants.ControllerConstants;
+import org.ua.project.controller.util.PaginationUtil;
 import org.ua.project.model.entity.*;
 import org.ua.project.model.service.CourseService;
 import org.ua.project.model.service.ThemeService;
@@ -29,19 +30,8 @@ public class GoToManageCoursesPageCommand implements Command {
         req.setAttribute("themes", themeList);
         req.setAttribute("tutors", tutorsList);
 
-        Optional<String> currentPageOpt = Optional.ofNullable(req.getParameter("page"));
-        int currentPage = Integer.parseInt(currentPageOpt.orElse("1"));
-
-        int courseCount = courseService.getAvailableCoursesCount(new CourseFilterOption());
-        int pageCount = courseCount / ControllerConstants.ITEMS_PER_PAGE;
-
-        if (courseCount % pageCount != 0) {
-            pageCount++;
-        }
-
-        if (currentPage > pageCount || currentPage < 1) {
-            currentPage = 1;
-        }
+        int pageCount = PaginationUtil.getPagesCount(courseService.getAvailableCoursesCount(new CourseFilterOption()));
+        int currentPage = PaginationUtil.getCurrentPage(req, pageCount);
 
         List<Course> coursesPage = courseService.getAvailableCoursePage(currentPage, ControllerConstants.ITEMS_PER_PAGE, CourseSortParameter.BY_NAME_ASC, new CourseFilterOption());
 

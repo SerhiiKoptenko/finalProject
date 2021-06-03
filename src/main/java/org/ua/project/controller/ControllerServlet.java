@@ -48,6 +48,8 @@ public class ControllerServlet extends HttpServlet {
         commands.put("/main_page", new GoToMainPageCommand());
         commands.put("/users/enroll?command=enroll", new EnrollCommand());
         commands.put("/user/personal_cabinet", new GoToPersonalCabinetCommand());
+
+        commands.put("/user/personal_cabinet?command=displayStudentsCourses", new DisplayStudentsCoursesCommand());
     }
 
     @Override

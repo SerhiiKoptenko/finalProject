@@ -15,7 +15,7 @@ import java.util.List;
 public class StudentCourseService {
     private static final Logger logger = LogManager.getLogger(StudentCourseService.class);
 
-    public List<StudentCourse> getMarksByStudent(User student, CourseFilterOption courseFilterOption) {
+    public List<StudentCourse> getCoursesByStudent(User student, CourseFilterOption courseFilterOption) {
         try (StudentCourseDao studentCourseDao = new JDBCDaoFactory().createStudentCourseDao()) {
             return studentCourseDao.findCoursesByStudent(student, courseFilterOption);
         } catch (DBException e) {
