@@ -43,6 +43,17 @@ public class UserMapper implements EntityMapper<User> {
                 .build();
     }
 
+    public User extractStudentData(ResultSet resultSet) throws SQLException {
+        String firstName = resultSet.getString("first_name");
+        String lastName = resultSet.getString("last_name");
+        int studId = resultSet.getInt("stud_id");
+        return new User.Builder()
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setId(studId)
+                .build();
+    }
+
     public List<User> extractAsList(ResultSet resultSet) throws SQLException{
         List<User> userList = new ArrayList<>();
         while (resultSet.next()) {

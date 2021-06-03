@@ -2,6 +2,21 @@
 #sign_in_page #sign_in_button {
     display: none;
 }
-
+table td {
+    position: relative;
+}
+table td input {
+    position: absolute;
+    background: transparent;
+    display: block;
+    top:0;
+    left:0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    border: black;
+    padding: 10px;
+    box-sizing: border-box;
+}
 
 

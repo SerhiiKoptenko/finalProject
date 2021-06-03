@@ -64,7 +64,7 @@ public class StudentCourse {
 
     public static class Builder {
         private User studIt;
-        private Course courseId;
+        private Course course;
         private int mark;
 
         public Builder setStudent(User studIt) {
@@ -72,8 +72,8 @@ public class StudentCourse {
             return this;
         }
 
-        public Builder setCourseId(Course courseId) {
-            this.courseId = courseId;
+        public Builder setCourse(Course courseId) {
+            this.course = courseId;
             return this;
         }
 
@@ -83,7 +83,7 @@ public class StudentCourse {
         }
 
         public StudentCourse build() {
-            return new StudentCourse(studIt, courseId, mark);
+            return new StudentCourse(studIt, course, mark);
         }
     }
 }

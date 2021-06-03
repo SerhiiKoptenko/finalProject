@@ -69,7 +69,7 @@ public class GoToMainPageCommand implements Command {
 
         int pageCount = PaginationUtil.getPagesCount(courseService.getAvailableCoursesCount(filterOption));
         int currentPage = PaginationUtil.getCurrentPage(req, pageCount);
-        List<Course> coursesPage = courseService.getAvailableCoursePage(currentPage, ControllerConstants.ITEMS_PER_PAGE, sortParameter, filterOption);
+        List<Course> coursesPage = courseService.getFilteredCoursesPage(currentPage, ControllerConstants.ITEMS_PER_PAGE, sortParameter, filterOption);
         req.setAttribute("pageCount", pageCount);
         req.setAttribute("coursesPage", coursesPage);
         return ControllerConstants.FORWARD_TO_MAIN_PAGE + "?sortOption=" + sortBy + "&page=" + currentPage;

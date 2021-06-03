@@ -7,19 +7,19 @@
 <body>
 <main class="container mx-auto">
     <div class="row justify-content-center">
-        <div class="col-lg-3 border border-3 border-primary rounded p-2 m-2">
+        <div class="col-lg-3  rounded p-2 m-2">
             <div class="text-center"><a href="manage_courses" class="action-button btn btn-primary align-middle">Manage courses</a></div>
             <div class="text-center">
                 <p>Create, delete or edit courses.</p>
             </div>
         </div>
-        <div class="col-lg-3 border border-3 border-primary rounded p-2 m-2">
+        <div class="col-lg-3 p-2 m-2">
             <div class="text-center"><a href="#" class="action-button btn btn-primary align-middle">Manage students</a></div>
             <div class="text-center">
                 <p>Block/unblock students.</p>
             </div>
         </div>
-        <div class="col-lg-3 border border-3 border-primary rounded p-2 m-2">
+        <div class="col-lg-3 p-2 m-2">
             <div class="text-center"><a href="#" class="action-button btn btn-primary align-middle">Manage tutors.</a></div>
             <div class="text-center">
                 <p>Register and assign tutors.</p>

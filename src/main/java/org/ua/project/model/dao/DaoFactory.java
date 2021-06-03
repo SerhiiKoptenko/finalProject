@@ -4,11 +4,11 @@ import org.ua.project.model.exception.DBException;
 
 public interface DaoFactory {
 
-    UserDao createUserDao();
+    UserDao createUserDao() throws DBException;
 
-    CourseDao createCourseDao();
+    CourseDao createCourseDao() throws DBException;
 
-    ThemeDao createThemeDao();
+    ThemeDao createThemeDao() throws DBException;
 
     StudentCourseDao createStudentCourseDao() throws DBException;
 }

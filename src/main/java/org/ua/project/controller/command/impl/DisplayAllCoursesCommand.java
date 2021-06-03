@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-public class ShowAllCoursesCommand implements Command {
+public class DisplayAllCoursesCommand implements Command {
 
     private static final String MANAGE_COURSES_PAGE = "/WEB-INF/jsp/manageCourses.jsp";
 

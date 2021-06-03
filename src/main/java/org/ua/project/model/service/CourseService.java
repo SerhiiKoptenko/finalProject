@@ -54,12 +54,24 @@ public class CourseService {
         }
     }
 
-    public List<Course> getAvailableCoursePage(int currentPage, int itemsPerPage,
+    public List<Course> getFilteredCourses(CourseSortParameter sortParameter, CourseFilterOption filterOption) {
+        logger.debug("getting courses with following filter option{}", filterOption);
+        try (CourseDao courseDao = new JDBCDaoFactory().createCourseDao()) {
+            List<Course> courses = courseDao.getFilteredCourses(sortParameter, filterOption);
+            logger.debug("received courses: {}", courses);
+            return courses;
+        } catch (DBException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+    }
+
+    public List<Course> getFilteredCoursesPage(int currentPage, int itemsPerPage,
                                                CourseSortParameter sortParameter, CourseFilterOption filterOption) {
         int offset = itemsPerPage * (currentPage - 1);
         logger.debug("getting courses page with following filter option{}", filterOption);
         try (CourseDao courseDao = new JDBCDaoFactory().createCourseDao()) {
-            List<Course> courses = courseDao.getFilteredCoursePage(offset, itemsPerPage, sortParameter, filterOption);
+            List<Course> courses = courseDao.getFilteredCourses(offset, itemsPerPage, sortParameter, filterOption);
             logger.debug("received courses page: {}", courses);
             return courses;
         } catch (DBException e) {

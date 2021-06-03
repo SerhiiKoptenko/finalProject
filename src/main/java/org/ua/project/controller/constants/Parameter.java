@@ -23,7 +23,13 @@ public enum Parameter {
     COURSE_SORT_STUDENTS_ASC("courseStudentsAsc"),
     COURSE_SORT_STUDENTS_DESC("courseStudentsDesc"),
     COURSE_SORT_NAME_DESC("courseNameDesc"),
-    COURSE_SORT_NAME_ASC("courseNameAsc");
+    COURSE_SORT_NAME_ASC("courseNameAsc"),
+
+    SHOW_TUTORS_COURSES("displayTutorsCourses"),
+
+    MARK("mark"),
+    STUDENT_ID("studId");
+
     private String value;
 
     Parameter(String value) {

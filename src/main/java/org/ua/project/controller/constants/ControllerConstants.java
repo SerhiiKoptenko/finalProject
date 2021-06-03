@@ -8,10 +8,13 @@ public class ControllerConstants {
     public static final String USER_ROLE_ATTR = "userRole";
     public static final String LOGGED_USERS_ATTR = "loggedUsers";
 
+
     public static final String REDIRECT_TO_MANAGE_COURSES_PAGE = REDIRECT_PREFIX + "/admin/manage_courses";
     public static final String REDIRECT_TO_EDIT_COURSE_PAGE = REDIRECT_PREFIX + "/admin/edit_course";
     public static final String REDIRECT_TO_MAIN_PAGE = REDIRECT_PREFIX + "/main_page";
+    public static final String REDIRECT_TO_PERSONAL_CABINET = REDIRECT_PREFIX + "/user/personal_cabinet";
 
+    public static final String FORWARD_TO_MANAGE_STUDENTS_PAGE = "/WEB-INF/jsp/admin/manage_students.jsp";
     public static final String FORWARD_TO_PERSONAL_CABINET = "/WEB-INF/jsp/user/personal_cabinet.jsp";
     public static final String FORWARD_TO_ENROLL_PAGE = "/WEB-INF/jsp/user/enroll.jsp";
     public static final String FORWARD_TO_MAIN_PAGE = "/WEB-INF/jsp/main.jsp";

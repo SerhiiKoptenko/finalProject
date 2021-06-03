@@ -17,17 +17,19 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 
 @WebServlet("/")
-public class ControllerServlet extends HttpServlet {
+public class Servlet extends HttpServlet {
     private static final Map<String, Command> commands = new HashMap<>();
-    private static final Logger logger = LogManager.getLogger(ControllerServlet.class);
+    private static final Logger logger = LogManager.getLogger(Servlet.class);
 
     public void init(ServletConfig servletConfig) {
         servletConfig.getServletContext()
                 .setAttribute(ControllerConstants.LOGGED_USERS_ATTR, new HashSet<String>());
 
         commands.put("/admin/admin_basis", new GoToAdminBasisCommand());
+        commands.put("/admin/manage_students", new GoToManageStudentsCommand());
         commands.put("/admin/manage_courses", new GoToManageCoursesPageCommand());
         commands.put("/admin/manage_courses?command=addCourse", new AddCourseCommand());
         commands.put("/admin/manage_courses?command=addTheme", new AddThemeCommand());
@@ -48,8 +50,11 @@ public class ControllerServlet extends HttpServlet {
         commands.put("/main_page", new GoToMainPageCommand());
         commands.put("/users/enroll?command=enroll", new EnrollCommand());
         commands.put("/user/personal_cabinet", new GoToPersonalCabinetCommand());
+        commands.put("/user/personal_cabinet?command=displayTutorsCourses", new DisplayTutorsCoursesCommand());
 
-        commands.put("/user/personal_cabinet?command=displayStudentsCourses", new DisplayStudentsCoursesCommand());
+        commands.put("/user/personal_cabinet?command=displayStudentsCourses", new DisplayCoursesByStudentCommand());
+        commands.put("/user/personal_cabinet?command=displayTutorsJournal", new DisplayStudentsByCourseCommand());
+        commands.put("/user/personal_cabinet?command=updateMark", new UpdateStudentsMarkCommand());
     }
 
     @Override
@@ -68,19 +73,19 @@ public class ControllerServlet extends HttpServlet {
         if (commandName != null) {
             path += "?command=" + commandName;
         }
-        logger.trace("received path " + path);
-        Command command = commands.get(path);
-        if (command != null) {
-            String page = command.execute(req, resp);
+        logger.trace("received path {}", path);
+        Optional<Command> commandOpt = Optional.ofNullable(commands.get(path));
+        if (commandOpt.isPresent()) {
+            String page = commandOpt.get().execute(req, resp);
             if (page.startsWith(ControllerConstants.REDIRECT_PREFIX)) {
-                logger.trace("Redirecting to: " + page);
+                logger.trace("Redirecting to: {}", page);
                 resp.sendRedirect(page.replaceFirst(ControllerConstants.REDIRECT_PREFIX, ""));
             } else {
-                logger.trace("Forwarding to: " + page);
+                logger.trace("Forwarding to: {}",  page);
                 req.getRequestDispatcher(page).forward(req, resp);
             }
         } else {
-            logger.error("unknown command: " + path);
+            logger.error("unknown command: {}", path);
         }
     }
 }

@@ -28,6 +28,7 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
     private static final String DELETE_COURSE_BY_ID;
     private static final String FIND_COURSE_NAME_BY_ID;
 
+    public static final String GET_FILTERED_COURSES;
     private static final String GET_FILTERED_COURSE_PAGE;
     private static final String GET_PAGE_FILTER_BY_THEME;
 
@@ -69,6 +70,7 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
         COUNT_ALL_COURSES = loader.getSqlStatement("countAllCourses");
         COUNT_COURSES_FILTERED = loader.getSqlStatement("countCoursesFiltered");
 
+        GET_FILTERED_COURSES = loader.getSqlStatement("getFilteredCourses");
         GET_FILTERED_COURSE_PAGE = loader.getSqlStatement("getAvailableCoursesPage");
 
         FIND_ONGOING = loader.getSqlStatement("findOngoing");
@@ -224,36 +226,70 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
 
 
     @Override
-    public List<Course> getFilteredCoursePage(int offset, int numberOfItems,
-                                              CourseSortParameter sortParameter, CourseFilterOption filterOption) throws DBException {
+    public List<Course> getFilteredCourses(CourseSortParameter sortParameter, CourseFilterOption filterOption) throws DBException {
+        List<Course> courses = new ArrayList<>();
+        String filterByStatus = getFilterByStatusStatement(filterOption);
+        String sql = String.format(GET_FILTERED_COURSES, filterByStatus, getOrderByStatement(sortParameter));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            prepareFilterStatement(filterOption, preparedStatement);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            CourseMapper courseMapper = new CourseMapper();
+            UserMapper userMapper = new UserMapper();
+            ThemeMapper themeMapper = new ThemeMapper();
+
+            Map<Integer, Theme> themeCache = new HashMap<>();
+            Map<Integer, User> tutorCache = new HashMap<>();
+            while (resultSet.next()) {
+                Course course = courseMapper.extractFromResultSet(resultSet);
+                User tutor = userMapper.makeUnique(tutorCache, course.getTutor());
+                Theme theme = themeMapper.makeUnique(themeCache, course.getTheme());
+                course.setTheme(theme);
+                course.setTutor(tutor);
+                courses.add(course);
+            }
+            return courses;
+        } catch (SQLException e) {
+            logger.error(e);
+            throw new DBException(e);
+        }
+    }
+
+    private void prepareFilterStatement(CourseFilterOption filterOption, PreparedStatement preparedStatement) throws SQLException {
+        int themeId = 0;
+        int tutorId = 0;
+        int studId = 0;
+
+        Optional<Theme> themeOpt = Optional.ofNullable(filterOption.getTheme());
+        Optional<User> tutorOpt = Optional.ofNullable(filterOption.getTutor());
+        Optional<User> studOpt = Optional.ofNullable(filterOption.getStudent());
+
+        if (themeOpt.isPresent()) {
+            themeId = themeOpt.get().getId();
+        }
+        if (tutorOpt.isPresent()) {
+            tutorId = tutorOpt.get().getId();
+        }
+        if (studOpt.isPresent()) {
+            studId = studOpt.get().getId();
+        }
+
+        preparedStatement.setInt(1, themeId);
+        preparedStatement.setInt(2, themeId);
+        preparedStatement.setInt(3, tutorId);
+        preparedStatement.setInt(4, tutorId);
+        preparedStatement.setInt(5, studId);
+        preparedStatement.setInt(6, studId);
+    }
+
+    @Override
+    public List<Course> getFilteredCourses(int offset, int numberOfItems,
+                                           CourseSortParameter sortParameter, CourseFilterOption filterOption) throws DBException {
         List<Course> page = new ArrayList<>();
         String filterByStatus = getFilterByStatusStatement(filterOption);
         String sql = String.format(GET_FILTERED_COURSE_PAGE, filterByStatus, getOrderByStatement(sortParameter));
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            int themeId = 0;
-            int tutorId = 0;
-            int studId = 0;
-
-            Optional<Theme> themeOpt = Optional.ofNullable(filterOption.getTheme());
-            Optional<User> tutorOpt = Optional.ofNullable(filterOption.getTutor());
-            Optional<User> studOpt = Optional.ofNullable(filterOption.getStudent());
-
-            if (themeOpt.isPresent()) {
-                themeId = themeOpt.get().getId();
-            }
-            if (tutorOpt.isPresent()) {
-                tutorId = tutorOpt.get().getId();
-            }
-            if (studOpt.isPresent()) {
-                studId = studOpt.get().getId();
-            }
-
-            preparedStatement.setInt(1, themeId);
-            preparedStatement.setInt(2, themeId);
-            preparedStatement.setInt(3, tutorId);
-            preparedStatement.setInt(4, tutorId);
-            preparedStatement.setInt(5, studId);
-            preparedStatement.setInt(6, studId);
+            prepareFilterStatement(filterOption, preparedStatement);
 
             preparedStatement.setInt(7, offset);
             preparedStatement.setInt(8, numberOfItems);

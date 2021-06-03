@@ -22,6 +22,8 @@ public interface CourseDao extends GenericDao<Course> {
 
     int getFilteredCoursesCount(CourseFilterOption filterOption) throws DBException;
 
-    List<Course> getFilteredCoursePage(int offset, int numberOfItems,
-                                       CourseSortParameter sortParameter, CourseFilterOption filterOption) throws DBException;
+    List<Course> getFilteredCourses(CourseSortParameter sortParameter, CourseFilterOption filterOption) throws DBException;
+
+    List<Course> getFilteredCourses(int offset, int numberOfItems,
+                                    CourseSortParameter sortParameter, CourseFilterOption filterOption) throws DBException;
 }

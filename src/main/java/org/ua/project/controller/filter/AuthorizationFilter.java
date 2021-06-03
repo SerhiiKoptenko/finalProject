@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@WebFilter("/*")
+
 public class AuthorizationFilter extends HttpFilter {
     private static final Map<User.Role, List<String>> accessMap = new HashMap<>();
 

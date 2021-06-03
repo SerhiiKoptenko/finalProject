@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 public class GoToManageCoursesPageCommand implements Command {
 
@@ -33,7 +32,7 @@ public class GoToManageCoursesPageCommand implements Command {
         int pageCount = PaginationUtil.getPagesCount(courseService.getAvailableCoursesCount(new CourseFilterOption()));
         int currentPage = PaginationUtil.getCurrentPage(req, pageCount);
 
-        List<Course> coursesPage = courseService.getAvailableCoursePage(currentPage, ControllerConstants.ITEMS_PER_PAGE, CourseSortParameter.BY_NAME_ASC, new CourseFilterOption());
+        List<Course> coursesPage = courseService.getFilteredCoursesPage(currentPage, ControllerConstants.ITEMS_PER_PAGE, CourseSortParameter.BY_NAME_ASC, new CourseFilterOption());
 
         req.setAttribute("currentPage", currentPage);
         req.setAttribute("pageCount", pageCount);
