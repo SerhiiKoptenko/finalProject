@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="col-lg-3 p-2 m-2">
-            <div class="text-center"><a href="#" class="action-button btn btn-primary align-middle">Manage students</a></div>
+            <div class="text-center"><a href="manage_students" class="action-button btn btn-primary align-middle">Manage students</a></div>
             <div class="text-center">
                 <p>Block/unblock students.</p>
             </div>

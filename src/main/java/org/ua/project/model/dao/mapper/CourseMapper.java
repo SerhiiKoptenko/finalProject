@@ -12,7 +12,7 @@ import java.util.Optional;
 public class CourseMapper implements EntityMapper<Course> {
 
     @Override
-    public Course extractFromResultSet(ResultSet resultSet) throws SQLException {
+    public Course extract(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
         String courseName = resultSet.getString("name");
         LocalDate startDate = resultSet.getDate("start_date").toLocalDate();

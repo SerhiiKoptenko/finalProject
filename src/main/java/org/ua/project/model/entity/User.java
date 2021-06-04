@@ -16,6 +16,7 @@ public class User implements Entity, Serializable {
     private String password;
     private Role role;
     private List<Course> courses;
+    private boolean blocked;
 
     @Override
     public void setId(int id) {
@@ -82,9 +83,17 @@ public class User implements Entity, Serializable {
         this.courses = courses;
     }
 
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+
     public User(){}
 
-    public User(int id, String firstName, String lastName, LocalDate birthDate, String login, String password, Role role, List<Course> courses) {
+    public User(int id, String firstName, String lastName, LocalDate birthDate, String login, String password, Role role, List<Course> courses, boolean isBlocked) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -93,6 +102,7 @@ public class User implements Entity, Serializable {
         this.password = password;
         this.role = role;
         this.courses = courses;
+        this.blocked = isBlocked;
     }
 
     public static class Builder {
@@ -104,6 +114,7 @@ public class User implements Entity, Serializable {
         private String password;
         private Role role;
         private List<Course> courses;
+        private boolean isBlocked;
 
         public Builder setId(int id) {
             this.id = id;
@@ -140,13 +151,18 @@ public class User implements Entity, Serializable {
             return this;
         }
 
+        public Builder setBlocked(boolean isBlocked) {
+            this.isBlocked = isBlocked;
+            return this;
+        }
+
         public Builder setCourses(List<Course> courses) {
             this.courses = courses;
             return this;
         }
 
         public User build() {
-            return new User(id,  firstName, lastName, birthDate, login, password, role, courses);
+            return new User(id,  firstName, lastName, birthDate, login, password, role, courses, isBlocked);
         }
     }
 
@@ -181,6 +197,6 @@ public class User implements Entity, Serializable {
     }
 
     public enum Role {
-        USER, TUTOR, ADMIN, GUEST;
+        STUDENT, TUTOR, ADMIN, GUEST;
     }
 }

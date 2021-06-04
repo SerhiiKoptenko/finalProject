@@ -58,7 +58,7 @@ public class JDBCThemeDao implements ThemeDao {
             if (!resultSet.next()) {
                 throw new EntityNotFoundException();
             }
-            return new ThemeMapper().extractFromResultSet(resultSet);
+            return new ThemeMapper().extract(resultSet);
         } catch (SQLException e) {
             logger.error(e);
             throw new DBException(e);
@@ -72,7 +72,7 @@ public class JDBCThemeDao implements ThemeDao {
             ThemeMapper themeMapper = new ThemeMapper();
             List<Theme> themesList = new ArrayList<>();
             while (resultSet.next()) {
-                themesList.add(themeMapper.extractFromResultSet(resultSet));
+                themesList.add(themeMapper.extract(resultSet));
             }
             return themesList;
         } catch (SQLException e) {

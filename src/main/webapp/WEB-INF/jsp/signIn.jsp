@@ -56,6 +56,9 @@
                    <c:when test="${signInError eq \"alreadySignedIn\"}">
                        User ${prevLogin} already signed in.<br>
                    </c:when>
+                   <c:when test="${signInError eq \"userBlocked\"}">
+                       You are blocked from accessing the website. Please contact administration for further information.<br>
+                   </c:when>
                </c:choose>
             </div>
         </div>

@@ -52,11 +52,11 @@
                     </li>
                     <c:if test="${userRole eq \"ADMIN\"}">
                         <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}admin/admin_basis">Admin page</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/admin/admin_basis">Admin page</a>
                         </li>
                     </c:if>
-                    <c:if test="${userRole eq \"USER\" || userRole eq \"TUTOR\"}">
-                        <a class="nav-link" href="${pageContext.request.contextPath}user/personal_cabinet">Personal cabinet</a>
+                    <c:if test="${userRole eq \"STUDENT\" || userRole eq \"TUTOR\"}">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/user/personal_cabinet">Personal cabinet</a>
                     </c:if>
                 </ul>
             </div>

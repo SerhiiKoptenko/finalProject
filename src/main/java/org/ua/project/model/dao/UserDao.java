@@ -14,4 +14,6 @@ public interface UserDao extends GenericDao<User> {
     void enrollStudent(User user, Course course) throws DBException;
 
     User getUserByLogin(String login) throws DBException;
+
+    boolean updateUserBlockedStatus(User user) throws DBException;
 }

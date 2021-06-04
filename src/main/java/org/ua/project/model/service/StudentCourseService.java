@@ -40,10 +40,21 @@ public class StudentCourseService {
     }
 
     public boolean updateStudentsMark(StudentCourse studentCourse) {
-        try (StudentCourseDao jdbcStudentCourseDao = new JDBCDaoFactory().createStudentCourseDao()) {
+        try (StudentCourseDao studentCourseDao = new JDBCDaoFactory().createStudentCourseDao()) {
              logger.debug("updating students mark {}", studentCourse);
-             return jdbcStudentCourseDao.updateStudentsMark(studentCourse);
+             return studentCourseDao.updateStudentsMark(studentCourse);
         } catch (DBException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+    }
+
+    public boolean removeStudentFromCourse(StudentCourse studentCourse) {
+        try (StudentCourseDao studentCourseDao = new JDBCDaoFactory().createStudentCourseDao()) {
+            logger.debug("removing student from course {}", studentCourse);
+            return studentCourseDao.removeStudentFromCourse(studentCourse);
+        } catch (DBException e) {
+            logger.error(e);
             throw new ServiceException(e);
         }
     }

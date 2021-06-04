@@ -25,6 +25,7 @@ public class UserSignInCommand implements Command {
     private static final String GO_TO_MAIN_PAGE = "/index.jsp";
     private static final String GO_TO_LOGIN_PAGE = "/sign_in_page?";
 
+    public static final String LOGIN_FAILED_USER_BLOCKED = "signInError=userBlocked";
     private static final String LOGIN_FAILED_INVALID_DATA = "signInError=invalidData";
     private static final String LOGIN_FAILED_ALREADY_SIGNED_IN = "signInError=alreadySignedIn";
     private static final String LOGIN_FAILED_NO_SUCH_USER = "signInError=wrongUserOrPassword";
@@ -33,7 +34,7 @@ public class UserSignInCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String url = ControllerConstants.REDIRECT_PREFIX;
+        String errorUrl = ControllerConstants.REDIRECT_PREFIX + GO_TO_LOGIN_PAGE;
 
         final String LOGIN_PARAMETER = Parameter.LOGIN.getValue();
         final String PASSWORD_PARAMETER = Parameter.PASSWORD.getValue();
@@ -44,33 +45,35 @@ public class UserSignInCommand implements Command {
         Validator validator = Validator.getInstance();
         ValidationResult result =  validator.validateSignInData(login, password);
         if (!result.isSuccessful()) {
-            url += GO_TO_LOGIN_PAGE;
-            url += LOGIN_FAILED_INVALID_DATA;
-            url += PREV_LOGIN + login;
-            url += result.getInvalidParametersString();
-            return url;
+            errorUrl += LOGIN_FAILED_INVALID_DATA;
+            errorUrl += PREV_LOGIN + login;
+            errorUrl += result.getInvalidParametersString();
+            return errorUrl;
         }
 
         UserService service = new UserService();
-        User user = null;
+        User user;
         try {
            user = service.signInUser(login, password);
         } catch (EntityNotFoundException | WrongPasswordException e) {
-            url += GO_TO_LOGIN_PAGE;
-            url += LOGIN_FAILED_NO_SUCH_USER;
-            url += PREV_LOGIN + login;
-            return url;
+            errorUrl += LOGIN_FAILED_NO_SUCH_USER;
+            errorUrl += PREV_LOGIN + login;
+            return errorUrl;
+        }
+
+        if (user.isBlocked()) {
+            errorUrl += LOGIN_FAILED_USER_BLOCKED;
+            return errorUrl;
         }
 
         if (!AuthorizationUtility.signInUser(req, user.getLogin())) {
-            url += GO_TO_LOGIN_PAGE;
-            url += LOGIN_FAILED_ALREADY_SIGNED_IN;
-            url += PREV_LOGIN + login;
-            return url;
+            errorUrl += LOGIN_FAILED_ALREADY_SIGNED_IN;
+            errorUrl += PREV_LOGIN + login;
+            return errorUrl;
         }
 
         AuthorizationUtility.saveUserToSession(req, user);
         logger.trace("User successfully signed in.");
-        return url + GO_TO_MAIN_PAGE;
+        return GO_TO_MAIN_PAGE;
     }
 }

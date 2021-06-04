@@ -6,6 +6,7 @@ public enum Parameter {
     LOGIN("login"),
     PASSWORD("password"),
     PAGE("page"),
+    USER_ID("userId"),
 
     COURSE_ID("courseId"),
     COURSE_NAME("courseName"),
@@ -25,10 +26,13 @@ public enum Parameter {
     COURSE_SORT_NAME_DESC("courseNameDesc"),
     COURSE_SORT_NAME_ASC("courseNameAsc"),
 
-    SHOW_TUTORS_COURSES("displayTutorsCourses"),
+    DISPLAY_STUDENTS_COURSES("displayedCourses"),
+    DISPLAY_TUTORS_COURSES("displayTutorsCourses"),
 
     MARK("mark"),
-    STUDENT_ID("studId");
+    STUDENT_ID("studId"),
+
+    BLOCK("block");
 
     private String value;
 

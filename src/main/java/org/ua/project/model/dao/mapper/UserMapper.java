@@ -6,19 +6,18 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserMapper implements EntityMapper<User> {
 
     @Override
-    public User extractFromResultSet(ResultSet resultSet) throws SQLException {
+    public User extract(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
         String firstName = resultSet.getString("first_name");
         String lastName = resultSet.getString("last_name");
         String login = resultSet.getString("login");
         String password = resultSet.getString("password");
         User.Role role = User.Role.valueOf(resultSet.getString("role"));
+        boolean isBlocked = resultSet.getBoolean("is_blocked");
 
         Date date = resultSet.getDate("birth_date");
         LocalDate birthDate = date == null ? null : date.toLocalDate();
@@ -30,6 +29,7 @@ public class UserMapper implements EntityMapper<User> {
                 .setLogin(login)
                 .setPassword(password)
                 .setRole(role)
+                .setBlocked(isBlocked)
                 .build();
     }
 
@@ -52,14 +52,5 @@ public class UserMapper implements EntityMapper<User> {
                 .setLastName(lastName)
                 .setId(studId)
                 .build();
-    }
-
-    public List<User> extractAsList(ResultSet resultSet) throws SQLException{
-        List<User> userList = new ArrayList<>();
-        while (resultSet.next()) {
-            User user = extractFromResultSet(resultSet);
-            userList.add(user);
-        }
-        return userList;
     }
 }

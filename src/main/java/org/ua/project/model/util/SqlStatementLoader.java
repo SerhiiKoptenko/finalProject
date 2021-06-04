@@ -35,6 +35,7 @@ public final class SqlStatementLoader {
             properties.load(inputStream);
         } catch (IOException e) {
             logger.fatal("Couldn't load sql properties.");
+            throw new RuntimeException();
         }
     }
 

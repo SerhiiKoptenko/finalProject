@@ -121,7 +121,7 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
             if (!resultSet.next()) {
                 throw new EntityNotFoundException();
             }
-            return new CourseMapper().extractFromResultSet(resultSet);
+            return new CourseMapper().extract(resultSet);
         } catch (SQLException e) {
             logger.error(e);
             throw new DBException(e);
@@ -241,7 +241,7 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
             Map<Integer, Theme> themeCache = new HashMap<>();
             Map<Integer, User> tutorCache = new HashMap<>();
             while (resultSet.next()) {
-                Course course = courseMapper.extractFromResultSet(resultSet);
+                Course course = courseMapper.extract(resultSet);
                 User tutor = userMapper.makeUnique(tutorCache, course.getTutor());
                 Theme theme = themeMapper.makeUnique(themeCache, course.getTheme());
                 course.setTheme(theme);
@@ -302,7 +302,7 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
             Map<Integer, Theme> themeCache = new HashMap<>();
             Map<Integer, User> tutorCache = new HashMap<>();
             while (resultSet.next()) {
-                Course course = courseMapper.extractFromResultSet(resultSet);
+                Course course = courseMapper.extract(resultSet);
                 User tutor = userMapper.makeUnique(tutorCache, course.getTutor());
                 Theme theme = themeMapper.makeUnique(themeCache, course.getTheme());
                 course.setTheme(theme);
@@ -386,7 +386,7 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
         ThemeMapper themeMapper = new ThemeMapper();
         UserMapper userMapper = new UserMapper();
         while (resultSet.next()) {
-            Course course = courseMapper.extractFromResultSet(resultSet);
+            Course course = courseMapper.extract(resultSet);
             Theme theme = themeMapper.makeUnique(themeCache, course.getTheme());
 
             course.setTheme(theme);

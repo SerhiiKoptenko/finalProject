@@ -7,7 +7,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +28,7 @@ public class AuthorizationFilter extends HttpFilter {
         List<String> userForbiddenUrls = new ArrayList<>();
         userForbiddenUrls.add("/sign_in_page");
         userForbiddenUrls.add("/registration_page");
-        accessMap.put(User.Role.USER, userForbiddenUrls);
+        accessMap.put(User.Role.STUDENT, userForbiddenUrls);
 
         List<String> adminForbiddenUrls = new ArrayList<>();
         adminForbiddenUrls.add("/sign_in_page");

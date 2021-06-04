@@ -12,12 +12,13 @@ import org.ua.project.model.exception.EntityNotFoundException;
 import org.ua.project.model.util.SqlStatementLoader;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     private static final Logger logger = LogManager.getLogger(JDBCUserDao.class);
 
-    private static final String DEFAULT_ROLE = User.Role.USER.toString();
+    private static final String DEFAULT_ROLE = User.Role.STUDENT.toString();
 
     private static final String INSERT_NEW_USER;
     private static final String GET_AUTHORIZATION_DATA;
@@ -25,6 +26,8 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     private static final String GET_USER_BY_LOGIN;
     private static final String ENROLL_USER;
     private static final String CREATE_USER_JOURNAl;
+    private static final String FIND_ALL_USERS;
+    public static final String CHANGE_USER_BLOCK_STATUS;
 
     private static final long serialVersionUID = 3008758863898750550L;
 
@@ -36,6 +39,8 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
         GET_USER_BY_LOGIN = sqlStatementLoader.getSqlStatement("getUserByLogin");
         ENROLL_USER = sqlStatementLoader.getSqlStatement("enrollUser");
         CREATE_USER_JOURNAl = sqlStatementLoader.getSqlStatement("createUserJournal");
+        FIND_ALL_USERS = sqlStatementLoader.getSqlStatement("findAllUsers");
+        CHANGE_USER_BLOCK_STATUS = sqlStatementLoader.getSqlStatement("changeUserBlockStatus");
     }
 
     protected JDBCUserDao(Connection connection) {
@@ -47,7 +52,12 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_USERS_BY_ROLE)) {
             preparedStatement.setString(1, role.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
-            return new UserMapper().extractAsList(resultSet);
+            List<User> users = new ArrayList<>();
+            UserMapper userMapper = new UserMapper();
+            while (resultSet.next()) {
+                users.add(userMapper.extract(resultSet));
+            }
+            return users;
         } catch (SQLException e) {
             logger.error(e);
             throw new DBException(e);
@@ -79,7 +89,7 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
             if (!resultSet.next()) {
                 throw new EntityNotFoundException();
             }
-            return new UserMapper().extractFromResultSet(resultSet);
+            return new UserMapper().extract(resultSet);
         } catch (SQLException e) {
             logger.error(e);
             throw new DBException(e);
@@ -122,8 +132,32 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     }
 
     @Override
-    public List<User> findAll() {
-        return null;
+    public List<User> findAll() throws DBException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_USERS)) {
+            List<User> users = new ArrayList<>();
+            UserMapper userMapper = new UserMapper();
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                users.add(userMapper.extract(resultSet));
+            }
+            return users;
+        } catch (SQLException e) {
+            logger.error(e);
+            throw new DBException(e);
+        }
+    }
+
+    @Override
+    public boolean updateUserBlockedStatus(User user) throws DBException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(CHANGE_USER_BLOCK_STATUS)) {
+            preparedStatement.setBoolean(1, user.isBlocked());
+            preparedStatement.setInt(2, user.getId());
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            logger.error(e);
+            throw new DBException();
+        }
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.ua.project.controller.command.impl;
 
 import org.ua.project.controller.command.Command;
 import org.ua.project.controller.constants.ControllerConstants;
+import org.ua.project.controller.constants.Parameter;
 import org.ua.project.model.entity.Course;
 import org.ua.project.model.entity.CourseFilterOption;
 import org.ua.project.model.entity.CourseSortParameter;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class DisplayTutorsCoursesCommand implements Command {
 
@@ -24,8 +26,12 @@ public class DisplayTutorsCoursesCommand implements Command {
         HttpSession session = req.getSession();
         User tutor = (User) session.getAttribute(ControllerConstants.USER_ATTR);
         CourseService courseService = new CourseService();
+        Optional<String> courseStatusOpt = Optional.ofNullable(req.getParameter(Parameter.DISPLAY_TUTORS_COURSES.getValue()));
+        CourseFilterOption.CourseStatus courseStatus;
+        courseStatus = CourseFilterOption.CourseStatus.valueOf(courseStatusOpt.orElse("ongoing").toUpperCase());
         CourseFilterOption courseFilterOption = new CourseFilterOption.Builder()
                 .setTutor(tutor)
+                .setCourseStatus(courseStatus)
                 .build();
         List<Course> tutorsCourses = courseService.getFilteredCourses(CourseSortParameter.BY_NAME_ASC, courseFilterOption);
         req.setAttribute("tutorsCourses", tutorsCourses);

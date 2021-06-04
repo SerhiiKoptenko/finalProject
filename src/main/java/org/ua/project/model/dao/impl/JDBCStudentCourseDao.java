@@ -29,6 +29,7 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
     public static final String FIND_NOT_STARTED;
     public static final String FIND_STUDENTS_BY_COURSE;
     public static final String UPDATE_STUDENTS_MARK;
+    public static final String REMOVE_STUDENT_FROM_COURSE;
 
     static {
         SqlStatementLoader loader = SqlStatementLoader.getInstance();
@@ -38,6 +39,7 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
         FIND_NOT_STARTED = loader.getSqlStatement("findNotStarted");
         FIND_STUDENTS_BY_COURSE = loader.getSqlStatement("findStudentsByCourse");
         UPDATE_STUDENTS_MARK = loader.getSqlStatement("updateStudentsMark");
+        REMOVE_STUDENT_FROM_COURSE = loader.getSqlStatement("removeStudentFromCourse");
     }
 
     protected JDBCStudentCourseDao(Connection connection) {
@@ -88,7 +90,7 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
 
             List<StudentCourse> studentCourses = new ArrayList<>();
             while (resultSet.next()) {
-                Course course = courseMapper.extractFromResultSet(resultSet);
+                Course course = courseMapper.extract(resultSet);
                 int mark = resultSet.getInt("mark");
                 studentCourses.add(new StudentCourse.Builder()
                         .setMark(mark)
@@ -137,6 +139,19 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
             throw new DBException(e);
         }
         return true;
+    }
+
+    @Override
+    public boolean removeStudentFromCourse(StudentCourse studentCourse) throws DBException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_STUDENT_FROM_COURSE)) {
+            preparedStatement.setInt(1, studentCourse.getStudent().getId());
+            preparedStatement.setInt(2, studentCourse.getCourse().getId());
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            logger.error(e);
+            throw new DBException(e);
+        }
     }
 
     @Override

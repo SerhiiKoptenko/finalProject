@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Logger;
 import org.ua.project.model.dao.DaoFactory;
 import org.ua.project.model.dao.UserDao;
 import org.ua.project.model.dao.impl.JDBCDaoFactory;
+import org.ua.project.model.dao.impl.JDBCUserDao;
 import org.ua.project.model.entity.Course;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.exception.DBException;
@@ -25,6 +26,15 @@ public class UserService {
             dao.create(user);
         } catch (EntityAlreadyExistsException e) {
             throw new UserAlreadyExistsException();
+        } catch (DBException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+    }
+
+    public boolean updateUserBlockedStatus(User user) {
+        try (UserDao jdbcUserDao = new JDBCDaoFactory().createUserDao()) {
+            return jdbcUserDao.updateUserBlockedStatus(user);
         } catch (DBException e) {
             logger.error(e);
             throw new ServiceException(e);
@@ -57,7 +67,7 @@ public class UserService {
             throw e;
         } catch (DBException e) {
             logger.error(e);
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
     }
 
@@ -66,7 +76,8 @@ public class UserService {
         try (UserDao userDao = daoFactory.createUserDao()) {
             return userDao.getUsersByRole(role);
         } catch (DBException e) {
-            throw new RuntimeException(e);
+            logger.error(e);
+            throw new ServiceException(e);
         }
     }
 
@@ -74,6 +85,16 @@ public class UserService {
         try (UserDao userDao = new JDBCDaoFactory().createUserDao()) {
             return userDao.findById(id);
         } catch (DBException e) {
+            logger.error(e);
+            throw new ServiceException(e);
+        }
+    }
+
+    public List<User> findAllUsers() {
+        try (UserDao userDao = new JDBCDaoFactory().createUserDao()) {
+            return userDao.findAll();
+        } catch (DBException e) {
+            logger.error(e);
             throw new ServiceException(e);
         }
     }

@@ -29,7 +29,7 @@ public class Servlet extends HttpServlet {
                 .setAttribute(ControllerConstants.LOGGED_USERS_ATTR, new HashSet<String>());
 
         commands.put("/admin/admin_basis", new GoToAdminBasisCommand());
-        commands.put("/admin/manage_students", new GoToManageStudentsCommand());
+        commands.put("/admin/manage_students", new GoToManageUsersCommand());
         commands.put("/admin/manage_courses", new GoToManageCoursesPageCommand());
         commands.put("/admin/manage_courses?command=addCourse", new AddCourseCommand());
         commands.put("/admin/manage_courses?command=addTheme", new AddThemeCommand());
@@ -38,6 +38,7 @@ public class Servlet extends HttpServlet {
         commands.put("/admin/edit_course?command=updateCourse", new UpdateCourseCommand());
         commands.put("/admin/delete_course", new GoToDeleteCourseCommand());
         commands.put("/admin/manage_courses?command=deleteCourse", new DeleteCourseCommand());
+        commands.put("/admin/manage_students?command=updateUserBlockedStatus", new UpdateUserBlockedStatusCommand());
 
         commands.put("/registration_page", new GoToRegistrationPageCommand());
         commands.put("/sign_in_page", new GoToSignInPageCommand());
@@ -53,8 +54,10 @@ public class Servlet extends HttpServlet {
         commands.put("/user/personal_cabinet?command=displayTutorsCourses", new DisplayTutorsCoursesCommand());
 
         commands.put("/user/personal_cabinet?command=displayStudentsCourses", new DisplayCoursesByStudentCommand());
-        commands.put("/user/personal_cabinet?command=displayTutorsJournal", new DisplayStudentsByCourseCommand());
+        commands.put("/user/personal_cabinet/journal", new DisplayStudentsByCourseCommand());
         commands.put("/user/personal_cabinet?command=updateMark", new UpdateStudentsMarkCommand());
+        commands.put("/user/personal_cabinet/leave_course", new GoToLeaveCourseCommand());
+        commands.put("/user/personal_cabinet/leave_course?command=leaveCourse", new LeaveCourseCommand());
     }
 
     @Override

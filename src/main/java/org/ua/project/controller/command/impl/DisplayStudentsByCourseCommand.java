@@ -28,6 +28,6 @@ public class DisplayStudentsByCourseCommand implements Command {
         StudentCourseService studentCourseService = new StudentCourseService();
         List<StudentCourse> studentsByCourse = studentCourseService.getStudentsByCourse(course);
         req.setAttribute("studentsByCourse", studentsByCourse);
-        return ControllerConstants.FORWARD_TO_PERSONAL_CABINET;
+        return ControllerConstants.FORWARD_TO_JOURNAL;
     }
 }
