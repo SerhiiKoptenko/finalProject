@@ -6,28 +6,20 @@ import org.ua.project.controller.command.Command;
 import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.constants.Parameter;
 import org.ua.project.controller.util.authorization.RegistrationUtility;
-import org.ua.project.controller.util.validation.ValidationResult;
-import org.ua.project.controller.util.validation.Validator;
 import org.ua.project.model.entity.User;
-import org.ua.project.model.service.UserService;
-import org.ua.project.model.service.exception.ServiceException;
-import org.ua.project.model.service.exception.UserAlreadyExistsException;
-import org.ua.project.model.service.util.encryption.EncryptionUtil;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Optional;
 
-public class UserRegistrationCommand implements Command {
-    private static Logger logger = LogManager.getLogger(UserRegistrationCommand.class);
+public class RegisterTutorCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(RegisterTutorCommand.class);
 
-    private static final String GO_TO_REG_PAGE = "/registration_page?";
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String redirectUrl = ControllerConstants.REDIRECT_PREFIX + GO_TO_REG_PAGE;
-        redirectUrl += Optional.ofNullable(req.getQueryString()).orElse("");
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        String redirectUrl = ControllerConstants.REDIRECT_TO_REGISTER_TUTOR_PAGE + "?";
 
         String firstName = req.getParameter(Parameter.FIRST_NAME.getValue());
         String lastName = req.getParameter(Parameter.LAST_NAME.getValue());
@@ -39,9 +31,11 @@ public class UserRegistrationCommand implements Command {
                 .setLastName(lastName)
                 .setPassword(password)
                 .setLogin(login)
+                .setRole(User.Role.TUTOR)
                 .build();
 
-        redirectUrl = RegistrationUtility.registerUser(user, redirectUrl);
-        return redirectUrl;
+
+        return RegistrationUtility.registerUser(user, redirectUrl);
     }
 }
+

@@ -20,9 +20,9 @@
             </div>
         </div>
         <div class="col-lg-3 p-2 m-2">
-            <div class="text-center"><a href="#" class="action-button btn btn-primary align-middle">Manage tutors.</a></div>
+            <div class="text-center"><a href="register_tutor" class="action-button btn btn-primary align-middle">Manage tutors.</a></div>
             <div class="text-center">
-                <p>Register and assign tutors.</p>
+                <p>Register tutors.</p>
             </div>
         </div>
     </div>

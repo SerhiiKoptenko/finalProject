@@ -18,8 +18,6 @@ import java.util.List;
 public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     private static final Logger logger = LogManager.getLogger(JDBCUserDao.class);
 
-    private static final String DEFAULT_ROLE = User.Role.STUDENT.toString();
-
     private static final String INSERT_NEW_USER;
     private static final String GET_AUTHORIZATION_DATA;
     private static final String GET_USERS_BY_ROLE;
@@ -71,7 +69,7 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
             preparedStatement.setString(2, user.getLastName());
             preparedStatement.setString(3, user.getLogin());
             preparedStatement.setString(4, user.getPassword());
-            preparedStatement.setString(5, DEFAULT_ROLE);
+            preparedStatement.setString(5, user.getRole().toString());
             preparedStatement.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new EntityAlreadyExistsException();

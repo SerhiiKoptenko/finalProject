@@ -16,14 +16,16 @@ public class Validator {
 
     private static volatile Validator instance;
 
-    private Validator() throws IOException {
+    private Validator() {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         try (InputStream stream = loader.getResourceAsStream(VALIDATION_PROPERTIES)) {
             properties.load(stream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public static Validator getInstance() throws IOException {
+    public static Validator getInstance()  {
         if (instance == null) {
             synchronized (Validator.class) {
                 if (instance == null) {

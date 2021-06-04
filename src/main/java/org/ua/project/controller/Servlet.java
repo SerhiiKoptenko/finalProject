@@ -39,6 +39,8 @@ public class Servlet extends HttpServlet {
         commands.put("/admin/delete_course", new GoToDeleteCourseCommand());
         commands.put("/admin/manage_courses?command=deleteCourse", new DeleteCourseCommand());
         commands.put("/admin/manage_students?command=updateUserBlockedStatus", new UpdateUserBlockedStatusCommand());
+        commands.put("/admin/register_tutor", new GoToRegisterTutorCommand());
+        commands.put("/admin/register_tutor?command=register", new RegisterTutorCommand());
 
         commands.put("/registration_page", new GoToRegistrationPageCommand());
         commands.put("/sign_in_page", new GoToSignInPageCommand());
