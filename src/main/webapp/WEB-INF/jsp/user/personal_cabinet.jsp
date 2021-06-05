@@ -147,9 +147,7 @@
                 </table>
             </c:when>
             <c:otherwise>
-                <div class="alert alert-light" role="alert">
-                    No courses to display.
-                </div>
+
             </c:otherwise>
         </c:choose>
     </c:if>

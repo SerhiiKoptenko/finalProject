@@ -14,10 +14,6 @@ public interface CourseDao extends GenericDao<Course> {
 
     void createWithTutor(Course course) throws DBException;
 
-    int countCourses() throws DBException;
-
-    List<Course> getPageFilterByTheme(int start, int offset, Theme theme) throws  DBException;
-
     void updateWithTutor(Course course) throws DBException;
 
     int getFilteredCoursesCount(CourseFilterOption filterOption) throws DBException;

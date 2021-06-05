@@ -19,7 +19,6 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     private static final Logger logger = LogManager.getLogger(JDBCUserDao.class);
 
     private static final String INSERT_NEW_USER;
-    private static final String GET_AUTHORIZATION_DATA;
     private static final String GET_USERS_BY_ROLE;
     private static final String GET_USER_BY_LOGIN;
     private static final String ENROLL_USER;
@@ -32,7 +31,6 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     static {
         SqlStatementLoader sqlStatementLoader = SqlStatementLoader.getInstance();
         INSERT_NEW_USER = sqlStatementLoader.getSqlStatement("insertNewUser");
-        GET_AUTHORIZATION_DATA = sqlStatementLoader.getSqlStatement("getAuthorizationData");
         GET_USERS_BY_ROLE = sqlStatementLoader.getSqlStatement("getUsersByRole");
         GET_USER_BY_LOGIN = sqlStatementLoader.getSqlStatement("getUserByLogin");
         ENROLL_USER = sqlStatementLoader.getSqlStatement("enrollUser");

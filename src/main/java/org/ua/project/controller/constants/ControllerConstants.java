@@ -27,6 +27,8 @@ public class ControllerConstants {
     public static final String FORWARD_TO_DELETE_COURSE_PAGE = "/WEB-INF/jsp/admin/delete_course.jsp";
     public static final String FORWARD_TO_JOURNAL = "/WEB-INF/jsp/user/journal.jsp";
 
-    public static final int ITEMS_PER_PAGE = 5;
+    public static final String ERROR_500_PAGE = "/WEB-INF/error500";
+
+    public static final int ITEMS_PER_PAGE = 3;
     private ControllerConstants() {}
 }

@@ -65,6 +65,7 @@
                     <button type="submit" class="btn btn-primary mb-2">Apply filter</button>
                 </form>
             </div>
+            <c:set var="coursesPageSize">${fn:length(coursesPage)}</c:set>
             <table class="table table-bordered border-primary ">
                 <thead>
                 <tr>
@@ -82,7 +83,8 @@
                 </thead>
                 <tbody>
                 <c:set var="currentPage" value="${pageContext.request.getParameter(\"page\")}"/>
-                <c:set var="count" value="${5 * (currentPage - 1)}"/>
+                <c:set var="count" value="${3 * (currentPage - 1)}"/>
+                <c:set var="userRole" value="${user.role}"/>
                 <c:forEach items="${coursesPage}" var="course">
                     <tr>
                         <c:set var="count" value="${count + 1}"/>
@@ -98,15 +100,22 @@
                         <td>${course.tutor.lastName}</td>
                         <td>${course.studentCount}</td>
                         <td>
-                            <form action="users/enroll" class="text-center" method="POST">
-                                <input type="hidden" name="command" value="enroll">
-                                <input type="hidden" name="courseId" value="${course.id}">
-                                <input type="hidden" name="courseName" value="${course.name}">
+                            <c:choose >
+                                <c:when test="${userRole eq \'STUDENT\'}">
+                                    <form action="user/enroll" class="text-center" method="POST">
+                                        <input type="hidden" name="command" value="enroll">
+                                        <input type="hidden" name="courseId" value="${course.id}">
+                                        <input type="hidden" name="courseName" value="${course.name}">
 
-                                <button type="submit" class="btn btn-outline-info">
-                                    Enroll
-                                </button>
-                            </form>
+                                        <button type="submit" class="btn btn-outline-info">
+                                            Enroll
+                                        </button>
+                                    </form>
+                                </c:when>
+                                <c:otherwise>
+                                    <p>Create student account in order to enroll</p>
+                                </c:otherwise>
+                            </c:choose>
                         </td>
                     </tr>
                 </c:forEach>

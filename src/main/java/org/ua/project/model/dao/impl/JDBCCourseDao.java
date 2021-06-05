@@ -30,7 +30,6 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
 
     public static final String GET_FILTERED_COURSES;
     private static final String GET_FILTERED_COURSE_PAGE;
-    private static final String GET_PAGE_FILTER_BY_THEME;
 
     private static final String SORT_BY_NAME_ASC;
     private static final String SORT_BY_NAME_DESC;
@@ -39,7 +38,6 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
     private static final String SORT_BY_DURATION_ASC;
     private static final String SORT_BY_DURATION_DESC;
 
-    private static final String COUNT_ALL_COURSES;
     private static final String COUNT_COURSES_FILTERED;
     public static final String FIND_ONGOING;
     public static final String FIND_NOT_STARTED;
@@ -58,8 +56,6 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
         DELETE_COURSE_BY_ID = loader.getSqlStatement("deleteCourseById");
         FIND_COURSE_NAME_BY_ID = loader.getSqlStatement("findCourseNameById");
 
-        GET_PAGE_FILTER_BY_THEME = loader.getSqlStatement("getPageFilterByTheme");
-
         SORT_BY_NAME_ASC = loader.getSqlStatement("sortByNameAsc");
         SORT_BY_NAME_DESC = loader.getSqlStatement("sortByNameDesc");
         SORT_BY_STUDENTS_ASC = loader.getSqlStatement("sortByStudentsAsc");
@@ -67,7 +63,6 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
         SORT_BY_DURATION_ASC = loader.getSqlStatement("sortByDurationAsc");
         SORT_BY_DURATION_DESC = loader.getSqlStatement("sortByDurationDesc");
 
-        COUNT_ALL_COURSES = loader.getSqlStatement("countAllCourses");
         COUNT_COURSES_FILTERED = loader.getSqlStatement("countCoursesFiltered");
 
         GET_FILTERED_COURSES = loader.getSqlStatement("getFilteredCourses");
@@ -198,18 +193,6 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
             throw new IllegalDeletionException();
         } catch (SQLException e) {
             logger.error(e);
-            throw new DBException(e);
-        }
-    }
-
-    @Override
-    public List<Course> getPageFilterByTheme(int offset, int numberOfItems, Theme theme) throws DBException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_PAGE_FILTER_BY_THEME)) {
-            preparedStatement.setInt(1, theme.getId());
-            preparedStatement.setInt(2, offset);
-            preparedStatement.setInt(3, numberOfItems);
-            return getCoursesUniqueFields(preparedStatement);
-        } catch (SQLException e) {
             throw new DBException(e);
         }
     }
@@ -395,17 +378,5 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
             courseList.add(course);
         }
         return courseList;
-    }
-
-    @Override
-    public int countCourses() throws DBException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(COUNT_ALL_COURSES)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            return resultSet.getInt(1);
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new DBException(e);
-        }
     }
 }

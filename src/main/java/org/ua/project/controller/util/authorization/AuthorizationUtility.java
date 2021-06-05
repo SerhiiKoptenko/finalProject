@@ -12,7 +12,6 @@ public final class AuthorizationUtility {
 
     public static void saveUserToSession(HttpServletRequest req, User user) {
        req.getSession().setAttribute(ControllerConstants.USER_ATTR, user);
-       req.getSession().setAttribute(ControllerConstants.USER_ROLE_ATTR, user.getRole());
     }
 
     public static boolean signInUser(HttpServletRequest req, String userLogin) {
@@ -21,8 +20,11 @@ public final class AuthorizationUtility {
     }
 
     public static void signOutUser(HttpServletRequest req, String userLogin) {
+       User user = new User.Builder()
+               .setRole(User.Role.GUEST)
+               .build();
        HttpSession session = req.getSession();
-       session.setAttribute(ControllerConstants.USER_ATTR, null);
+       session.setAttribute(ControllerConstants.USER_ATTR, user);
        session.setAttribute(ControllerConstants.USER_ROLE_ATTR, User.Role.GUEST);
        Set<String> loggedUsers = (Set<String>) session.getServletContext().getAttribute(ControllerConstants.LOGGED_USERS_ATTR);
        loggedUsers.remove(userLogin);

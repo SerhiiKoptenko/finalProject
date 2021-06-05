@@ -13,7 +13,10 @@ public class SessionListener implements HttpSessionListener {
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
-        se.getSession().setAttribute(ControllerConstants.USER_ROLE_ATTR, User.Role.GUEST);
+        User user = new User.Builder()
+                .setRole(User.Role.GUEST)
+                .build();
+        se.getSession().setAttribute(ControllerConstants.USER_ATTR, user);
     }
 
     @Override

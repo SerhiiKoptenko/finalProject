@@ -47,9 +47,9 @@ public final class RegistrationUtility {
     }
 
     private static String includePreviousValues(String redirectUrl, User user) {
-        redirectUrl += "&firstName=" + user.getFirstName();
-        redirectUrl += "&login=" + user.getLogin();
-        redirectUrl += "&lastName=" + user.getLastName();
+        redirectUrl += "&prevFirstName=" + user.getFirstName();
+        redirectUrl += "&prevLogin=" + user.getLogin();
+        redirectUrl += "&prevLastName=" + user.getLastName();
         return redirectUrl;
     }
 }
