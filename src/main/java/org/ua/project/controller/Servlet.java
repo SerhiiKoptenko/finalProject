@@ -4,16 +4,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ua.project.controller.command.Command;
 import org.ua.project.controller.command.impl.GoToMainPageCommand;
+import org.ua.project.controller.command.impl.LocalizationCommand;
 import org.ua.project.controller.command.impl.admin.*;
 import org.ua.project.controller.command.impl.guest.GoToRegistrationPageCommand;
 import org.ua.project.controller.command.impl.guest.GoToSignInPageCommand;
 import org.ua.project.controller.command.impl.guest.UserRegistrationCommand;
 import org.ua.project.controller.command.impl.guest.UserSignInCommand;
 import org.ua.project.controller.command.impl.user.GoToPersonalCabinetCommand;
-import org.ua.project.controller.command.impl.user.student.DisplayCoursesByStudentCommand;
-import org.ua.project.controller.command.impl.user.student.EnrollCommand;
-import org.ua.project.controller.command.impl.user.student.GoToLeaveCourseCommand;
-import org.ua.project.controller.command.impl.user.student.LeaveCourseCommand;
+import org.ua.project.controller.command.impl.user.student.*;
 import org.ua.project.controller.command.impl.user.tutor.DisplayStudentsByCourseCommand;
 import org.ua.project.controller.command.impl.user.UserSignOutCommand;
 import org.ua.project.controller.command.impl.user.tutor.DisplayTutorsCoursesCommand;
@@ -22,7 +20,6 @@ import org.ua.project.controller.constants.ControllerConstants;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +29,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 
-@WebServlet("/")
 public class Servlet extends HttpServlet {
     private static final Map<String, Command> commands = new HashMap<>();
     private static final Logger logger = LogManager.getLogger(Servlet.class);
@@ -63,7 +59,8 @@ public class Servlet extends HttpServlet {
 
 
         commands.put("/main_page", new GoToMainPageCommand());
-        commands.put("/user/enroll?command=enroll", new EnrollCommand());
+        commands.put("/main_page?command=enroll", new EnrollCommand());
+        commands.put("/user/enroll", new GoToEnrollCommand());
         commands.put("/user/personal_cabinet", new GoToPersonalCabinetCommand());
         commands.put("/user/personal_cabinet?command=displayTutorsCourses", new DisplayTutorsCoursesCommand());
 
@@ -72,6 +69,8 @@ public class Servlet extends HttpServlet {
         commands.put("/user/personal_cabinet?journal?command=updateMark", new UpdateStudentsMarkCommand());
         commands.put("/user/personal_cabinet/leave_course", new GoToLeaveCourseCommand());
         commands.put("/user/personal_cabinet/leave_course?command=leaveCourse", new LeaveCourseCommand());
+
+        commands.put("/main_page?command=switchLocale", new LocalizationCommand());
     }
 
     @Override
@@ -104,6 +103,7 @@ public class Servlet extends HttpServlet {
             logger.trace("Forwarding to: {}", page);
             req.getRequestDispatcher(page).forward(req, resp);
         } else {
+            logger.error("Unknown url: {}", path);
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }

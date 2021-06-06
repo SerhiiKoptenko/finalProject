@@ -7,14 +7,12 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
-@WebFilter("/*")
 public class AuthorizationFilter extends HttpFilter {
     private static final Map<User.Role, List<String>> accessMap = new HashMap<>();
     private static final List<String> allUrls = new ArrayList<>();
@@ -39,7 +37,8 @@ public class AuthorizationFilter extends HttpFilter {
        allUrls.add("/registration_page?command=register");
        allUrls.add("/signIn_page?command=signIn");
        allUrls.add("/main_page");
-       allUrls.add("/user/enroll?command=enroll");
+       allUrls.add("/main_page?command=enroll");
+       allUrls.add("/user/enroll");
        allUrls.add("/user/personal_cabinet");
        allUrls.add("/user/personal_cabinet?command=displayTutorsCourses");
        allUrls.add("/user/personal_cabinet?command=displayStudentsCourses");
@@ -59,6 +58,8 @@ public class AuthorizationFilter extends HttpFilter {
         studentUrls.add("/user/personal_cabinet");
         studentUrls.add("/main_page");
         studentUrls.add("/user/personal_cabinet/leave_course");
+        studentUrls.add("/main_page?command=enroll");
+        studentUrls.add("/user/enroll");
         accessMap.put(User.Role.STUDENT, studentUrls);
 
         List<String> adminUrls = new ArrayList<>();
@@ -82,7 +83,7 @@ public class AuthorizationFilter extends HttpFilter {
         final HttpServletRequest request = (HttpServletRequest) req;
         final HttpServletResponse response = (HttpServletResponse) res;
 
-        String url = request.getRequestURI();
+        String url = request.getRequestURI() + request.getParameter("command");
         Optional<User> userOpt = Optional.ofNullable((User) request.getSession().getAttribute(ControllerConstants.USER_ATTR));
         if (userOpt.isPresent() && allUrls.contains(url)
                 && !accessMap.get(userOpt.get().getRole())

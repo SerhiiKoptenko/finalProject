@@ -1,10 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
-<!DOCTYPE html>
 <html lang="en">
 <c:set var="pageTitle" scope="page" value="Sign in page"/>
 <body id="sign_in_page">
 <%@ include file="header.jsp" %>
+<fmt:message key="wrong_password_or_login" var="wrong_password_or_login"/>
+<fmt:message key="already_signed_in" var="already_signed_in"/>
+<fmt:message key="blocked" var="blocked"/>
 <main>
     <c:set var="signInError" scope="page" value="${pageContext.request.getParameter(\"signInError\")}"/>
     <c:set var="prevLogin" scope="page" value="${pageContext.request.getParameter(\"login\")}"/>
@@ -12,18 +14,18 @@
     <c:set var="invalidPassword" scope="page" value="${pageContext.request.getParameter(\"invalid_password\")}"/>
     <!--Login form-->
     <div class="container mx-auto p-5 rounded">
-        <h3 class="text-center">Sign in</h3>
+        <h3 class="text-center">${sign_in}</h3>
         <form action="signIn_page" method="post">
             <input type="hidden" name="command" value="signIn">
             <div class="mb-3">
-                <label for="login" class="form-label">Login</label>
+                <label for="login" class="form-label">${login}</label>
                 <input type="text" class="form-control" name="login" id="login" required value="${prevLogin}">
             </div>
             <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
+                <label for="password" class="form-label">${password}</label>
                 <input type="password" class="form-control" name="password" id="password" required>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">${submit}</button>
         </form>
     </div>
     <!--/Login form-->
@@ -44,20 +46,20 @@
                <c:choose>
                    <c:when test="${signInError eq \"invalidData\"}">
                        <c:if test="${invalidLogin ne null}">
-                           Invalid login.<br>
+                           ${invalid_login}<br>
                        </c:if>
                        <c:if test="${invalidPassword ne null}">
-                           Invalid password.<br>
+                           ${invalid_password}<br>
                        </c:if>
                    </c:when>
                    <c:when test="${signInError eq \"wrongUserOrPassword\"}">
-                       Wrong login or password.<br>
+                       ${wrong_password_or_login}<br>
                    </c:when>
                    <c:when test="${signInError eq \"alreadySignedIn\"}">
-                       User ${prevLogin} already signed in.<br>
+                       ${user_name} ${prevLogin} ${already_signed_in}<br>
                    </c:when>
                    <c:when test="${signInError eq \"userBlocked\"}">
-                       You are blocked from accessing the website. Please contact administration for further information.<br>
+                       ${blocked}<br>
                    </c:when>
                </c:choose>
             </div>

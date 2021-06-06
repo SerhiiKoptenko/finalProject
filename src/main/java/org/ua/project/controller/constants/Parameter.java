@@ -32,6 +32,8 @@ public enum Parameter {
     MARK("mark"),
     STUDENT_ID("studId"),
 
+    LOCALE("locale"),
+
     BLOCK("block");
 
     private String value;

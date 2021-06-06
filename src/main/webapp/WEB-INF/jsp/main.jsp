@@ -4,10 +4,32 @@
 <html lang="en">
 <%@ include file="header.jsp" %>
 <c:set var="pageTitle" scope="page" value="Main page"/>
+<fmt:message key="available_courses" var="available_courses"/>
+<fmt:message key="filter" var="filter"/>
+<fmt:message key="apply_filter" var="apply_filter"/>
+<fmt:message key="sort_by" var="sort_by"/>
+<fmt:message key="by_tutor" var="by_tutor"/>
+<fmt:message key="by_theme" var="by_theme"/>
+<fmt:message key="course_name_az" var="course_name_az"/>
+<fmt:message key="course_name_za" var="course_name_za"/>
+<fmt:message key="course_duration_long_first" var="course_duration_long_first"/>
+<fmt:message key="course_duration_short_first" var="course_duration_short_first"/>
+<fmt:message key="enrolled_students_few_first" var="enrolled_students_few_first"/>
+<fmt:message key="enrolled_students_more_first" var="enrolled_students_more_first"/>
+<fmt:message key="course_name" var="course_name"/>
+<fmt:message key="start_date" var="start_date"/>
+<fmt:message key="end_date" var="end_date"/>
+<fmt:message key="description" var="description"/>
+<fmt:message key="tutor_first_name" var="tutor_first_name"/>
+<fmt:message key="tutor_last_name" var="tutor_last_name"/>
+<fmt:message key="students_enrolled" var="students_enrolled"/>
+<fmt:message key="enroll" var="enroll"/>
+<fmt:message key="all" var="all"/>
+<fmt:message key="create_stud_account" var="create_stud_account"/>
 
 <body>
 <main class="container mx-auto">
-    <h2 class="text-center">Available courses</h2>
+    <h2 class="text-center"></h2>
     <div class="row">
         <div class="p-1 ">
             <div>
@@ -15,9 +37,9 @@
                     <input type="hidden" name="page" value="1">
                     <c:set var="selectedThemeId" value="${pageContext.request.getParameter(\"themeId\")}"></c:set>
                     <c:set var="selectedTutorId" value="${pageContext.request.getParameter(\"tutorId\")}"></c:set>
-                    <label>Filter:</label>
+                    <label>${filter}</label>
                     <select id="tutor-filter" name="tutorId" class="form-select mb-1" id="tutor-filter">
-                        <option value="" disabled selected>By tutor:</option>
+                        <option value="" disabled selected>${by_tutor}</option>
                         <option value="">All</option>
                         <c:forEach items="${tutors}" var="tutor">
                             <option
@@ -27,42 +49,42 @@
                         </c:forEach>
                     </select>
                     <select id="theme-filter" name="themeId" class="form-select mb-1" id="theme-filter" class="mb-1">
-                        <option value="" disabled selected>By theme:</option>
-                        <option value="">All</option>
+                        <option value="" disabled selected>${by_theme}</option>
+                        <option value="">${all}</option>
                         <c:forEach items="${themes}" var="theme">
                             <option
                                     <c:if test="${selectedThemeId eq theme.id}">selected</c:if>
                                     value="${theme.id}">${theme.name}</option>
                         </c:forEach>
                     </select>
-                    <label for="sort-option">Sort by:</label>
+                    <label for="sort-option">${sort_by}</label>
                     <select id="sort-option" name="sortOption" class="form-select col-lg-3 mb-2">
                         <option
                                 <c:if test="${pageContext.request.getParameter(\"sortOption\") eq \"courseNameAsc\"}">selected</c:if>
-                                value="courseNameAsc">Course name A-Z
+                                value="courseNameAsc">${course_name_az}
                         </option>
                         <option
                                 <c:if test="${pageContext.request.getParameter(\"sortOption\") eq \"courseNameDesc\"}">selected</c:if>
-                                value="courseNameDesc">Course name Z-A
+                                value="courseNameDesc">${course_name_za}
                         </option>
                         <option
                                 <c:if test="${pageContext.request.getParameter(\"sortOption\") eq \"courseDurationAsc\"}">selected</c:if>
-                                value="courseDurationAsc">Course duration (shortest first)
+                                value="courseDurationAsc">${course_duration_short_first}
                         </option>
                         <option
                                 <c:if test="${pageContext.request.getParameter(\"sortOption\") eq \"courseDurationDesc\"}">selected</c:if>
-                                value="courseDurationAsc">Course duration (longest first)
+                                value="courseDurationAsc">${course_duration_long_first}
                         </option>
                         <option
                                 <c:if test="${pageContext.request.getParameter(\"sortOption\") eq \"courseStudentsAsc\"}">selected</c:if>
-                                value="courseStudentsAsc">Enrolled students (fewer first)
+                                value="courseStudentsAsc">${enrolled_students_few_first}
                         </option>
                         <option
                                 <c:if test="${pageContext.request.getParameter(\"sortOption\") eq \"courseStudentsDesc\"}">selected</c:if>
-                                value="courseStudentsDesc">Enrolled students (more first)
+                                value="courseStudentsDesc">${enrolled_students_more_first}
                         </option>
                     </select>
-                    <button type="submit" class="btn btn-primary mb-2">Apply filter</button>
+                    <button type="submit" class="btn btn-primary mb-2">${apply_filter}</button>
                 </form>
             </div>
             <c:set var="coursesPageSize">${fn:length(coursesPage)}</c:set>
@@ -70,15 +92,15 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Name</th>
-                    <th>Theme</th>
-                    <th>Start date</th>
-                    <th>End date</th>
-                    <th>Description</th>
-                    <th>Tutor first name</th>
-                    <th>Tutor last name</th>
-                    <th>Students enrolled</th>
-                    <th>Action</th>
+                    <th>${course_name}</th>
+                    <th>${theme_name}</th>
+                    <th>${start_date}</th>
+                    <th>${end_date}</th>
+                    <th>${description}</th>
+                    <th>${tutor_first_name}</th>
+                    <th>${tutor_last_name}</th>
+                    <th>${students_enrolled}</th>
+                    <th>${action}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -102,18 +124,18 @@
                         <td>
                             <c:choose >
                                 <c:when test="${userRole eq \'STUDENT\'}">
-                                    <form action="user/enroll" class="text-center" method="POST">
+                                    <form class="text-center" method="POST">
                                         <input type="hidden" name="command" value="enroll">
                                         <input type="hidden" name="courseId" value="${course.id}">
                                         <input type="hidden" name="courseName" value="${course.name}">
 
                                         <button type="submit" class="btn btn-outline-info">
-                                            Enroll
+                                            ${enroll}
                                         </button>
                                     </form>
                                 </c:when>
                                 <c:otherwise>
-                                    <p>Create student account in order to enroll</p>
+                                    <p>${create_stud_account}</p>
                                 </c:otherwise>
                             </c:choose>
                         </td>
@@ -131,7 +153,7 @@
                         <c:set var="prevDisabled" value="disabled"></c:set>
                     </c:if>
                     <li class="page-item ${prevDisabled}"><a class="page-link"
-                                                             href="main_page?page=${currentPage - 1}&sortOption=${sortOption}&themeId=${themeId}&tutorId=${tutorId}">Previous</a>
+                                                             href="main_page?page=${currentPage - 1}&sortOption=${sortOption}&themeId=${themeId}&tutorId=${tutorId}">${previous}</a>
                     </li>
 
                     <c:forEach begin="1" end="${pageCount}" var="num" varStatus="loop">
@@ -148,12 +170,25 @@
                         <c:set var="nextDisabled" value="disabled"></c:set>
                     </c:if>
                     <li class="page-item ${nextDisabled}"><a class="page-link"
-                                                             href="main_page?page=${currentPage + 1}&sortOption=${sortOption}&themeId=${themeId}&tutorId=${tutorId}">Next</a>
+                                                             href="main_page?page=${currentPage + 1}&sortOption=${sortOption}&themeId=${themeId}&tutorId=${tutorId}">${next}</a>
                     </li>
                 </ul>
             </nav>
         </div>
     </div>
+    <footer class="container mt-3">
+        <hr class="featurette-divider"/>
+        &copy; 2017–2021 Company, Inc. &middot;
+       <div style="float:right;" class="display-inline">
+          <form action="${pageContext.request.contextPath}/main_page" class="localization-form">
+              <input type="hidden" name="command" value="switchLocale">
+              <button type="submit" name="locale" value="En">En</button>
+              <button type="submit" name="locale" value="Ru">Ru</button>
+          </form>
+
+       </div>
+
+    </footer>
 </main>
 <script src="${pageContext.request.contextPath}/static/js/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"

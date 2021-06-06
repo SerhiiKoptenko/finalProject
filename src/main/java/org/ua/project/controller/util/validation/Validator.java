@@ -7,11 +7,10 @@ import org.ua.project.model.entity.User;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
-import java.util.Optional;
 import java.util.Properties;
 
 public class Validator {
- private static final String VALIDATION_PROPERTIES = "validation.properties";
+ private static final String VALIDATION_PROPERTIES = "validation/validation.properties";
     private final Properties properties = new Properties();
 
     private static volatile Validator instance;
@@ -64,16 +63,9 @@ public class Validator {
     }
 
     public void validateParameter(String value, Parameter parameter, ValidationResult result) {
-        String minLengthProp = properties.getProperty(parameter.getValue() + ".minLength");
-        String maxLengthProp = properties.getProperty(parameter.getValue() + ".maxLength");
-        int minLength = Integer.parseInt(minLengthProp);
-        int maxLength = Integer.parseInt(maxLengthProp);
         String regex = properties.getProperty(parameter.getValue() + ".regex");
 
-        if (value == null
-                || value.length() < minLength
-                || value.length() > maxLength
-                || !value.matches(regex)) {
+        if (value == null || !value.matches(regex)) {
             result.setSuccessful(false);
             result.addInvalidParameter(parameter);
         }

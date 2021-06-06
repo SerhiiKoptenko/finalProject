@@ -16,6 +16,7 @@ public class ControllerConstants {
     public static final String REDIRECT_TO_MANAGE_USERS_PAGE = REDIRECT_PREFIX + "/admin/manage_students";
     public static final String REDIRECT_TO_PERSONAL_CABINET = REDIRECT_PREFIX + "/user/personal_cabinet";
     public static final String REDIRECT_TO_JOURNAL = REDIRECT_PREFIX + "/user/personal_cabinet/journal";
+    public static final String REDIRECT_TO_ENROLL_PAGE = REDIRECT_PREFIX + "/user/enroll";
 
     public static final String FORWARD_TO_REGISTER_TUTOR_PAGE = "/WEB-INF/jsp/admin/registerTutor.jsp";
     public static final String FORWARD_TO_LEAVE_COURSE = "/WEB-INF/jsp/user/leave_course.jsp";

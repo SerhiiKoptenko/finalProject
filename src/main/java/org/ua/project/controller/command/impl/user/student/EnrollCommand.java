@@ -26,7 +26,7 @@ public class EnrollCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String url = ControllerConstants.FORWARD_TO_ENROLL_PAGE + "?enrollResult=";
+        String url = ControllerConstants.REDIRECT_TO_ENROLL_PAGE + "?enrollResult=";
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute(ControllerConstants.USER_ATTR);
         if (User.Role.GUEST.equals(user.getRole())) {

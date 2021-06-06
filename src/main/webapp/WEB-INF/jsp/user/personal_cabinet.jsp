@@ -2,43 +2,52 @@
 <!DOCTYPE html>
 <html>
 <%@ include file="../header.jsp" %>
+<fmt:message key="display_courses" var="display_courses"/>
+<fmt:message key="not_started" var="not_started"/>
+<fmt:message key="ongoing" var="ongoing"/>
+<fmt:message key="completed" var="completed"/>
+<fmt:message key="display" var="display"/>
+<fmt:message key="mark" var="mark"/>
+<fmt:message key="leave_course" var="leave_course"/>
+<fmt:message key="no_courses_to_display" var="no_courses_to_display"/>
+<fmt:message key="you_left" var="you_left"/>
 <body>
 <main class="container">
-    <h2 class="text-center">Personal cabinet</h2>
-    <p>First name: ${user.firstName}</p>
-    <p>Last name: ${user.lastName}</p>
-    <p>Login: ${user.login}</p>
+    <h2 class="text-center">${personal_cabinet}</h2>
+    <p>${first_name}: ${user.firstName}</p>
+    <p>${last_name}: ${user.lastName}</p>
+    <p>${login}: ${user.login}</p>
     <c:if test="${user.role eq \"STUDENT\"}">
         <form method="GET">
             <input type="hidden" name="command" value="displayStudentsCourses">
-            <label for="courses-select">Display courses: </label>
+            <label for="courses-select">${display_courses}: </label>
             <select name="displayedCourses" id="courses-select" class="form-select mb-3">
-                <option value="not_started">Not started</option>
-                <option value="ongoing">Ongoing</option>
-                <option value="completed">Completed</option>
+                <option value="not_started">${not_started}</option>
+                <option value="ongoing">${ongoing}</option>
+                <option value="completed">${completed}</option>
             </select>
-            <button type="submit" class="btn btn-primary">Display</button>
+            <button type="submit" class="btn btn-primary">${display}</button>
         </form>
 
         <c:set var="studentsCoursesListSize">${fn:length(studentsCourses)}</c:set>
         <c:set var="displayedCourses" value="${pageContext.request.getParameter(\"displayedCourses\")}"/>
         <c:choose>
             <c:when test="${studentsCoursesListSize > 0}">
-                <table class="table table-bordered border-primary ">
+                <table class="table table-bordered border-primary mt-3">
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Theme</th>
-                        <th>Start date</th>
-                        <th>End date</th>
-                        <th>Description</th>
-                        <th>Tutor first name</th>
-                        <th>Tutor last name</th>
-                        <th>Students enrolled</th>
-                        <th>Mark</th>
+                        <th>${course_name}</th>
+                        <th>${theme_name}</th>
+                        <th>${start_date}</th>
+                        <th>${end_date}</th>
+                        <th>${description}</th>
+                        <th>${tutor_first_name}</th>
+                        <th>${tutor_last_name}</th>
+                        <th>${students_enrolled}</th>
+                        <th>${mark}</th>
                         <c:if test="${displayedCourses eq \"ongoing\" || displayedCourses eq \"not_started\"}">
-                            <th>Action</th>
+                            <th>${action}</th>
                         </c:if>
                     </tr>
                     </thead>
@@ -68,7 +77,7 @@
                                     <input type="hidden" name="courseId" value="${studentsCourse.course.id}">
                                 <td><button class="btn btn-outline-danger"
                                        type="submit"
-                                       role="button">Leave course</button></td>
+                                       role="button">${leave_course}</button></td>
                                 </form>
                             </c:if>
                         </tr>
@@ -78,7 +87,7 @@
             </c:when>
             <c:otherwise>
                 <div class="alert alert-light" role="alert">
-                    No courses to display.
+                    ${no_courses_to_display}
                 </div>
             </c:otherwise>
         </c:choose>
@@ -86,20 +95,20 @@
 
     <c:if test="${pageContext.request.getParameter('leftCourseName') ne null}}">
         <div class="alert alert-warning" role="alert">
-            You left ${pageContext.request.getParameter('leftCourseName')} course.
+            ${you_left} ${pageContext.request.getParameter('leftCourseName')} ${course_word}
         </div>
     </c:if>
 
     <c:if test="${user.role eq \"TUTOR\"}">
         <form method="GET">
             <input type="hidden" name="command" value="displayTutorsCourses">
-            <label for="tutors-courses-select">Display courses: </label>
+            <label for="tutors-courses-select">${display_courses}: </label>
             <select name="displayTutorsCourses" id="tutors-courses-select" class="form-select mb-3">
-                <option value="not_started">Not started</option>
-                <option value="ongoing">Ongoing</option>
-                <option value="completed">Completed</option>
+                <option value="not_started">${not_started}/option>
+                <option value="ongoing">${ongoing}</option>
+                <option value="completed">${completed}</option>
             </select>
-            <button type="submit" class="btn btn-primary">Display</button>
+            <button type="submit" class="btn btn-primary">${display}</button>
         </form>
         <c:set var="displayedCourses" value="${pageContext.request.getParameter(\"displayTutorsCourses\")}"/>
         <c:set var="tutorsCoursesListSize">${fn:length(tutorsCourses)}</c:set>
@@ -109,14 +118,14 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Theme</th>
-                        <th>Start date</th>
-                        <th>End date</th>
-                        <th>Description</th>
-                        <th>Students enrolled</th>
+                        <th>${course_name}</th>
+                        <th>${theme_name}</th>
+                        <th>${start_date}</th>
+                        <th>${end_date}</th>
+                        <th>${description}</th>
+                        <th>${students_enrolled}</th>
                         <c:if test="${displayedCourses eq \"completed\"}">
-                            <th class="text-center">Action</th>
+                            <th class="text-center">${action}</th>
                         </c:if>
                     </tr>
                     </thead>

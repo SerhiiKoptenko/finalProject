@@ -15,7 +15,7 @@ public final class SqlStatementLoader {
     private static volatile SqlStatementLoader instance;
 
     private final Properties properties = new Properties();
-    private static final String PROPERTIES_PATH = "sqlStatements.properties";
+    private static final String PROPERTIES_PATH = "db/sqlStatements.properties";
 
     public static SqlStatementLoader getInstance() {
         if (instance == null) {
