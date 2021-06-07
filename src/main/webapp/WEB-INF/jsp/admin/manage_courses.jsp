@@ -150,8 +150,8 @@
                         <td>${count}</td>
                         <td>${course.name}</td>
                         <td>${course.theme.name}</td>
-                        <td>${course.startDate}</td>
-                        <td>${course.endDate}</td>
+                        <td><tags:formatLocalDate date="${course.startDate}"/></td>
+                        <td><tags:formatLocalDate date="${course.endDate}"/></td>
                         <td>${course.description}</td>
                         <td>${course.tutor.login}</td>
                         <td>${course.tutor.firstName}</td>
@@ -257,6 +257,7 @@
     </div>
     </div>
     <!-- remove theme modal -->
+    <%@include file="../footer.jsp"%>
 </main>
 <script src="${pageContext.request.contextPath}/static/js/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"

@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 public class LocalizationCommand implements Command {
 
@@ -15,6 +16,8 @@ public class LocalizationCommand implements Command {
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String locale = req.getParameter(Parameter.LOCALE.getValue());
         req.getSession().setAttribute("locale", locale);
-        return ControllerConstants.REDIRECT_TO_MAIN_PAGE;
+
+        Optional<String> lastRequest = Optional.ofNullable((String) req.getSession().getAttribute("lastRequest"));
+        return ControllerConstants.REDIRECT_PREFIX + lastRequest.orElse("/main_page");
     }
 }

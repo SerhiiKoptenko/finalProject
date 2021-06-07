@@ -3,13 +3,14 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="cust" uri="/WEB-INF/tags.tld" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
 <c:if test="${not empty sessionScope.locale}">
     <fmt:setLocale value="${sessionScope.locale}"/>
 </c:if>
 
 
 <c:if test="${not empty sessionScope.locale}">
-    <fmt:setLocale value="${sessionScope.locale}"/>
+    <fmt:setLocale value="${locale}"/>
 </c:if>
 
 <fmt:setBundle basename="i18n.app"/>
@@ -43,6 +44,7 @@
 <fmt:message key="no" var="no"/>
 <fmt:message key="previous" var="previous"/>
 <fmt:message key="next" var="next"/>
+<fmt:message key="mark" var="mark"/>
 <head>
     <meta charset="UTF-8">
     <title>${pageTitle}</title>
@@ -92,9 +94,6 @@
                            href="${pageContext.request.contextPath}">${home}</a>
                     </li>
                     <c:if test="${user.role eq \"ADMIN\"}">
-                        <li class="nav-item"><a class="nav-link"
-                                                href="${pageContext.request.contextPath}/admin/admin_basis">Admin
-                            home</a></li>
                         <li class="nav-item"><a class="nav-link"
                                                 href="${pageContext.request.contextPath}/admin/manage_courses">${manage_courses}</a>
                         </li>

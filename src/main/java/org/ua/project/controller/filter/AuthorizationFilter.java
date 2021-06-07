@@ -19,7 +19,6 @@ public class AuthorizationFilter extends HttpFilter {
 
     @Override
     public void init() throws ServletException {
-       allUrls.add("/admin/admin_basis");
        allUrls.add("/admin/manage_students");
        allUrls.add("/admin/manage_courses");
        allUrls.add("/admin/manage_courses?command=addCourse");
@@ -64,7 +63,6 @@ public class AuthorizationFilter extends HttpFilter {
 
         List<String> adminUrls = new ArrayList<>();
         adminUrls.add("/admin/manage_courses");
-        adminUrls.add("/admin/admin_basis");
         adminUrls.add("/admin/edit_course");
         adminUrls.add("/admin/register_tutor");
         adminUrls.add("/admin/delete_course");

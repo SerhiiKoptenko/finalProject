@@ -95,5 +95,6 @@
             ${update_success}.
         </div>
     </c:if>
+    <%@include file="../footer.jsp"%>
 </main>
 </body>

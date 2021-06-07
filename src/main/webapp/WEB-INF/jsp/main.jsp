@@ -115,8 +115,8 @@
                         <td>${count}</td>
                         <td>${course.name}</td>
                         <td>${course.theme.name}</td>
-                        <td>${course.startDate}</td>
-                        <td>${course.endDate}</td>
+                        <td><tags:formatLocalDate date="${course.startDate}"/></td>
+                        <td><tags:formatLocalDate date="${course.endDate}"/></td>
                         <td>${course.description}</td>
                         <td>${course.tutor.firstName}</td>
                         <td>${course.tutor.lastName}</td>
@@ -176,24 +176,8 @@
             </nav>
         </div>
     </div>
-    <footer class="container mt-3">
-        <hr class="featurette-divider"/>
-        &copy; 2017–2021 Company, Inc. &middot;
-       <div style="float:right;" class="display-inline">
-          <form action="${pageContext.request.contextPath}/main_page" class="localization-form">
-              <input type="hidden" name="command" value="switchLocale">
-              <button type="submit" name="locale" value="En">En</button>
-              <button type="submit" name="locale" value="Ru">Ru</button>
-          </form>
-
-       </div>
-
-    </footer>
+    <%@include file="footer.jsp"%>
 </main>
-<script src="${pageContext.request.contextPath}/static/js/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-        crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/static/js/app.js"></script>
+
 </body>
 </html>

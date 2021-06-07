@@ -2,9 +2,11 @@
 <!DOCTYPE html>
 <html>
 <%@ include file="../header.jsp" %>
+<fmt:message key="journal_for" var="journal_for"/>
+<fmt:message key="no_students_to_display" var="no_students_to_display"/>
 <body>
 <main class="container">
-    <h2 class="text-center">Journal for ${pageContext.request.getParameter("courseName")} course</h2>
+    <h2 class="text-center">${journal_for} ${pageContext.request.getParameter("courseName")}</h2>
     <c:set var="studentsByCourseSize">${fn:length(studentsByCourse)}</c:set>
     <c:choose>
         <c:when test="${studentsByCourseSize > 0}">
@@ -12,10 +14,10 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>First name</th>
-                    <th>Last name</th>
-                    <th>Mark</th>
-                    <th class="text-center">Action</th>
+                    <th>${first_name}</th>
+                    <th>${last_name}</th>
+                    <th>${mark}/th>
+                    <th class="text-center">${action}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -46,9 +48,10 @@
         </c:when>
         <c:otherwise>
             <div class="alert alert-light" role="alert">
-                No students to display.
+               ${no_students_to_display}.
             </div>
         </c:otherwise>
     </c:choose>
+    <%@include file="../footer.jsp"%>
 </main>
 </body>

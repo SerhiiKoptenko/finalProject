@@ -5,6 +5,7 @@
 <c:set var="pageTitle" scope="page" value="Registration tutor"/>
 <body id="reg_page">
 <%@ include file="../header.jsp" %>
+<fmt:message key="tutor_reg_success" var="tutor_reg_success"/>
 <main>
     <c:set var="regResult" scope="page" value="${pageContext.request.getParameter(\"registrationResult\")}"/>
     <c:set var="prevFirstName" scope="page" value="${pageContext.request.getParameter(\"prevFirstName\")}"/>
@@ -12,33 +13,7 @@
     <c:set var="prevLogin" scope="page" value="${pageContext.request.getParameter(\"prevLogin\")}"/>
     <c:if test="${\"success\" ne regResult}">
         <!--Registration form-->
-        <div class="registrationForm container mx-auto p-5 rounded ">
-            <h3 class="text-center">Register tutor</h3>
-            <form  method="post">
-                <input type="hidden" name="command" value="register">
-                <div class="mb-3">
-                    <label for="firstName" class="form-label ">First name</label>
-                    <input type="text" class="form-control" name="firstName" id="firstName" required
-                            value="${prevFirstName}">
-                </div>
-                <div class="mb-3">
-                    <label for="lastName" class="form-label">Last name</label>
-                    <input type="text" class="form-control" name="lastName" id="lastName" required
-                            value="${prevLastName}">
-                </div>
-                <div class="mb-3">
-                    <label for="login" class="form-label">Login</label>
-                    <input type="text" class="form-control" name="login" id="login" required
-                            value="${prevLogin}">
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" name="password" id="password" required
-                           >
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-        </div>
+        <%@include file="../registration_form.jsp"%>
         <!--Registration form-->
     </c:if>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -56,7 +31,7 @@
                     <use xlink:href="#check-circle-fill"/>
                 </svg>
                 <div>
-                    Tutor successfully registered.
+                    ${tutor_reg_success}.
                 </div>
             </div>
         </c:when>
@@ -66,7 +41,7 @@
                     <use xlink:href="#exclamation-triangle-fill"/>
                 </svg>
                 <div>
-                    User with login ${prevLogin} already exists. Please try another login.
+                    ${user_already_exists}.
                 </div>
             </div>
         </c:when>
@@ -77,21 +52,22 @@
                 </svg>
                 <div>
                     <c:if test="${pageContext.request.getParameter(\"invalid_firstName\") ne null}">
-                        Invalid first name.<br>
+                        ${invalid_first_name}.<br>
                     </c:if>
                     <c:if test="${pageContext.request.getParameter(\"invalid_lastName\") ne null}">
-                        Invalid last name.<br>
+                        ${invalid_last_name}.<br>
                     </c:if>
                     <c:if test="${pageContext.request.getParameter(\"invalid_login\") ne null}">
-                        Invalid login.<br>
+                        ${invalid_login}.<br>
                     </c:if>
                     <c:if test="${pageContext.request.getParameter(\"invalid_password\") ne null}">
-                        Invalid password.<br>
+                        ${invalid_password}.<br>
                     </c:if>
                 </div>
             </div>
         </c:when>
     </c:choose>
+    <%@include file="../footer.jsp"%>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"

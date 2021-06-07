@@ -2,10 +2,8 @@ package org.ua.project.model.dao.mapper;
 
 import org.ua.project.model.entity.User;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 public class UserMapper implements EntityMapper<User> {
 
@@ -19,13 +17,10 @@ public class UserMapper implements EntityMapper<User> {
         User.Role role = User.Role.valueOf(resultSet.getString("role"));
         boolean isBlocked = resultSet.getBoolean("is_blocked");
 
-        Date date = resultSet.getDate("birth_date");
-        LocalDate birthDate = date == null ? null : date.toLocalDate();
         return new User.Builder()
                 .setId(id)
                 .setFirstName(firstName)
                 .setLastName(lastName)
-                .setBirthDate(birthDate)
                 .setLogin(login)
                 .setPassword(password)
                 .setRole(role)

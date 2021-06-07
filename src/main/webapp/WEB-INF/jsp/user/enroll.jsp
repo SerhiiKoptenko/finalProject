@@ -9,5 +9,6 @@
             <hr>
             <a href="../main_page">${go_back_to_available_courses}</a>
         </div>
+        <%@include file="../footer.jsp"%>
     </main>
 </html>

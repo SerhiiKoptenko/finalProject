@@ -11,7 +11,6 @@ public class User implements Entity, Serializable {
     private int id;
     private String firstName;
     private String lastName;
-    private LocalDate birthDate;
     private String login;
     private String password;
     private Role role;
@@ -35,10 +34,6 @@ public class User implements Entity, Serializable {
         this.lastName = lastName;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
     public void setLogin(String login) {
         this.login = login;
     }
@@ -53,10 +48,6 @@ public class User implements Entity, Serializable {
 
     public String getLogin() {
         return login;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
     }
 
     public String getPassword() {
@@ -93,11 +84,10 @@ public class User implements Entity, Serializable {
 
     public User(){}
 
-    public User(int id, String firstName, String lastName, LocalDate birthDate, String login, String password, Role role, List<Course> courses, boolean isBlocked) {
+    public User(int id, String firstName, String lastName, String login, String password, Role role, List<Course> courses, boolean isBlocked) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthDate = birthDate;
         this.login = login;
         this.password = password;
         this.role = role;
@@ -109,7 +99,6 @@ public class User implements Entity, Serializable {
         private int id;
         private String firstName;
         private String lastName;
-        private LocalDate birthDate;
         private String login;
         private String password;
         private Role role;
@@ -132,7 +121,6 @@ public class User implements Entity, Serializable {
         }
 
         public Builder setBirthDate(LocalDate birthDate) {
-            this.birthDate = birthDate;
             return this;
         }
 
@@ -162,7 +150,7 @@ public class User implements Entity, Serializable {
         }
 
         public User build() {
-            return new User(id,  firstName, lastName, birthDate, login, password, role, courses, isBlocked);
+            return new User(id,  firstName, lastName, login, password, role, courses, isBlocked);
         }
     }
 
@@ -171,17 +159,12 @@ public class User implements Entity, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id
-                && Objects.equals(firstName, user.firstName)
-                && Objects.equals(lastName, user.lastName)
-                && Objects.equals(login, user.login)
-                && Objects.equals(birthDate, user.birthDate)
-                && role == user.role;
+        return id == user.id && blocked == user.blocked && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(login, user.login) && Objects.equals(password, user.password) && role == user.role && Objects.equals(courses, user.courses);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, login, birthDate, role);
+        return Objects.hash(id, firstName, lastName, login, password, role, courses, blocked);
     }
 
     @Override
@@ -191,8 +174,10 @@ public class User implements Entity, Serializable {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", login='" + login + '\'' +
-                ", birthDate=" + birthDate +
+                ", password='" + password + '\'' +
                 ", role=" + role +
+                ", courses=" + courses +
+                ", blocked=" + blocked +
                 '}';
     }
 

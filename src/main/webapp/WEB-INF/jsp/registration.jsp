@@ -5,11 +5,6 @@
 <c:set var="pageTitle" scope="page" value="Registration page"/>
 <body id="reg_page">
 <%@ include file="header.jsp" %>
-<fmt:message key="registration_success" var="registration_success"/>
-<fmt:message key="user_already_exists" var="user_already_exists"/>
-<fmt:message key="invalid_first_name" var="invalid_first_name"/>
-<fmt:message key="invalid_last_name" var="invalid_last_name"/>
-<fmt:message key="registration" var="registration"/>
 <main>
     <c:set var="regResult" scope="page" value="${pageContext.request.getParameter(\"registrationResult\")}"/>
     <c:set var="prevFirstName" scope="page" value="${pageContext.request.getParameter(\"firstName\")}"/>
@@ -17,33 +12,7 @@
     <c:set var="prevLogin" scope="page" value="${pageContext.request.getParameter(\"login\")}"/>
     <c:if test="${\"success\" ne regResult}">
         <!--Registration form-->
-        <div class="registrationForm container mx-auto p-5 rounded ">
-            <h3 class="text-center">${registration}</h3>
-            <form action="registration_page" method="post">
-                <input type="hidden" name="command" value="register">
-                <div class="mb-3">
-                    <label for="firstName" class="form-label ">${first_name}</label>
-                    <input type="text" class="form-control" name="firstName" id="firstName" required
-                            value="${prevFirstName}">
-                </div>
-                <div class="mb-3">
-                    <label for="lastName" class="form-label">${last_name}</label>
-                    <input type="text" class="form-control" name="lastName" id="lastName" required
-                            value="${prevLastName}">
-                </div>
-                <div class="mb-3">
-                    <label for="login" class="form-label">${login}</label>
-                    <input type="text" class="form-control" name="login" id="login" required
-                            value="${prevLogin}">
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">${password}</label>
-                    <input type="password" class="form-control" name="password" id="password" required
-                           >
-                </div>
-                <button type="submit" class="btn btn-primary">${submit}</button>
-            </form>
-        </div>
+        <%@include file="registration_form.jsp"%>
         <!--Registration form-->
     </c:if>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -97,6 +66,7 @@
             </div>
         </c:when>
     </c:choose>
+    <%@include file="footer.jsp"%>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"

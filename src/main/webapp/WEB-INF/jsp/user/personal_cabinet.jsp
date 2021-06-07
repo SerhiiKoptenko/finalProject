@@ -7,10 +7,10 @@
 <fmt:message key="ongoing" var="ongoing"/>
 <fmt:message key="completed" var="completed"/>
 <fmt:message key="display" var="display"/>
-<fmt:message key="mark" var="mark"/>
 <fmt:message key="leave_course" var="leave_course"/>
 <fmt:message key="no_courses_to_display" var="no_courses_to_display"/>
 <fmt:message key="you_left" var="you_left"/>
+<fmt:message key="display_journal" var="display_journal"/>
 <body>
 <main class="container">
     <h2 class="text-center">${personal_cabinet}</h2>
@@ -59,8 +59,8 @@
                             <td>${count}</td>
                             <td>${studentsCourse.course.name}</td>
                             <td>${studentsCourse.course.theme.name}</td>
-                            <td>${studentsCourse.course.startDate}</td>
-                            <td>${studentsCourse.course.endDate}</td>
+                            <td><tags:formatLocalDate date="${studentsCourse.course.startDate}"/></td>
+                            <td><tags:formatLocalDate date="${studentsCourse.course.endDate}"/></td>
                             <td>${studentsCourse.course.description}</td>
                             <td>${studentsCourse.course.tutor.firstName}</td>
                             <td>${studentsCourse.course.tutor.lastName}</td>
@@ -75,9 +75,11 @@
                                     <input type="hidden" name="studId" value="${studentsCourse.student.id}">
                                     <input type="hidden" name="courseName" value="${studentsCourse.course.name}">
                                     <input type="hidden" name="courseId" value="${studentsCourse.course.id}">
-                                <td><button class="btn btn-outline-danger"
-                                       type="submit"
-                                       role="button">${leave_course}</button></td>
+                                    <td>
+                                        <button class="btn btn-outline-danger"
+                                                type="submit"
+                                                role="button">${leave_course}</button>
+                                    </td>
                                 </form>
                             </c:if>
                         </tr>
@@ -87,7 +89,7 @@
             </c:when>
             <c:otherwise>
                 <div class="alert alert-light" role="alert">
-                    ${no_courses_to_display}
+                        ${no_courses_to_display}
                 </div>
             </c:otherwise>
         </c:choose>
@@ -95,7 +97,7 @@
 
     <c:if test="${pageContext.request.getParameter('leftCourseName') ne null}}">
         <div class="alert alert-warning" role="alert">
-            ${you_left} ${pageContext.request.getParameter('leftCourseName')} ${course_word}
+                ${you_left} ${pageContext.request.getParameter('leftCourseName')} ${course_word}
         </div>
     </c:if>
 
@@ -104,11 +106,11 @@
             <input type="hidden" name="command" value="displayTutorsCourses">
             <label for="tutors-courses-select">${display_courses}: </label>
             <select name="displayTutorsCourses" id="tutors-courses-select" class="form-select mb-3">
-                <option value="not_started">${not_started}/option>
+                <option value="not_started">${not_started}</option>
                 <option value="ongoing">${ongoing}</option>
                 <option value="completed">${completed}</option>
             </select>
-            <button type="submit" class="btn btn-primary">${display}</button>
+            <button type="submit" class="btn btn-primary mb-3">${display}</button>
         </form>
         <c:set var="displayedCourses" value="${pageContext.request.getParameter(\"displayTutorsCourses\")}"/>
         <c:set var="tutorsCoursesListSize">${fn:length(tutorsCourses)}</c:set>
@@ -137,19 +139,19 @@
                             <td>${count}</td>
                             <td>${tutorsCourse.name}</td>
                             <td>${tutorsCourse.theme.name}</td>
-                            <td>${tutorsCourse.startDate}</td>
-                            <td>${tutorsCourse.endDate}</td>
+                            <td><tags:formatLocalDate date="${tutorsCourse.startDate}"/></td>
+                            <td><tags:formatLocalDate date="${tutorsCourse.endDate}"/></td>
                             <td>${tutorsCourse.description}</td>
                             <td>${tutorsCourse.studentCount}</td>
-                            <td>
-                                <c:if test="${displayedCourses eq \"completed\"}">
+                            <c:if test="${displayedCourses eq \"completed\"}">
+                                <td>
                                     <form method="GET" class="text-center" action="personal_cabinet/journal">
-                                        <button class="btn btn-outline-success" type="submit">Display journal</button>
+                                        <button class="btn btn-outline-success" type="submit">${display_journal}</button>
                                         <input type="hidden" name="courseId" value="${tutorsCourse.id}">
                                         <input type="hidden" name="courseName" value="${tutorsCourse.name}">
                                     </form>
-                                </c:if>
-                            </td>
+                                </td>
+                            </c:if>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -160,6 +162,7 @@
             </c:otherwise>
         </c:choose>
     </c:if>
+    <%@include file="../footer.jsp" %>
 </main>
 </body>
 </html>

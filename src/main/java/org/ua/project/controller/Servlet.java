@@ -37,7 +37,6 @@ public class Servlet extends HttpServlet {
         servletConfig.getServletContext()
                 .setAttribute(ControllerConstants.LOGGED_USERS_ATTR, new HashSet<String>());
 
-        commands.put("/admin/admin_basis", new GoToAdminBasisCommand());
         commands.put("/admin/manage_students", new GoToManageUsersCommand());
         commands.put("/admin/manage_courses", new GoToManageCoursesPageCommand());
         commands.put("/admin/manage_courses?command=addCourse", new AddCourseCommand());
@@ -71,6 +70,7 @@ public class Servlet extends HttpServlet {
         commands.put("/user/personal_cabinet/leave_course?command=leaveCourse", new LeaveCourseCommand());
 
         commands.put("/main_page?command=switchLocale", new LocalizationCommand());
+
     }
 
     @Override
@@ -102,6 +102,7 @@ public class Servlet extends HttpServlet {
             }
             logger.trace("Forwarding to: {}", page);
             req.getRequestDispatcher(page).forward(req, resp);
+            req.getSession().setAttribute("lastRequest", req.getRequestURI());
         } else {
             logger.error("Unknown url: {}", path);
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
