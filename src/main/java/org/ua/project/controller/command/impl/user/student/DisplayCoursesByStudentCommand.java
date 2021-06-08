@@ -24,7 +24,7 @@ public class DisplayCoursesByStudentCommand implements Command {
         User user = (User) req.getSession().getAttribute(ControllerConstants.USER_ATTR);
         Optional<String> courseStatusOpt = Optional.ofNullable(req.getParameter(Parameter.DISPLAY_STUDENTS_COURSES.getValue()));
         CourseFilterOption.CourseStatus courseStatus;
-        courseStatus = CourseFilterOption.CourseStatus.valueOf(courseStatusOpt.orElse("ongoing").toUpperCase());
+        courseStatus = CourseFilterOption.CourseStatus.valueOf(courseStatusOpt.orElse("not_started").toUpperCase());
         StudentCourseService studentCourseService = new StudentCourseService();
         CourseFilterOption filterOption = new CourseFilterOption.Builder()
                 .setCourseStatus(courseStatus)

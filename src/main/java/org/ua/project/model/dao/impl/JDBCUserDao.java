@@ -104,30 +104,6 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     }
 
     @Override
-    public void enrollStudent(User student, Course course) throws DBException {
-        try (PreparedStatement enrollStudentStatement = connection.prepareStatement(ENROLL_USER);
-             PreparedStatement createJournalStatement = connection.prepareStatement(CREATE_USER_JOURNAl)) {
-            connection.setAutoCommit(false);
-            enrollStudentStatement.setInt(1, student.getId());
-            enrollStudentStatement.setInt(2, course.getId());
-            createJournalStatement.setInt(1, student.getId());
-            createJournalStatement.setInt(2, course.getId());
-            enrollStudentStatement.executeUpdate();
-            createJournalStatement.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            try {
-                connection.rollback();
-                connection.setAutoCommit(true);
-                throw new DBException(e);
-            } catch (SQLException ex) {
-                logger.error(ex);
-                throw new DBException(ex);
-            }
-        }
-    }
-
-    @Override
     public List<User> findAll() throws DBException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_USERS)) {
             List<User> users = new ArrayList<>();

@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
 <c:set var="pageTitle" scope="page" value="Sign in page"/>
 <body id="sign_in_page">
@@ -43,33 +43,29 @@
                 <use xlink:href="#exclamation-triangle-fill"/>
             </svg>
             <div>
-               <c:choose>
-                   <c:when test="${signInError eq \"invalidData\"}">
-                       <c:if test="${invalidLogin ne null}">
-                           ${invalid_login}<br>
-                       </c:if>
-                       <c:if test="${invalidPassword ne null}">
-                           ${invalid_password}<br>
-                       </c:if>
-                   </c:when>
-                   <c:when test="${signInError eq \"wrongUserOrPassword\"}">
-                       ${wrong_password_or_login}<br>
-                   </c:when>
-                   <c:when test="${signInError eq \"alreadySignedIn\"}">
-                       ${user_name} ${prevLogin} ${already_signed_in}<br>
-                   </c:when>
-                   <c:when test="${signInError eq \"userBlocked\"}">
-                       ${blocked}<br>
-                   </c:when>
-               </c:choose>
+                <c:choose>
+                    <c:when test="${signInError eq \"invalidData\"}">
+                        <c:if test="${invalidLogin ne null}">
+                            ${invalid_login}<br>
+                        </c:if>
+                        <c:if test="${invalidPassword ne null}">
+                            ${invalid_password}<br>
+                        </c:if>
+                    </c:when>
+                    <c:when test="${signInError eq \"wrongUserOrPassword\"}">
+                        ${wrong_password_or_login}<br>
+                    </c:when>
+                    <c:when test="${signInError eq \"alreadySignedIn\"}">
+                        ${user_name} ${prevLogin} ${already_signed_in}<br>
+                    </c:when>
+                    <c:when test="${signInError eq \"userBlocked\"}">
+                        ${blocked}<br>
+                    </c:when>
+                </c:choose>
             </div>
         </div>
     </c:if>
-    <%@include file="footer.jsp"%>
 </main>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-        crossorigin="anonymous"></script>
+<%@include file="footer.jsp" %>
 </body>
-
 </html>

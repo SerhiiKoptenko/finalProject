@@ -120,10 +120,6 @@ public class User implements Entity, Serializable {
             return this;
         }
 
-        public Builder setBirthDate(LocalDate birthDate) {
-            return this;
-        }
-
         public Builder setLogin(String login) {
             this.login = login;
             return this;

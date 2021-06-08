@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html>
 <html lang="en">
 <%@ include file="header.jsp" %>
 <c:set var="pageTitle" scope="page" value="Main page"/>
@@ -27,9 +26,8 @@
 <fmt:message key="all" var="all"/>
 <fmt:message key="create_stud_account" var="create_stud_account"/>
 
-<body>
 <main class="container mx-auto">
-    <h2 class="text-center"></h2>
+    <h2 class="text-center">${available_courses}</h2>
     <div class="row">
         <div class="p-1 ">
             <div>
@@ -178,6 +176,5 @@
     </div>
     <%@include file="footer.jsp"%>
 </main>
-
 </body>
 </html>

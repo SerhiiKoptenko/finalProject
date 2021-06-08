@@ -1,5 +1,8 @@
 package org.ua.project.controller.constants;
 
+/**
+ * Enum class which holds HTTP parameters names.
+ */
 public enum Parameter {
     FIRST_NAME("firstName"),
     LAST_NAME("lastName"),
@@ -28,6 +31,7 @@ public enum Parameter {
 
     DISPLAY_STUDENTS_COURSES("displayedCourses"),
     DISPLAY_TUTORS_COURSES("displayTutorsCourses"),
+    DISPLAY_COURSES("displayCourses"),
 
     MARK("mark"),
     STUDENT_ID("studId"),
@@ -38,10 +42,15 @@ public enum Parameter {
 
     private String value;
 
+
     Parameter(String value) {
         this.value = value;
     }
 
+    /**
+     * Returns string value of parameter.
+     * @return string value of parameter
+     */
     public String getValue() {
         return value;
     }

@@ -16,7 +16,7 @@
                     <th>#</th>
                     <th>${first_name}</th>
                     <th>${last_name}</th>
-                    <th>${mark}/th>
+                    <th>${mark}</th>
                     <th class="text-center">${action}</th>
                 </tr>
                 </thead>

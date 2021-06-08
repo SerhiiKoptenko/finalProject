@@ -33,6 +33,7 @@ public class UserRegistrationCommand implements Command {
                 .setLastName(lastName)
                 .setPassword(password)
                 .setLogin(login)
+                .setRole(User.Role.STUDENT)
                 .build();
 
         redirectUrl = RegistrationUtility.registerUser(user, redirectUrl);

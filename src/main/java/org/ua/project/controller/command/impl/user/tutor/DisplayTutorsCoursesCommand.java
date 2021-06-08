@@ -26,7 +26,7 @@ public class DisplayTutorsCoursesCommand implements Command {
         HttpSession session = req.getSession();
         User tutor = (User) session.getAttribute(ControllerConstants.USER_ATTR);
         CourseService courseService = new CourseService();
-        Optional<String> courseStatusOpt = Optional.ofNullable(req.getParameter(Parameter.DISPLAY_TUTORS_COURSES.getValue()));
+        Optional<String> courseStatusOpt = Optional.ofNullable(req.getParameter(Parameter.DISPLAY_COURSES.getValue()));
         CourseFilterOption.CourseStatus courseStatus;
         courseStatus = CourseFilterOption.CourseStatus.valueOf(courseStatusOpt.orElse("ongoing").toUpperCase());
         CourseFilterOption courseFilterOption = new CourseFilterOption.Builder()

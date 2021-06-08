@@ -16,4 +16,6 @@ public interface StudentCourseDao extends GenericDao<StudentCourse> {
     boolean updateStudentsMark(StudentCourse studentCourse) throws DBException;
 
     boolean removeStudentFromCourse(StudentCourse studentCourses) throws DBException;
+
+    void enrollStudent(int studId, int courseId) throws DBException;
 }

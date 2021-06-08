@@ -10,12 +10,14 @@ import org.ua.project.model.entity.CourseFilterOption;
 import org.ua.project.model.entity.StudentCourse;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.exception.DBException;
+import org.ua.project.model.exception.IllegalInsertionException;
 import org.ua.project.model.util.SqlStatementLoader;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,8 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
     public static final String FIND_STUDENTS_BY_COURSE;
     public static final String UPDATE_STUDENTS_MARK;
     public static final String REMOVE_STUDENT_FROM_COURSE;
+    public static final String ENROLL_USER;
+
 
     static {
         SqlStatementLoader loader = SqlStatementLoader.getInstance();
@@ -40,6 +44,7 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
         FIND_STUDENTS_BY_COURSE = loader.getSqlStatement("findStudentsByCourse");
         UPDATE_STUDENTS_MARK = loader.getSqlStatement("updateStudentsMark");
         REMOVE_STUDENT_FROM_COURSE = loader.getSqlStatement("removeStudentFromCourse");
+        ENROLL_USER = loader.getSqlStatement("enrollUser");
     }
 
     protected JDBCStudentCourseDao(Connection connection) {
@@ -124,6 +129,31 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
         } catch (SQLException e) {
             logger.error(e);
             throw new DBException(e);
+        }
+    }
+
+    @Override
+    public void enrollStudent(int studId, int courseId) throws DBException {
+        try (JDBCCourseDao courseDao = new JDBCCourseDao(connection);
+                PreparedStatement enrollStudentStatement = connection.prepareStatement(ENROLL_USER)) {
+            connection.setAutoCommit(false);
+            Course course = courseDao.findById(courseId);
+            if (course.getEndDate().compareTo(LocalDate.now()) < 0) {
+                throw new IllegalInsertionException();
+            }
+            enrollStudentStatement.setInt(1, studId);
+            enrollStudentStatement.setInt(2, courseId);
+            enrollStudentStatement.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+                connection.setAutoCommit(true);
+                throw new DBException(e);
+            } catch (SQLException ex) {
+                logger.error(ex);
+                throw new DBException(ex);
+            }
         }
     }
 

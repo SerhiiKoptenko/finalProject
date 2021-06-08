@@ -3,7 +3,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="cust" uri="/WEB-INF/tags.tld" %>
-<%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <c:if test="${not empty sessionScope.locale}">
     <fmt:setLocale value="${sessionScope.locale}"/>
 </c:if>
@@ -16,6 +16,8 @@
 <fmt:setBundle basename="i18n.app"/>
 <fmt:message key="home" var="home"></fmt:message>
 <fmt:message key="register" var="register"/>
+<fmt:message key="registration_success" var="registration_success"/>
+<fmt:message key="registration_success" var="registration_success"/>
 <fmt:message key="sign_in" var="sign_in"/>
 <fmt:message key="sign_out" var="sign_out"/>
 <fmt:message key="manage_courses" var="manage_courses"/>
@@ -45,6 +47,8 @@
 <fmt:message key="previous" var="previous"/>
 <fmt:message key="next" var="next"/>
 <fmt:message key="mark" var="mark"/>
+<!DOCTYPE html>
+<html>
 <head>
     <meta charset="UTF-8">
     <title>${pageTitle}</title>
@@ -54,6 +58,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/app.css">
 
 </head>
+<body>
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light bg-gradient">
         <div class="container-fluid">

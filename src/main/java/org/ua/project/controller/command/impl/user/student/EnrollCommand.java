@@ -32,24 +32,27 @@ public class EnrollCommand implements Command {
         if (User.Role.GUEST.equals(user.getRole())) {
             return ControllerConstants.REDIRECT_PREFIX + "/sign_in_page?signInError=needToLogin";
         }
+
+
         Optional<User> studentOpt = Optional.ofNullable((User) session.getAttribute(ControllerConstants.USER_ATTR));
         Optional<String> courseIdOpt = Optional.ofNullable(req.getParameter(Parameter.COURSE_ID.getValue()));
         if (!courseIdOpt.isPresent() || !studentOpt.isPresent()) {
             return url + UNEXPECTED_ERROR;
         }
 
-        Course course;
+        int courseId;
         try {
-            int courseId = Integer.parseInt(courseIdOpt.get());
-            course = new CourseService().findCourseById(courseId);
-        } catch (NumberFormatException | EntityNotFoundException e) {
+            courseId = Integer.parseInt(courseIdOpt.get());
+        } catch (NumberFormatException e) {
             return url + UNEXPECTED_ERROR;
         }
+
+
         User student = studentOpt.get();
         UserService userService = new UserService();
-        logger.debug("user {} attempts to enroll in course with id {}",  student.getLogin(), course.getId());
-        userService.enrollStudent(studentOpt.get(), course);
+        logger.debug("user {} attempts to enroll in course with id {}",  student.getLogin(), courseId);
+        userService.enrollStudent(studentOpt.get().getId(), courseId);
 
-        return url + SUCCESS + "&courseName=" + course.getName();
+        return url + SUCCESS;
     }
 }

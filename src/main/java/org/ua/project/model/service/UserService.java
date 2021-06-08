@@ -2,8 +2,10 @@ package org.ua.project.model.service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ua.project.model.dao.DaoFactory;
+import org.ua.project.model.dao.StudentCourseDao;
 import org.ua.project.model.dao.UserDao;
 import org.ua.project.model.dao.impl.JDBCDaoFactory;
+import org.ua.project.model.dao.impl.JDBCStudentCourseDao;
 import org.ua.project.model.dao.impl.JDBCUserDao;
 import org.ua.project.model.entity.Course;
 import org.ua.project.model.entity.User;
@@ -41,13 +43,9 @@ public class UserService {
         }
     }
 
-    public void enrollStudent(User student, Course course) {
-        try (UserDao userDao = new JDBCDaoFactory().createUserDao()) {
-            if (course.getStartDate().compareTo(LocalDate.now()) < 0) {
-                logger.error("user attempted to enroll on completed course");
-                throw new ServiceException("");
-            }
-            userDao.enrollStudent(student, course);
+    public void enrollStudent(int studId, int courseId) {
+        try (StudentCourseDao studentCourseDao = new JDBCDaoFactory().createStudentCourseDao()) {
+            studentCourseDao.enrollStudent(studId, courseId);
         } catch (DBException e) {
             logger.error(e);
             throw new ServiceException(e);

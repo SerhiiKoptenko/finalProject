@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<html lang="en">
 <c:set var="pageTitle" scope="page" value="Manage courses"/>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="../header.jsp" %>
@@ -22,7 +21,6 @@
 <fmt:message key="close" var="close"/>
 <fmt:message key="add" var="add"/>
 <fmt:message key="enter_theme_name" var="enter_theme_name"/>
-<body>
 <main class="container mx-auto">
     <div class="row">
         <form id="add-course-form" action="/admin/manage_courses" method="POST" class="d-none">
@@ -257,12 +255,8 @@
     </div>
     </div>
     <!-- remove theme modal -->
-    <%@include file="../footer.jsp"%>
+
 </main>
-<script src="${pageContext.request.contextPath}/static/js/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-        crossorigin="anonymous"></script>
-<script src="${pageContext.request.contextPath}/static/js/app.js"></script>
+<%@include file="../footer.jsp"%>
 </body>
 </html>

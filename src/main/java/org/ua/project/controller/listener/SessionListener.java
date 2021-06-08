@@ -17,12 +17,15 @@ public class SessionListener implements HttpSessionListener {
                 .setRole(User.Role.GUEST)
                 .build();
         se.getSession().setAttribute(ControllerConstants.USER_ATTR, user);
+        se.getSession().setAttribute("locale", "en");
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
-        String userLogin = (String) se.getSession().getAttribute(ControllerConstants.USER_ATTR);
+        User user = (User) se.getSession().getAttribute(ControllerConstants.USER_ATTR);
+        user.setRole(User.Role.GUEST);
+        String login = user.getLogin();
         Set<String> userLogins = (Set<String>) se.getSession().getServletContext().getAttribute(ControllerConstants.LOGGED_USERS_ATTR);
-        userLogins.remove(userLogin);
+        userLogins.remove(login);
     }
 }

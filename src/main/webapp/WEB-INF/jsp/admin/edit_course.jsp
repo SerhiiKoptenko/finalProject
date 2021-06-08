@@ -1,7 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html>
-<html lang="en">
 <c:set var="pageTitle" scope="page" value="Manage courses"/>
 <%@ include file="../header.jsp" %>
 <fmt:message key="add_new_theme" var="add_new_theme"/>
@@ -24,7 +22,6 @@
 <fmt:message key="enter_theme_name" var="enter_theme_name"/>
 <fmt:message key="edit_course" var="edit_course"/>
 <fmt:message key="update_success" var="update_success"/>
-<body>
 <main class="container mx-auto">
     <form id="edit-course-form" action="edit_course" method="POST">
         <input type="hidden" name="page" value="${pageContext.request.getParameter("page")}">
@@ -33,12 +30,12 @@
         <div class="mb-2">
             <h1 class="text-center mt-3">${edit_course}</h1>
 
-            <label for="course-name" class="mt-5 mx-2 py-1">:</label>
+            <label for="course-name" class="mt-5 mx-2 py-1">${course_name}:</label>
             <div class="input-group mb-2">
                 <input id="course-name" name="courseName" type="text" class="form-control" value="${editedCourse.name}">
             </div>
 
-            <label for="course-theme" class="mx-2 py-1">${} </label>
+            <label for="course-theme" class="mx-2 py-1">${theme_name} </label>
             <div class="input-group mb-2 ">
                 <select name="themeId" class="form-select" id="course-theme">
                     <option selected value="${editedCourse.theme.id}">${editedCourse.theme.name}</option>
@@ -60,15 +57,19 @@
             <input id="end-date" name="endDate" type="date" class="form-control" value="${editedCourse.endDate}">
         </div>
 
+
+        <c:set var="isTutorSet" value="${editedCourse.tutor ne null}"/>
         <label for="tutor" class="mx-2 py-1">${add_tutor}: </label>
         <div class="input-group mb-2 ">
             <select name="tutorId" class="form-select" id="tutor">
-                <option value="${editedCourse.tutor.id}"
-                        selected>
-                    <c:if test="${editedCourse.tutor ne null}">${editedCourse.tutor.firstName} ${editedCourse.tutor.lastName}
-                        (${editedCourse.tutor.login})
-                    </c:if>
+                    <c:if test="${isTutorSet}">$
+                <option value="${edit_course.tutor.id}"
+                        selected>${editedCourse.tutor.firstName} ${editedCourse.tutor.lastName}
+                    (${editedCourse.tutor.login})
                 </option>
+                </c:if>
+                </option>
+                <option <c:if test="${!isTutorSet}>">selected</c:if> value="">No tutor</option>
                 <c:forEach items="${tutors}" var="tutor">
                     <option value="${tutor.id}">${tutor.firstName} ${tutor.lastName} (${tutor.login})</option>
                 </c:forEach>
@@ -92,9 +93,10 @@
     </c:if>
     <c:if test="${pageContext.request.getParameter(\"result\") eq \"success\"}">
         <div class="alert alert-success mt-2 mb-2" role="alert">
-            ${update_success}.
+                ${update_success}.
         </div>
     </c:if>
-    <%@include file="../footer.jsp"%>
 </main>
+<%@include file="../footer.jsp" %>
 </body>
+</html>

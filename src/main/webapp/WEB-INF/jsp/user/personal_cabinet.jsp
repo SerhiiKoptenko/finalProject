@@ -89,7 +89,9 @@
             </c:when>
             <c:otherwise>
                 <div class="alert alert-light" role="alert">
-                        ${no_courses_to_display}
+                        <c:if test="${displayedCourses ne null}">
+                            ${no_courses_to_display}
+                        </c:if>
                 </div>
             </c:otherwise>
         </c:choose>
@@ -105,14 +107,14 @@
         <form method="GET">
             <input type="hidden" name="command" value="displayTutorsCourses">
             <label for="tutors-courses-select">${display_courses}: </label>
-            <select name="displayTutorsCourses" id="tutors-courses-select" class="form-select mb-3">
+            <select name="displayCourses" id="tutors-courses-select" class="form-select mb-3">
                 <option value="not_started">${not_started}</option>
                 <option value="ongoing">${ongoing}</option>
                 <option value="completed">${completed}</option>
             </select>
             <button type="submit" class="btn btn-primary mb-3">${display}</button>
         </form>
-        <c:set var="displayedCourses" value="${pageContext.request.getParameter(\"displayTutorsCourses\")}"/>
+        <c:set var="displayedCourses" value="${pageContext.request.getParameter(\"displayCourses\")}"/>
         <c:set var="tutorsCoursesListSize">${fn:length(tutorsCourses)}</c:set>
         <c:choose>
             <c:when test="${tutorsCoursesListSize > 0}">
@@ -158,7 +160,9 @@
                 </table>
             </c:when>
             <c:otherwise>
-
+                <c:if test="${displayedCourses ne null}">
+                    ${no_courses_to_display}
+                </c:if>
             </c:otherwise>
         </c:choose>
     </c:if>

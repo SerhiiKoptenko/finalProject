@@ -69,7 +69,7 @@ public class Servlet extends HttpServlet {
         commands.put("/user/personal_cabinet/leave_course", new GoToLeaveCourseCommand());
         commands.put("/user/personal_cabinet/leave_course?command=leaveCourse", new LeaveCourseCommand());
 
-        commands.put("/main_page?command=switchLocale", new LocalizationCommand());
+
 
     }
 
@@ -89,6 +89,12 @@ public class Servlet extends HttpServlet {
         if (commandParameter.isPresent()) {
             path += "?command=" + commandParameter.get();
         }
+        String lastRequest = req.getRequestURI();
+        Optional<String> queryString = Optional.ofNullable(req.getQueryString());
+        if (queryString.isPresent()) {
+            lastRequest += "?" + queryString.get();
+        }
+        req.getSession().setAttribute("lastRequest", lastRequest);
         logger.trace("received path {}", path);
 
 
@@ -102,7 +108,6 @@ public class Servlet extends HttpServlet {
             }
             logger.trace("Forwarding to: {}", page);
             req.getRequestDispatcher(page).forward(req, resp);
-            req.getSession().setAttribute("lastRequest", req.getRequestURI());
         } else {
             logger.error("Unknown url: {}", path);
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);

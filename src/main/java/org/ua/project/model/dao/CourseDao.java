@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface CourseDao extends GenericDao<Course> {
 
-    Course findCourseNameById(int id) throws DBException;
-
     void createWithTutor(Course course) throws DBException;
 
     void updateWithTutor(Course course) throws DBException;

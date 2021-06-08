@@ -7,9 +7,9 @@
 <%@ include file="header.jsp" %>
 <main>
     <c:set var="regResult" scope="page" value="${pageContext.request.getParameter(\"registrationResult\")}"/>
-    <c:set var="prevFirstName" scope="page" value="${pageContext.request.getParameter(\"firstName\")}"/>
-    <c:set var="prevLastName" scope="page" value="${pageContext.request.getParameter(\"lastName\")}"/>
-    <c:set var="prevLogin" scope="page" value="${pageContext.request.getParameter(\"login\")}"/>
+    <c:set var="prevFirstName" scope="page" value="${pageContext.request.getParameter(\"prevFirstName\")}"/>
+    <c:set var="prevLastName" scope="page" value="${pageContext.request.getParameter(\"prevLastName\")}"/>
+    <c:set var="prevLogin" scope="page" value="${pageContext.request.getParameter(\"prevLogin\")}"/>
     <c:if test="${\"success\" ne regResult}">
         <!--Registration form-->
         <%@include file="registration_form.jsp"%>
@@ -66,11 +66,7 @@
             </div>
         </c:when>
     </c:choose>
-    <%@include file="footer.jsp"%>
 </main>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-        crossorigin="anonymous"></script>
+<%@include file="footer.jsp"%>
 </body>
-
 </html>
