@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ua.project.model.dao.UserDao;
 import org.ua.project.model.dao.mapper.UserMapper;
-import org.ua.project.model.entity.Course;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.exception.DBException;
 import org.ua.project.model.exception.EntityAlreadyExistsException;
@@ -21,20 +20,15 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     private static final String INSERT_NEW_USER;
     private static final String GET_USERS_BY_ROLE;
     private static final String GET_USER_BY_LOGIN;
-    private static final String ENROLL_USER;
-    private static final String CREATE_USER_JOURNAl;
     private static final String FIND_ALL_USERS;
     public static final String CHANGE_USER_BLOCK_STATUS;
 
-    private static final long serialVersionUID = 3008758863898750550L;
 
     static {
         SqlStatementLoader sqlStatementLoader = SqlStatementLoader.getInstance();
         INSERT_NEW_USER = sqlStatementLoader.getSqlStatement("insertNewUser");
         GET_USERS_BY_ROLE = sqlStatementLoader.getSqlStatement("getUsersByRole");
         GET_USER_BY_LOGIN = sqlStatementLoader.getSqlStatement("getUserByLogin");
-        ENROLL_USER = sqlStatementLoader.getSqlStatement("enrollUser");
-        CREATE_USER_JOURNAl = sqlStatementLoader.getSqlStatement("createUserJournal");
         FIND_ALL_USERS = sqlStatementLoader.getSqlStatement("findAllUsers");
         CHANGE_USER_BLOCK_STATUS = sqlStatementLoader.getSqlStatement("changeUserBlockStatus");
     }
@@ -129,25 +123,6 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
         } catch (SQLException e) {
             logger.error(e);
             throw new DBException();
-        }
-    }
-
-    @Override
-    public void update(User entity) {
-
-    }
-
-    @Override
-    public void delete(int id) {
-
-    }
-
-    @Override
-    public void close() {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 }

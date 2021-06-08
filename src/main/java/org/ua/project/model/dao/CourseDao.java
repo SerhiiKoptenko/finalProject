@@ -8,11 +8,15 @@ import org.ua.project.model.exception.DBException;
 
 import java.util.List;
 
-public interface CourseDao extends GenericDao<Course> {
+public interface CourseDao extends Dao {
 
-    void createWithTutor(Course course) throws DBException;
+    void updateCourse(Course course) throws DBException;
 
-    void updateWithTutor(Course course) throws DBException;
+    void createCourse(Course course) throws DBException;
+
+    Course findCourseById(int id) throws DBException;
+
+    void deleteCourse(int id) throws DBException;
 
     int getFilteredCoursesCount(CourseFilterOption filterOption) throws DBException;
 

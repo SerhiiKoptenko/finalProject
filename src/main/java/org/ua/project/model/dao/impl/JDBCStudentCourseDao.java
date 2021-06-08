@@ -51,30 +51,6 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
         super(connection);
     }
 
-    @Override
-    public void create(StudentCourse entity) throws DBException {
-
-    }
-
-    @Override
-    public StudentCourse findById(int id) throws DBException {
-        return null;
-    }
-
-    @Override
-    public List<StudentCourse> findAll() throws DBException {
-        return null;
-    }
-
-    @Override
-    public void update(StudentCourse entity) throws DBException {
-
-    }
-
-    @Override
-    public void delete(int id) throws DBException {
-
-    }
 
     public List<StudentCourse> findCoursesByStudent(User student, CourseFilterOption courseFilterOption) throws DBException {
         CourseFilterOption.CourseStatus courseStatus = courseFilterOption.getCourseStatus();
@@ -137,7 +113,7 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
         try (JDBCCourseDao courseDao = new JDBCCourseDao(connection);
                 PreparedStatement enrollStudentStatement = connection.prepareStatement(ENROLL_USER)) {
             connection.setAutoCommit(false);
-            Course course = courseDao.findById(courseId);
+            Course course = courseDao.findCourseById(courseId);
             if (course.getEndDate().compareTo(LocalDate.now()) < 0) {
                 throw new IllegalInsertionException();
             }
@@ -180,15 +156,6 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
             return true;
         } catch (SQLException e) {
             logger.error(e);
-            throw new DBException(e);
-        }
-    }
-
-    @Override
-    public void close() throws DBException {
-        try {
-            connection.close();
-        } catch (SQLException e) {
             throw new DBException(e);
         }
     }

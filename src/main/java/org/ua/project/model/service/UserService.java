@@ -79,15 +79,6 @@ public class UserService {
         }
     }
 
-    public User findUserById(int id) {
-        try (UserDao userDao = new JDBCDaoFactory().createUserDao()) {
-            return userDao.findById(id);
-        } catch (DBException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-    }
-
     public List<User> findAllUsers() {
         try (UserDao userDao = new JDBCDaoFactory().createUserDao()) {
             return userDao.findAll();

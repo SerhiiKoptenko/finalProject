@@ -1,12 +1,25 @@
 package org.ua.project.model.dao.impl;
 
 
-import java.sql.Connection;
+import org.ua.project.model.dao.Dao;
+import org.ua.project.model.exception.DBException;
 
-public abstract class JDBCAbstractDao  {
+import java.sql.Connection;
+import java.sql.SQLException;
+
+public abstract class JDBCAbstractDao implements Dao {
     protected Connection connection;
 
-    public JDBCAbstractDao(Connection connection) {
+    protected JDBCAbstractDao(Connection connection) {
         this.connection = connection;
+    }
+
+    @Override
+    public void close() throws DBException {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new DBException(e);
+        }
     }
 }

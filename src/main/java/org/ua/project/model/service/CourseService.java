@@ -11,7 +11,6 @@ import org.ua.project.model.exception.IllegalDeletionException;
 import org.ua.project.model.service.exception.ServiceException;
 
 import java.util.List;
-import java.util.Optional;
 
 public class CourseService {
     Logger logger = LogManager.getLogger(CourseService.class);
@@ -23,13 +22,7 @@ public class CourseService {
      */
     public void createCourse(Course course) throws EntityNotFoundException {
         try (CourseDao courseDao = new JDBCDaoFactory().createCourseDao()) {
-            Optional<User> tutorOpt = Optional.ofNullable(course.getTutor());
-
-            if (tutorOpt.isPresent()) {
-                courseDao.createWithTutor(course);
-                return;
-            }
-            courseDao.create(course);
+            courseDao.createCourse(course);
         } catch (EntityNotFoundException e) {
             throw e;
         } catch (DBException e) {
@@ -102,7 +95,7 @@ public class CourseService {
      */
     public Course findCourseById(int id) throws EntityNotFoundException {
         try (CourseDao courseDao = new JDBCDaoFactory().createCourseDao()) {
-            return courseDao.findById(id);
+            return courseDao.findCourseById(id);
         } catch (EntityNotFoundException e) {
             throw e;
         } catch (DBException e) {
@@ -119,7 +112,7 @@ public class CourseService {
      */
     public void deleteCourseById(int id) throws IllegalDeletionException, EntityNotFoundException {
         try (CourseDao courseDao = new JDBCDaoFactory().createCourseDao()) {
-            courseDao.delete(id);
+            courseDao.deleteCourse(id);
         } catch (IllegalDeletionException | EntityNotFoundException e) {
             throw e;
         } catch (DBException e) {
@@ -133,7 +126,7 @@ public class CourseService {
      */
     public void updateCourse(Course course) {
         try (CourseDao courseDao = new JDBCDaoFactory().createCourseDao()) {
-            courseDao.update(course);
+            courseDao.updateCourse(course);
         } catch (DBException e) {
             logger.error(e);
             throw new ServiceException(e);

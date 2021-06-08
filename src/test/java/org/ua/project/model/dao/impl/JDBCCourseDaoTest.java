@@ -77,7 +77,7 @@ public class JDBCCourseDaoTest {
                     .setEndDate(LocalDate.parse("2021-08-20"))
                     .setDescription("testDescription")
                     .build();
-            jdbcCourseDao.create(testCourse);
+            jdbcCourseDao.createCourse(testCourse);
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COURSE_BY_ID);
             preparedStatement.setInt(1, 4);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -116,7 +116,7 @@ public class JDBCCourseDaoTest {
     public void testFindCourseById() throws SQLException, DBException {
         try (Connection connection = TestConnectionProvider.getConnection()) {
             JDBCCourseDao jdbcCourseDao = new JDBCCourseDao(connection);
-            assertEquals(courseA, jdbcCourseDao.findById(1));
+            assertEquals(courseA, jdbcCourseDao.findCourseById(1));
         }
     }
 
@@ -133,7 +133,7 @@ public class JDBCCourseDaoTest {
                     .setEndDate(LocalDate.now().plus(Period.ofDays(5)))
                     .setDescription("Updated description A")
                     .build();
-            jdbcCourseDao.update(expected);
+            jdbcCourseDao.updateCourse(expected);
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COURSE_BY_ID);
             preparedStatement.setInt(1, expected.getId());
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -146,7 +146,7 @@ public class JDBCCourseDaoTest {
     public void testDeleteCourse() throws SQLException, DBException {
         try (Connection connection = TestConnectionProvider.getConnection()) {
             JDBCCourseDao jdbcCourseDao = new JDBCCourseDao(connection);
-            jdbcCourseDao.delete(3);
+            jdbcCourseDao.deleteCourse(3);
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COURSE_BY_ID);
             preparedStatement.setInt(1, 3);
             ResultSet resultSet = preparedStatement.executeQuery();

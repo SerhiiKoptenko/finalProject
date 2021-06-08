@@ -8,7 +8,7 @@ import org.ua.project.model.exception.DBException;
 
 import java.util.List;
 
-public interface StudentCourseDao extends GenericDao<StudentCourse> {
+public interface StudentCourseDao extends Dao {
     List<StudentCourse> findCoursesByStudent(User student, CourseFilterOption filterOption) throws DBException;
 
     List<StudentCourse> findStudentsByCourse(Course course) throws DBException;

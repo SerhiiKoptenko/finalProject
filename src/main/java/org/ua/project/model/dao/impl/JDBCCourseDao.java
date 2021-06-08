@@ -1,6 +1,4 @@
 package org.ua.project.model.dao.impl;
-
-import jdk.internal.org.objectweb.asm.Type;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ua.project.model.dao.CourseDao;
@@ -20,12 +18,9 @@ import java.util.*;
 public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
     private static final Logger logger = LogManager.getLogger(JDBCCourseDao.class);
 
-    private static final String FIND_ALL_COURSES;
     private static final String FIND_COURSE_BY_ID;
     private static final String CREATE_COURSE;
-    private static final String CREATE_COURSE_WITH_TUTOR;
     private static final String UPDATE_COURSE;
-    private static final String UPDATE_COURSE_WITH_TUTOR;
     private static final String DELETE_COURSE_BY_ID;
 
     public static final String GET_FILTERED_COURSES;
@@ -46,13 +41,10 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
 
     static {
         SqlStatementLoader loader = SqlStatementLoader.getInstance();
-        FIND_ALL_COURSES = loader.getSqlStatement("findAllCourses");
         CREATE_COURSE = loader.getSqlStatement("createCourse");
-        CREATE_COURSE_WITH_TUTOR = loader.getSqlStatement("createCourseWithTutor");
 
         FIND_COURSE_BY_ID = loader.getSqlStatement("findCourseById");
         UPDATE_COURSE = loader.getSqlStatement("updateCourse");
-        UPDATE_COURSE_WITH_TUTOR = loader.getSqlStatement("updateCourseWithTutor");
         DELETE_COURSE_BY_ID = loader.getSqlStatement("deleteCourseById");
 
         SORT_BY_NAME_ASC = loader.getSqlStatement("sortByNameAsc");
@@ -85,7 +77,7 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
     }
 
     @Override
-    public void create(Course course) throws DBException {
+    public void createCourse(Course course) throws DBException {
         try (PreparedStatement createCourseStatement = connection.prepareStatement(CREATE_COURSE)) {
             setCourseParameters(course, createCourseStatement);
             Optional<User> tutor = Optional.ofNullable(course.getTutor());
@@ -102,19 +94,7 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
     }
 
     @Override
-    public void createWithTutor(Course course) throws DBException {
-        try (PreparedStatement createCourseStatement = connection.prepareStatement(CREATE_COURSE_WITH_TUTOR)) {
-            setCourseParameters(course, createCourseStatement);
-            createCourseStatement.setInt(6, course.getTutor().getId());
-            createCourseStatement.executeUpdate();
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new DBException(e);
-        }
-    }
-
-    @Override
-    public Course findById(int id) throws DBException {
+    public Course findCourseById(int id) throws DBException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_COURSE_BY_ID)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -128,18 +108,7 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
         }
     }
 
-    @Override
-    public List<Course> findAll() throws DBException {
-        try (PreparedStatement statement = connection.prepareStatement(FIND_ALL_COURSES)) {
-            return getCoursesUniqueFields(statement);
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new DBException(e);
-        }
-    }
-
-    @Override
-    public void update(Course course) throws DBException {
+    public void updateCourse(Course course) throws DBException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_COURSE)) {
             setCourseParameters(course, preparedStatement);
             Optional<User> tutor = Optional.ofNullable(course.getTutor());
@@ -160,22 +129,7 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
     }
 
     @Override
-    public void updateWithTutor(Course course) throws DBException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_COURSE_WITH_TUTOR)) {
-            setCourseParameters(course, preparedStatement);
-            preparedStatement.setInt(6, course.getTutor().getId());
-            preparedStatement.setInt(7, course.getId());
-            if (preparedStatement.executeUpdate() < 1) {
-                throw new EntityNotFoundException();
-            }
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new DBException(e);
-        }
-    }
-
-    @Override
-    public void delete(int id) throws DBException {
+    public void deleteCourse(int id) throws DBException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_COURSE_BY_ID)) {
             preparedStatement.setInt(1, id);
             if (preparedStatement.executeUpdate() < 1) {
@@ -352,24 +306,4 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
         return orderByStatement;
     }
 
-    private List<Course> getCoursesUniqueFields(PreparedStatement preparedStatement) throws SQLException {
-        ResultSet resultSet = preparedStatement.executeQuery();
-
-        List<Course> courseList = new ArrayList<>();
-        Map<Integer, Theme> themeCache = new HashMap<>();
-        Map<Integer, User> userCache = new HashMap<>();
-        CourseMapper courseMapper = new CourseMapper();
-        ThemeMapper themeMapper = new ThemeMapper();
-        UserMapper userMapper = new UserMapper();
-        while (resultSet.next()) {
-            Course course = courseMapper.extract(resultSet);
-            Theme theme = themeMapper.makeUnique(themeCache, course.getTheme());
-
-            course.setTheme(theme);
-            Optional.ofNullable(course.getTutor()).ifPresent(tutor ->
-                    course.setTutor(userMapper.makeUnique(userCache, tutor)));
-            courseList.add(course);
-        }
-        return courseList;
-    }
 }

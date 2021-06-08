@@ -42,6 +42,4 @@ public class JDBCDaoFactory implements DaoFactory {
             throw new DBException(e);
         }
     }
-
-
 }

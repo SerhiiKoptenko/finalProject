@@ -19,7 +19,7 @@ public class ThemeService {
 
     public Theme createTheme(Theme theme) throws EntityAlreadyExistsException {
         try (ThemeDao themeDao = new JDBCDaoFactory().createThemeDao()) {
-            themeDao.create(theme);
+            themeDao.createTheme(theme);
         } catch (EntityAlreadyExistsException e) {
             throw e;
         } catch (DBException e) {
@@ -31,7 +31,7 @@ public class ThemeService {
 
     public List<Theme> findAllThemes() {
         try (ThemeDao themeDao = new JDBCDaoFactory().createThemeDao()) {
-            return themeDao.findAll();
+            return themeDao.findAllThemes();
         } catch (DBException e) {
             logger.error(e);
             throw new ServiceException(e);
@@ -40,7 +40,7 @@ public class ThemeService {
 
     public Theme findThemeById(int id) throws ServiceException, EntityNotFoundException {
         try (ThemeDao themeDao = new JDBCDaoFactory().createThemeDao()) {
-            return themeDao.findById(id);
+            return themeDao.findThemeById(id);
         } catch (EntityNotFoundException e) {
             throw e;
         } catch (DBException e) {
@@ -51,7 +51,7 @@ public class ThemeService {
 
     public void deleteTheme(int id) throws EntityNotFoundException, IllegalDeletionException {
         try (ThemeDao themeDao = new JDBCDaoFactory().createThemeDao()) {
-            themeDao.delete(id);
+            themeDao.deleteTheme(id);
         } catch (EntityNotFoundException | IllegalDeletionException e) {
             throw e;
         } catch (DBException e) {

@@ -15,10 +15,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JDBCThemeDao implements ThemeDao {
+public class JDBCThemeDao extends JDBCAbstractDao implements ThemeDao {
     private static final Logger logger = LogManager.getLogger(JDBCThemeDao.class);
-
-    private final Connection connection;
 
     private static final String FIND_ALL_THEMES;
     private static final String CREATE_THEME;
@@ -34,11 +32,11 @@ public class JDBCThemeDao implements ThemeDao {
     }
 
     public JDBCThemeDao(Connection connection) {
-        this.connection = connection;
+        super(connection);
     }
 
     @Override
-    public void create(Theme theme) throws DBException {
+    public void createTheme(Theme theme) throws DBException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(CREATE_THEME)) {
             preparedStatement.setString(1, theme.getName());
             preparedStatement.executeUpdate();
@@ -51,9 +49,9 @@ public class JDBCThemeDao implements ThemeDao {
     }
 
     @Override
-    public Theme findById(int id) throws DBException {
+    public Theme findThemeById(int themeId) throws DBException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_THEME_BY_ID)) {
-            preparedStatement.setInt(1, id);
+            preparedStatement.setInt(1, themeId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (!resultSet.next()) {
                 throw new EntityNotFoundException();
@@ -66,7 +64,7 @@ public class JDBCThemeDao implements ThemeDao {
     }
 
     @Override
-    public List<Theme> findAll() throws DBException {
+    public List<Theme> findAllThemes() throws DBException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_THEMES)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             ThemeMapper themeMapper = new ThemeMapper();
@@ -82,14 +80,9 @@ public class JDBCThemeDao implements ThemeDao {
     }
 
     @Override
-    public void update(Theme entity) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void delete(int id) throws DBException {
+    public void deleteTheme(int themeId) throws DBException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_THEME)) {
-            preparedStatement.setInt(1, id);
+            preparedStatement.setInt(1, themeId);
             if (preparedStatement.executeUpdate() == 0) {
                 throw new EntityNotFoundException();
             }
@@ -97,15 +90,6 @@ public class JDBCThemeDao implements ThemeDao {
             throw new IllegalDeletionException();
         } catch (SQLException e) {
             logger.error(e);
-            throw new DBException(e);
-        }
-    }
-
-    @Override
-    public void close() throws DBException {
-        try {
-            connection.close();
-        } catch (SQLException e) {
             throw new DBException(e);
         }
     }
