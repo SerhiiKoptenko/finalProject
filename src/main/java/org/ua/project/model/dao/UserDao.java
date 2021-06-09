@@ -7,9 +7,7 @@ import java.util.List;
 
 public interface UserDao extends Dao {
 
-    User findById(int id) throws DBException;
-
-    void create(User user) throws DBException;
+    void createUser(User user) throws DBException;
 
     List<User> findAll() throws DBException;
 

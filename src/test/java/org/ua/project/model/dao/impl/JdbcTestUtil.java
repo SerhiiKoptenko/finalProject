@@ -10,7 +10,7 @@ public class JdbcTestUtil {
     private JdbcTestUtil(){}
     public static void populateTables() throws SQLException {
         try (Connection connection = TestConnectionProvider.getConnection()) {
-           PreparedStatement preparedStatement =  connection.prepareStatement("INSERT INTO themes (name) VALUES ('Theme A'), ('Theme B');\n" +
+           PreparedStatement preparedStatement =  connection.prepareStatement("INSERT INTO themes (name) VALUES ('Theme A'), ('Theme B'), ('Theme C');\n" +
                    "\n" +
                    "INSERT INTO users (first_name, last_name, login, password, role)\n" +
                    "VALUES ('Tutor', 'A', 'tutorA', 4444, 'TUTOR'),\n" +

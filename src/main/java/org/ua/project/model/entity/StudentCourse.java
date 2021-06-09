@@ -55,7 +55,7 @@ public class StudentCourse {
 
     @Override
     public String toString() {
-        return "StudentMark{" +
+        return "StudentCourse{" +
                 "student=" + student +
                 ", course=" + course +
                 ", mark=" + mark +

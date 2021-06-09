@@ -15,7 +15,7 @@ public interface StudentCourseDao extends Dao {
 
     boolean updateStudentsMark(StudentCourse studentCourse) throws DBException;
 
-    boolean removeStudentFromCourse(StudentCourse studentCourses) throws DBException;
+    boolean removeStudentFromCourse(int studId, int courseId) throws DBException;
 
     void enrollStudent(int studId, int courseId) throws DBException;
 }

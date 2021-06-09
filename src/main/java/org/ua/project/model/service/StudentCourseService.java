@@ -49,10 +49,10 @@ public class StudentCourseService {
         }
     }
 
-    public boolean removeStudentFromCourse(StudentCourse studentCourse) {
+    public boolean removeStudentFromCourse(int studId, int courseId) {
         try (StudentCourseDao studentCourseDao = new JDBCDaoFactory().createStudentCourseDao()) {
-            logger.debug("removing student from course {}", studentCourse);
-            return studentCourseDao.removeStudentFromCourse(studentCourse);
+            logger.debug("removing student {} from course {}", studId, courseId);
+            return studentCourseDao.removeStudentFromCourse(studId, courseId);
         } catch (DBException e) {
             logger.error(e);
             throw new ServiceException(e);

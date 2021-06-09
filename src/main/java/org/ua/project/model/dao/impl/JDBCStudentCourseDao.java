@@ -55,13 +55,7 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
     public List<StudentCourse> findCoursesByStudent(User student, CourseFilterOption courseFilterOption) throws DBException {
         CourseFilterOption.CourseStatus courseStatus = courseFilterOption.getCourseStatus();
         String filterByCourseStatus;
-        if (CourseFilterOption.CourseStatus.COMPLETED.equals(courseStatus)) {
-            filterByCourseStatus = FIND_COMPLETED;
-        } else if (CourseFilterOption.CourseStatus.NOT_STARTED.equals(courseStatus)) {
-            filterByCourseStatus = FIND_NOT_STARTED;
-        } else {
-            filterByCourseStatus = FIND_ONGOING;
-        }
+        filterByCourseStatus = getFilterByStatement(courseStatus);
 
         String sql = String.format(FIND_COURSES_BY_STUDENT, filterByCourseStatus);
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -83,6 +77,19 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
         } catch (SQLException e) {
             throw new DBException(e);
         }
+    }
+
+    private String getFilterByStatement(CourseFilterOption.CourseStatus courseStatus) {
+        if (CourseFilterOption.CourseStatus.COMPLETED.equals(courseStatus)) {
+            return FIND_COMPLETED;
+        }
+        if (CourseFilterOption.CourseStatus.NOT_STARTED.equals(courseStatus)) {
+            return FIND_NOT_STARTED;
+        }
+        if (CourseFilterOption.CourseStatus.ONGOING.equals(courseStatus)){
+            return FIND_ONGOING;
+        }
+        return "0 = 0";
     }
 
     @Override
@@ -110,9 +117,8 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
 
     @Override
     public void enrollStudent(int studId, int courseId) throws DBException {
-        try (JDBCCourseDao courseDao = new JDBCCourseDao(connection);
-                PreparedStatement enrollStudentStatement = connection.prepareStatement(ENROLL_USER)) {
-            connection.setAutoCommit(false);
+        try (PreparedStatement enrollStudentStatement = connection.prepareStatement(ENROLL_USER)) {
+            JDBCCourseDao courseDao = new JDBCCourseDao(connection);
             Course course = courseDao.findCourseById(courseId);
             if (course.getEndDate().compareTo(LocalDate.now()) < 0) {
                 throw new IllegalInsertionException();
@@ -120,16 +126,9 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
             enrollStudentStatement.setInt(1, studId);
             enrollStudentStatement.setInt(2, courseId);
             enrollStudentStatement.executeUpdate();
-            connection.commit();
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-                connection.setAutoCommit(true);
-                throw new DBException(e);
-            } catch (SQLException ex) {
-                logger.error(ex);
-                throw new DBException(ex);
-            }
+            logger.error(e);
+            throw new DBException(e);
         }
     }
 
@@ -148,10 +147,10 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
     }
 
     @Override
-    public boolean removeStudentFromCourse(StudentCourse studentCourse) throws DBException {
+    public boolean removeStudentFromCourse(int studId, int courseId) throws DBException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_STUDENT_FROM_COURSE)) {
-            preparedStatement.setInt(1, studentCourse.getStudent().getId());
-            preparedStatement.setInt(2, studentCourse.getCourse().getId());
+            preparedStatement.setInt(1, studId);
+            preparedStatement.setInt(2, courseId);
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {

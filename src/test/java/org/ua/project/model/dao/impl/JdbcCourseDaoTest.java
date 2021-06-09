@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class JDBCCourseDaoTest {
+public class JdbcCourseDaoTest {
     public static final String SELECT_COURSE_BY_ID = "SELECT c.id course_id, c.name course_name, t.id theme_id, start_date, end_date, description, tutor_id " +
             "FROM courses c " +
             "INNER JOIN themes t ON c.theme_id = t.id "

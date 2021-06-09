@@ -5,9 +5,6 @@ import org.ua.project.model.dao.DaoFactory;
 import org.ua.project.model.dao.StudentCourseDao;
 import org.ua.project.model.dao.UserDao;
 import org.ua.project.model.dao.impl.JDBCDaoFactory;
-import org.ua.project.model.dao.impl.JDBCStudentCourseDao;
-import org.ua.project.model.dao.impl.JDBCUserDao;
-import org.ua.project.model.entity.Course;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.exception.DBException;
 import org.ua.project.model.exception.EntityAlreadyExistsException;
@@ -17,7 +14,6 @@ import org.ua.project.model.service.exception.UserAlreadyExistsException;
 import org.ua.project.model.service.exception.WrongPasswordException;
 import org.ua.project.model.service.util.encryption.EncryptionUtil;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class UserService {
@@ -25,7 +21,7 @@ public class UserService {
 
     public void addUser(User user) throws ServiceException, UserAlreadyExistsException{
         try (UserDao dao = new JDBCDaoFactory().createUserDao()) {
-            dao.create(user);
+            dao.createUser(user);
         } catch (EntityAlreadyExistsException e) {
             throw new UserAlreadyExistsException();
         } catch (DBException e) {

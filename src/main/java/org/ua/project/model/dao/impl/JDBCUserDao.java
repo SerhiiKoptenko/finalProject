@@ -55,7 +55,7 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     }
 
     @Override
-    public void create(User user) throws DBException {
+    public void createUser(User user) throws DBException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_NEW_USER)) {
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
@@ -64,7 +64,7 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
             preparedStatement.setString(5, user.getRole().toString());
             preparedStatement.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException e) {
-            throw new EntityAlreadyExistsException();
+            throw new EntityAlreadyExistsException(e);
         } catch (SQLException e) {
             logger.error(e);
             throw new DBException("Unexpected database error", e);
@@ -80,17 +80,6 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
                 throw new EntityNotFoundException();
             }
             return new UserMapper().extract(resultSet);
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new DBException(e);
-        }
-    }
-
-    @Override
-    public User findById(int id) throws DBException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("")) {
-            preparedStatement.setInt(1, id);
-            return null;
         } catch (SQLException e) {
             logger.error(e);
             throw new DBException(e);

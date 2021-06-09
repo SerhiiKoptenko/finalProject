@@ -22,19 +22,8 @@ public class LeaveCourseCommand implements Command {
         int studId = Integer.parseInt(req.getParameter(Parameter.STUDENT_ID.getValue()));
         int courseId = Integer.parseInt(req.getParameter(Parameter.COURSE_ID.getValue()));
 
-
-        User student = new User.Builder()
-                .setId(studId)
-                .build();
-        Course course = new Course.Builder()
-                .setId(courseId)
-                .build();
-        StudentCourse studentCourse = new StudentCourse.Builder()
-                .setStudent(student)
-                .setCourse(course)
-                .build();
         StudentCourseService studentCourseService = new StudentCourseService();
-        studentCourseService.removeStudentFromCourse(studentCourse);
+        studentCourseService.removeStudentFromCourse(studId, courseId);
         return ControllerConstants.REDIRECT_TO_PERSONAL_CABINET + "?leftCourseName=" + courseName;
     }
 }
