@@ -51,7 +51,11 @@ public class EnrollCommand implements Command {
         User student = studentOpt.get();
         UserService userService = new UserService();
         logger.debug("user {} attempts to enroll in course with id {}",  student.getLogin(), courseId);
-        userService.enrollStudent(studentOpt.get().getId(), courseId);
+        try {
+            userService.enrollStudent(studentOpt.get().getId(), courseId);
+        } catch (Exception e) {
+            //TODO: handle
+        }
 
         return url + SUCCESS;
     }

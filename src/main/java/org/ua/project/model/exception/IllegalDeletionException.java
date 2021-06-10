@@ -1,5 +1,5 @@
 package org.ua.project.model.exception;
 
-public class IllegalDeletionException  extends  DBException {
+public class IllegalDeletionException extends Exception {
 
 }

@@ -5,18 +5,20 @@ import org.ua.project.model.entity.CourseFilterOption;
 import org.ua.project.model.entity.CourseSortParameter;
 import org.ua.project.model.entity.Theme;
 import org.ua.project.model.exception.DBException;
+import org.ua.project.model.exception.EntityNotFoundException;
+import org.ua.project.model.exception.IllegalDeletionException;
 
 import java.util.List;
 
 public interface CourseDao extends Dao {
 
-    void updateCourse(Course course) throws DBException;
+    void updateCourse(Course course) throws DBException, EntityNotFoundException;
 
-    void createCourse(Course course) throws DBException;
+    void createCourse(Course course) throws DBException, EntityNotFoundException;
 
-    Course findCourseById(int id) throws DBException;
+    Course findCourseById(int id) throws DBException, EntityNotFoundException;
 
-    void deleteCourse(int id) throws DBException;
+    void deleteCourse(int id) throws DBException, EntityNotFoundException, IllegalDeletionException;
 
     int getFilteredCoursesCount(CourseFilterOption filterOption) throws DBException;
 

@@ -55,7 +55,7 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     }
 
     @Override
-    public void createUser(User user) throws DBException {
+    public void createUser(User user) throws DBException, EntityAlreadyExistsException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(INSERT_NEW_USER)) {
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());
@@ -72,7 +72,7 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     }
 
     @Override
-    public User getUserByLogin(String login) throws DBException {
+    public User getUserByLogin(String login) throws DBException, EntityNotFoundException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_LOGIN)) {
             preparedStatement.setString(1, login);
             ResultSet resultSet = preparedStatement.executeQuery();

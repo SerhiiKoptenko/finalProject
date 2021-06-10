@@ -29,7 +29,7 @@ public class JdbcThemeDaoTest {
     }
 
     @Test
-    public void testCreateTheme() throws SQLException, DBException {
+    public void testCreateTheme() throws Exception{
         Theme expected = new Theme(4, "Theme D");
         try (Connection connection = TestConnectionProvider.getConnection()) {
             ThemeDao themeDao = new JDBCThemeDao(connection);
@@ -43,17 +43,7 @@ public class JdbcThemeDaoTest {
     }
 
     @Test
-    public void testFindThemeById() throws SQLException, DBException {
-        Theme expected = new Theme(1, "Theme A");
-        try (Connection connection = TestConnectionProvider.getConnection()) {
-            ThemeDao themeDao = new JDBCThemeDao(connection);
-            Theme actual = themeDao.findThemeById(expected.getId());
-            assertEquals(expected, actual);
-        }
-    }
-
-    @Test
-    public void testFindAllThemes() throws SQLException, DBException {
+    public void testFindAllThemes() throws Exception {
         Theme themeA = new Theme(1, "Theme A");
         Theme themeB = new Theme(2, "Theme B");
         Theme themeC = new Theme(3, "Theme C");
@@ -66,7 +56,7 @@ public class JdbcThemeDaoTest {
     }
 
     @Test
-    public void testDeleteTheme() throws SQLException, DBException {
+    public void testDeleteTheme() throws Exception{
         int themeId = 3;
         try (Connection connection = TestConnectionProvider.getConnection()) {
             ThemeDao themeDao = new JDBCThemeDao(connection);
@@ -78,7 +68,7 @@ public class JdbcThemeDaoTest {
         }
     }
 
-    private Theme extractTheme(ResultSet resultSet) throws SQLException {
+    private Theme extractTheme(ResultSet resultSet) throws Exception {
         resultSet.next();
         return new Theme.Builder()
                 .setId(resultSet.getInt("id"))

@@ -5,8 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.ua.project.controller.util.validation.ValidationResult;
 import org.ua.project.controller.util.validation.Validator;
 import org.ua.project.model.entity.User;
+import org.ua.project.model.exception.EntityAlreadyExistsException;
 import org.ua.project.model.service.UserService;
-import org.ua.project.model.service.exception.UserAlreadyExistsException;
 import org.ua.project.model.service.util.encryption.EncryptionUtil;
 
 public final class RegistrationUtility {
@@ -36,15 +36,15 @@ public final class RegistrationUtility {
         try {
             UserService userService = new UserService();
             userService.addUser(user);
-        } catch (UserAlreadyExistsException e) {
+        } catch (EntityAlreadyExistsException e) {
             redirectUrl += REG_FAILED_USER_EXISTS;
             redirectUrl = includePreviousValues(redirectUrl, user);
-            logger.trace("Registration failed: user already exists.");
+            logger.info("Registration failed: user already exists.");
             return redirectUrl;
         }
 
         redirectUrl += REG_SUCCESS;
-        logger.trace("User successfully registered.");
+        logger.info("User successfully registered.");
         return redirectUrl;
     }
 

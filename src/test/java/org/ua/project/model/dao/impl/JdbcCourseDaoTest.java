@@ -59,7 +59,7 @@ public class JdbcCourseDaoTest {
     }
 
     @Test
-    public void testCreateCourse() throws SQLException, DBException {
+    public void testCreateCourse() throws Exception {
         try (Connection connection = TestConnectionProvider.getConnection()) {
             JDBCCourseDao jdbcCourseDao = new JDBCCourseDao(connection);
             Theme testTheme = new Theme.Builder()
@@ -86,7 +86,7 @@ public class JdbcCourseDaoTest {
         }
     }
 
-    private Course extractCourse(ResultSet resultSet) throws SQLException {
+    private Course extractCourse(ResultSet resultSet) throws Exception {
         resultSet.next();
         int courseId = resultSet.getInt("course_id");
         String courseName = resultSet.getString("course_name");
@@ -113,7 +113,7 @@ public class JdbcCourseDaoTest {
     }
 
     @Test
-    public void testFindCourseById() throws SQLException, DBException {
+    public void testFindCourseById() throws Exception {
         try (Connection connection = TestConnectionProvider.getConnection()) {
             JDBCCourseDao jdbcCourseDao = new JDBCCourseDao(connection);
             assertEquals(courseA, jdbcCourseDao.findCourseById(1));
@@ -121,7 +121,7 @@ public class JdbcCourseDaoTest {
     }
 
     @Test
-    public void testUpdateCourse() throws SQLException, DBException {
+    public void testUpdateCourse() throws Exception{
         try (Connection connection = TestConnectionProvider.getConnection()) {
             JDBCCourseDao jdbcCourseDao = new JDBCCourseDao(connection);
             Course expected = new Course.Builder()
@@ -143,7 +143,7 @@ public class JdbcCourseDaoTest {
     }
 
     @Test
-    public void testDeleteCourse() throws SQLException, DBException {
+    public void testDeleteCourse() throws Exception {
         try (Connection connection = TestConnectionProvider.getConnection()) {
             JDBCCourseDao jdbcCourseDao = new JDBCCourseDao(connection);
             jdbcCourseDao.deleteCourse(3);
@@ -155,7 +155,7 @@ public class JdbcCourseDaoTest {
     }
 
     @Test
-    public void testGetFilteredCourses() throws SQLException, DBException {
+    public void testGetFilteredCourses() throws Exception {
         try (Connection connection = TestConnectionProvider.getConnection()) {
             JDBCCourseDao jdbcCourseDao = new JDBCCourseDao(connection);
             CourseSortParameter sortParameter = CourseSortParameter.BY_NAME_DESC;
@@ -196,7 +196,7 @@ public class JdbcCourseDaoTest {
     }
 
     @Test
-    public void testGetFilteredCoursesPage() throws SQLException, DBException {
+    public void testGetFilteredCoursesPage() throws Exception {
         try (Connection connection = TestConnectionProvider.getConnection()) {
             JDBCCourseDao jdbcCourseDao = new JDBCCourseDao(connection);
             CourseSortParameter sortParameter = CourseSortParameter.BY_NAME_DESC;
@@ -213,7 +213,7 @@ public class JdbcCourseDaoTest {
     }
 
     @Test
-    public void testGetFilteredCourseCount() throws SQLException, DBException {
+    public void testGetFilteredCourseCount() throws Exception {
         try (Connection connection = TestConnectionProvider.getConnection()) {
             JDBCCourseDao jdbcCourseDao = new JDBCCourseDao(connection);
             CourseFilterOption filterOption = new CourseFilterOption.Builder()

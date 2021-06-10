@@ -36,27 +36,12 @@ public class JDBCThemeDao extends JDBCAbstractDao implements ThemeDao {
     }
 
     @Override
-    public void createTheme(Theme theme) throws DBException {
+    public void createTheme(Theme theme) throws DBException, EntityAlreadyExistsException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(CREATE_THEME)) {
             preparedStatement.setString(1, theme.getName());
             preparedStatement.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException e) {
-            throw new EntityAlreadyExistsException();
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new DBException(e);
-        }
-    }
-
-    @Override
-    public Theme findThemeById(int themeId) throws DBException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_THEME_BY_ID)) {
-            preparedStatement.setInt(1, themeId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (!resultSet.next()) {
-                throw new EntityNotFoundException();
-            }
-            return new ThemeMapper().extract(resultSet);
+            throw new EntityAlreadyExistsException(e);
         } catch (SQLException e) {
             logger.error(e);
             throw new DBException(e);
@@ -80,7 +65,7 @@ public class JDBCThemeDao extends JDBCAbstractDao implements ThemeDao {
     }
 
     @Override
-    public void deleteTheme(int themeId) throws DBException {
+    public void deleteTheme(int themeId) throws DBException, EntityNotFoundException, IllegalDeletionException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_THEME)) {
             preparedStatement.setInt(1, themeId);
             if (preparedStatement.executeUpdate() == 0) {

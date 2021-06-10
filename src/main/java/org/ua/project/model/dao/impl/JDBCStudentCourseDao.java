@@ -10,6 +10,7 @@ import org.ua.project.model.entity.CourseFilterOption;
 import org.ua.project.model.entity.StudentCourse;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.exception.DBException;
+import org.ua.project.model.exception.EntityNotFoundException;
 import org.ua.project.model.exception.IllegalInsertionException;
 import org.ua.project.model.util.SqlStatementLoader;
 
@@ -116,7 +117,7 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
     }
 
     @Override
-    public void enrollStudent(int studId, int courseId) throws DBException {
+    public void enrollStudent(int studId, int courseId) throws DBException, EntityNotFoundException, IllegalInsertionException {
         try (PreparedStatement enrollStudentStatement = connection.prepareStatement(ENROLL_USER)) {
             JDBCCourseDao courseDao = new JDBCCourseDao(connection);
             Course course = courseDao.findCourseById(courseId);

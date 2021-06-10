@@ -60,7 +60,7 @@ public class JdbcStudentCourseDaoTest {
     }
 
     @Test
-    public void testFindCoursesByStudent() throws SQLException, DBException {
+    public void testFindCoursesByStudent() throws Exception {
         User student = new User.Builder()
                 .setId(2)
                 .setFirstName("Student")
@@ -86,7 +86,7 @@ public class JdbcStudentCourseDaoTest {
     }
 
     @Test
-    public void testFindStudentsByCourse() throws SQLException, DBException {
+    public void testFindStudentsByCourse() throws Exception {
         User studentA = new User.Builder()
                 .setId(2)
                 .setFirstName("Student")
@@ -116,7 +116,7 @@ public class JdbcStudentCourseDaoTest {
     }
 
     @Test
-    public void testEnrollStudent() throws SQLException, DBException {
+    public void testEnrollStudent() throws Exception {
         int studId = 2;
         int courseId = 3;
         try (Connection connection = TestConnectionProvider.getConnection()) {
@@ -134,7 +134,7 @@ public class JdbcStudentCourseDaoTest {
     }
 
     @Test
-    public void testRemoveStudentFromCourse() throws SQLException, DBException {
+    public void testRemoveStudentFromCourse() throws Exception{
         int studId = 2;
         int courseId = 1;
         try (Connection connection = TestConnectionProvider.getConnection()) {
@@ -149,7 +149,7 @@ public class JdbcStudentCourseDaoTest {
     }
 
     @Test
-    public void testUpdateStudentMark() throws SQLException, DBException {
+    public void testUpdateStudentMark() throws Exception {
         User studentA = new User.Builder()
                 .setId(2)
                 .build();

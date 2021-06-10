@@ -124,7 +124,7 @@ public class CourseService {
      * Updates course with data contained in course entity.
      * @param course - entity representing course to be updated.
      */
-    public void updateCourse(Course course) {
+    public void updateCourse(Course course) throws EntityNotFoundException {
         try (CourseDao courseDao = new JDBCDaoFactory().createCourseDao()) {
             courseDao.updateCourse(course);
         } catch (DBException e) {

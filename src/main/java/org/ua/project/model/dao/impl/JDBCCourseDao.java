@@ -77,7 +77,7 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
     }
 
     @Override
-    public void createCourse(Course course) throws DBException {
+    public void createCourse(Course course) throws DBException, EntityNotFoundException {
         try (PreparedStatement createCourseStatement = connection.prepareStatement(CREATE_COURSE)) {
             setCourseParameters(course, createCourseStatement);
             Optional<User> tutor = Optional.ofNullable(course.getTutor());
@@ -87,6 +87,8 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
                 createCourseStatement.setNull(6, Types.INTEGER);
             }
             createCourseStatement.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new EntityNotFoundException(e);
         } catch (SQLException e) {
             logger.error(e);
             throw new DBException(e);
@@ -94,7 +96,7 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
     }
 
     @Override
-    public Course findCourseById(int id) throws DBException {
+    public Course findCourseById(int id) throws DBException, EntityNotFoundException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_COURSE_BY_ID)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -108,7 +110,7 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
         }
     }
 
-    public void updateCourse(Course course) throws DBException {
+    public void updateCourse(Course course) throws DBException, EntityNotFoundException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_COURSE)) {
             setCourseParameters(course, preparedStatement);
             Optional<User> tutor = Optional.ofNullable(course.getTutor());
@@ -129,7 +131,7 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
     }
 
     @Override
-    public void deleteCourse(int id) throws DBException {
+    public void deleteCourse(int id) throws DBException, EntityNotFoundException, IllegalDeletionException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_COURSE_BY_ID)) {
             preparedStatement.setInt(1, id);
             if (preparedStatement.executeUpdate() < 1) {

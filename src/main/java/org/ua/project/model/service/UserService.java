@@ -9,6 +9,7 @@ import org.ua.project.model.entity.User;
 import org.ua.project.model.exception.DBException;
 import org.ua.project.model.exception.EntityAlreadyExistsException;
 import org.ua.project.model.exception.EntityNotFoundException;
+import org.ua.project.model.exception.IllegalInsertionException;
 import org.ua.project.model.service.exception.ServiceException;
 import org.ua.project.model.service.exception.UserAlreadyExistsException;
 import org.ua.project.model.service.exception.WrongPasswordException;
@@ -19,11 +20,11 @@ import java.util.List;
 public class UserService {
     Logger logger = LogManager.getLogger(UserService.class);
 
-    public void addUser(User user) throws ServiceException, UserAlreadyExistsException{
+    public void addUser(User user) throws ServiceException, EntityAlreadyExistsException {
         try (UserDao dao = new JDBCDaoFactory().createUserDao()) {
             dao.createUser(user);
         } catch (EntityAlreadyExistsException e) {
-            throw new UserAlreadyExistsException();
+            throw new EntityAlreadyExistsException();
         } catch (DBException e) {
             logger.error(e);
             throw new ServiceException(e);
@@ -39,7 +40,7 @@ public class UserService {
         }
     }
 
-    public void enrollStudent(int studId, int courseId) {
+    public void enrollStudent(int studId, int courseId) throws IllegalInsertionException, EntityNotFoundException {
         try (StudentCourseDao studentCourseDao = new JDBCDaoFactory().createStudentCourseDao()) {
             studentCourseDao.enrollStudent(studId, courseId);
         } catch (DBException e) {
@@ -57,9 +58,7 @@ public class UserService {
                throw new WrongPasswordException();
            }
            return user;
-       } catch (EntityNotFoundException e) {
-            throw e;
-        } catch (DBException e) {
+       }  catch (DBException e) {
             logger.error(e);
             throw new ServiceException(e);
         }

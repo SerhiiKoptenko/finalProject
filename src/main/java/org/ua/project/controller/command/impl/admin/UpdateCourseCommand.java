@@ -34,7 +34,7 @@ public class UpdateCourseCommand implements Command {
 
         Optional<String> courseIdOpt = Optional.ofNullable(req.getParameter("courseId"));
         if (!courseIdOpt.isPresent()) {
-            logger.error("no couser id specified");
+            logger.error("no couse id specified");
 
         }
 
@@ -72,7 +72,11 @@ public class UpdateCourseCommand implements Command {
         }
 
         CourseService courseService = new CourseService();
-        courseService.updateCourse(course);
+       try {
+           courseService.updateCourse(course);
+       } catch (Exception e) {
+           //TODO: handle
+       }
 
         String url = ControllerConstants.REDIRECT_TO_MANAGE_COURSES_PAGE + UPDATE_RESULT + SUCCESS;
         return PaginationUtil.appendPageFromRequest(url, req);

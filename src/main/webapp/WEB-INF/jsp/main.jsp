@@ -42,7 +42,7 @@
                         <c:forEach items="${tutors}" var="tutor">
                             <option
                                     <c:if test="${selectedTutorId eq tutor.id}">selected</c:if>
-                                    value="${tutor.id}">${tutor.firstName} ${tutor.lastName} (${tutor.login})
+                                    value="${tutor.id}">${tutor.firstName} ${tutor.lastName}
                             </option>
                         </c:forEach>
                     </select>

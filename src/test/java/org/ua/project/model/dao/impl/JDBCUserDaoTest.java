@@ -29,7 +29,7 @@ public class JDBCUserDaoTest {
     }
 
     @Test
-    public void testCreateUser() throws SQLException, DBException {
+    public void testCreateUser() throws Exception {
         User user = new User.Builder()
                 .setId(4)
                 .setFirstName("test")
@@ -49,7 +49,7 @@ public class JDBCUserDaoTest {
         }
     }
 
-    private User extractUser(ResultSet resultSet) throws SQLException{
+    private User extractUser(ResultSet resultSet) throws Exception{
         resultSet.next();
         return new User.Builder()
                 .setId(resultSet.getInt("id"))
@@ -63,7 +63,7 @@ public class JDBCUserDaoTest {
     }
 
     @Test
-    public void testGetUserByLogin() throws SQLException, DBException {
+    public void testGetUserByLogin() throws Exception {
         User expected = new User.Builder()
                 .setId(1)
                 .setFirstName("Tutor")
@@ -80,7 +80,7 @@ public class JDBCUserDaoTest {
     }
 
     @Test
-    public void testFindAllUsers() throws SQLException, DBException {
+    public void testFindAllUsers() throws Exception {
         User expected1 = new User.Builder()
                 .setId(2)
                 .setFirstName("Student")
@@ -114,7 +114,7 @@ public class JDBCUserDaoTest {
     }
 
     @Test
-    public void testUpdateUserBlockedStatus() throws SQLException, DBException {
+    public void testUpdateUserBlockedStatus() throws Exception {
         User expected = new User.Builder()
                 .setId(2)
                 .setFirstName("Student")
@@ -136,7 +136,7 @@ public class JDBCUserDaoTest {
     }
 
     @Test
-    public void testFindUsersByRole() throws SQLException, DBException {
+    public void testFindUsersByRole() throws Exception {
         User expected = new User.Builder()
                 .setId(1)
                 .setFirstName("Tutor")

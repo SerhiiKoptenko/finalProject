@@ -38,17 +38,6 @@ public class ThemeService {
         }
     }
 
-    public Theme findThemeById(int id) throws ServiceException, EntityNotFoundException {
-        try (ThemeDao themeDao = new JDBCDaoFactory().createThemeDao()) {
-            return themeDao.findThemeById(id);
-        } catch (EntityNotFoundException e) {
-            throw e;
-        } catch (DBException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
-    }
-
     public void deleteTheme(int id) throws EntityNotFoundException, IllegalDeletionException {
         try (ThemeDao themeDao = new JDBCDaoFactory().createThemeDao()) {
             themeDao.deleteTheme(id);

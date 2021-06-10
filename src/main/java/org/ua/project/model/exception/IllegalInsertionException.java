@@ -1,4 +1,4 @@
 package org.ua.project.model.exception;
 
-public class IllegalInsertionException extends DBException {
+public class IllegalInsertionException extends Exception {
 }
