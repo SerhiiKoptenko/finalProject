@@ -1,7 +1,7 @@
 package org.ua.project.controller.constants;
 
 /**
- * Enum class which holds HTTP parameters names.
+ * Enum class which holds HTTP request parameters names.
  */
 public enum Parameter {
     FIRST_NAME("firstName"),

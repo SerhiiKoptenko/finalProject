@@ -19,7 +19,6 @@ import java.io.IOException;
 
 public class AddCourseCommand implements Command {
 
-    private static final String GO_TO_MANAGE_COURSES_PAGE = ControllerConstants.REDIRECT_PREFIX + "/admin/manage_courses";
     private static final String ERROR_INVALID_DATA = "errorInvalidData";
     private static final String ADD_RESULT = "?addResult=";
     private static final String SUCCESS = "success";

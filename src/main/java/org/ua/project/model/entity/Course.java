@@ -14,7 +14,6 @@ public class Course implements Entity, Serializable {
     private LocalDate endDate;
     private User tutor;
     private String description;
-    private List<User> students;
     private int studentCount;
 
     @Override
@@ -33,14 +32,6 @@ public class Course implements Entity, Serializable {
 
     public void setStudentCount(int studentCount) {
         this.studentCount = studentCount;
-    }
-
-    public List<User> getStudents() {
-        return students;
-    }
-
-    public void setStudents(List<User> students) {
-        this.students = students;
     }
 
     public String getName() {
@@ -94,7 +85,7 @@ public class Course implements Entity, Serializable {
     public Course() {
     }
 
-    private Course(int id, String name, Theme theme, LocalDate startDate, LocalDate endDate, User tutor, String description, List<User> students, int studentCount) {
+    private Course(int id, String name, Theme theme, LocalDate startDate, LocalDate endDate, User tutor, String description, int studentCount) {
         this.id = id;
         this.name = name;
         this.theme = theme;
@@ -102,7 +93,6 @@ public class Course implements Entity, Serializable {
         this.endDate = endDate;
         this.tutor = tutor;
         this.description = description;
-        this.students = students;
         this.studentCount = studentCount;
     }
 
@@ -174,21 +164,13 @@ public class Course implements Entity, Serializable {
             return this;
         }
 
-        public Builder setStudents(List<User> students) {
-            this.students = students;
+        public Builder setStudentCount(int studentCount) {
+            this.studentCount = studentCount;
             return this;
         }
 
-        public Builder setStudentCount(int studentCount) {
-            if (students != null) {
-                this.studentCount = students.size();
-            } else {
-                this.studentCount = studentCount;
-            }
-            return this;
-        }
         public Course build() {
-            return new Course(id, name, theme, startDate, endDate, tutor, description, students, studentCount);
+            return new Course(id, name, theme, startDate, endDate, tutor, description, studentCount);
         }
     }
 

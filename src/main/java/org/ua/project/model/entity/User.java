@@ -14,7 +14,6 @@ public class User implements Entity, Serializable {
     private String login;
     private String password;
     private Role role;
-    private List<Course> courses;
     private boolean blocked;
 
     @Override
@@ -66,14 +65,6 @@ public class User implements Entity, Serializable {
         this.role = role;
     }
 
-    public List<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(List<Course> courses) {
-        this.courses = courses;
-    }
-
     public boolean isBlocked() {
         return blocked;
     }
@@ -84,14 +75,13 @@ public class User implements Entity, Serializable {
 
     public User(){}
 
-    public User(int id, String firstName, String lastName, String login, String password, Role role, List<Course> courses, boolean isBlocked) {
+    public User(int id, String firstName, String lastName, String login, String password, Role role,  boolean isBlocked) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.login = login;
         this.password = password;
         this.role = role;
-        this.courses = courses;
         this.blocked = isBlocked;
     }
 
@@ -102,7 +92,6 @@ public class User implements Entity, Serializable {
         private String login;
         private String password;
         private Role role;
-        private List<Course> courses;
         private boolean isBlocked;
 
         public Builder setId(int id) {
@@ -140,13 +129,8 @@ public class User implements Entity, Serializable {
             return this;
         }
 
-        public Builder setCourses(List<Course> courses) {
-            this.courses = courses;
-            return this;
-        }
-
         public User build() {
-            return new User(id,  firstName, lastName, login, password, role, courses, isBlocked);
+            return new User(id,  firstName, lastName, login, password, role, isBlocked);
         }
     }
 
@@ -155,12 +139,12 @@ public class User implements Entity, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && blocked == user.blocked && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(login, user.login) && Objects.equals(password, user.password) && role == user.role && Objects.equals(courses, user.courses);
+        return id == user.id && blocked == user.blocked && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(login, user.login) && Objects.equals(password, user.password) && role == user.role;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, login, password, role, courses, blocked);
+        return Objects.hash(id, firstName, lastName, login, password, role, blocked);
     }
 
     @Override
@@ -172,7 +156,6 @@ public class User implements Entity, Serializable {
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +
-                ", courses=" + courses +
                 ", blocked=" + blocked +
                 '}';
     }

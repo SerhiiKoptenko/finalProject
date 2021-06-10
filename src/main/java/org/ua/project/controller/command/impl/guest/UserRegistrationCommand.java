@@ -14,13 +14,10 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class UserRegistrationCommand implements Command {
-    private static Logger logger = LogManager.getLogger(UserRegistrationCommand.class);
-
-    private static final String GO_TO_REG_PAGE = "/registration_page?";
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String redirectUrl = ControllerConstants.REDIRECT_PREFIX + GO_TO_REG_PAGE;
+        String redirectUrl = ControllerConstants.REDIRECT_TO_REGISTRATION_PAGE + "?";
         redirectUrl += Optional.ofNullable(req.getQueryString()).orElse("");
 
         String firstName = req.getParameter(Parameter.FIRST_NAME.getValue());

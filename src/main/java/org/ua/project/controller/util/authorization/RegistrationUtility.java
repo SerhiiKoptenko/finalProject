@@ -11,7 +11,7 @@ import org.ua.project.model.service.util.encryption.EncryptionUtil;
 
 public final class RegistrationUtility {
     private static final Logger logger = LogManager.getLogger(RegistrationUtility.class);
-    private static final String REG_SUCCESS = "&registrationResult=success";
+    private static final String REG_SUCCESS = "registrationResult=success";
     private static final String REG_FAILED_USER_EXISTS = "&registrationResult=userExists";
     private static final String REG_FAILED_INVALID_DATA = "&registrationResult=invalidData";
 
@@ -20,11 +20,11 @@ public final class RegistrationUtility {
     private RegistrationUtility(){}
 
     public static String registerUser(User user, String redirectUrl) {
-        logger.debug("Attempting to register user {}", user.getLogin());
+        logger.info("Attempting to register user {}", user.getLogin());
         Validator validator = Validator.getInstance();
         ValidationResult validationResult = validator.validateUser(user);
         if (!validationResult.isSuccessful()) {
-            logger.debug("Validation failed.");
+            logger.info("Validation failed.");
             redirectUrl += REG_FAILED_INVALID_DATA;
             redirectUrl = includePreviousValues(redirectUrl, user);
             redirectUrl += validationResult.getInvalidParametersString();
@@ -36,13 +36,15 @@ public final class RegistrationUtility {
         try {
             UserService userService = new UserService();
             userService.addUser(user);
-            redirectUrl += REG_SUCCESS;
-            logger.trace("User successfully registered.");
         } catch (UserAlreadyExistsException e) {
             redirectUrl += REG_FAILED_USER_EXISTS;
             redirectUrl = includePreviousValues(redirectUrl, user);
             logger.trace("Registration failed: user already exists.");
+            return redirectUrl;
         }
+
+        redirectUrl += REG_SUCCESS;
+        logger.trace("User successfully registered.");
         return redirectUrl;
     }
 
