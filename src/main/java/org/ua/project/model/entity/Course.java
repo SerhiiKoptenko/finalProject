@@ -1,12 +1,11 @@
 package org.ua.project.model.entity;
 
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-public class Course implements Entity, Serializable {
+public class Course implements Entity {
     private int id;
     private String name;
     private Theme theme;

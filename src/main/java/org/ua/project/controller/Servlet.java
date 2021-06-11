@@ -95,18 +95,18 @@ public class Servlet extends HttpServlet {
             lastRequest += "?" + queryString.get();
         }
         req.getSession().setAttribute("lastRequest", lastRequest);
-        logger.trace("received path {}", path);
+        logger.info("received path {}", path);
 
 
         Optional<Command> commandOpt = Optional.ofNullable(commands.get(path));
         if (commandOpt.isPresent()) {
             String page = commandOpt.get().execute(req, resp);
             if (page.startsWith(ControllerConstants.REDIRECT_PREFIX)) {
-                logger.trace("Redirecting to: {}", page);
+                logger.info("Redirecting to: {}", page);
                 resp.sendRedirect(page.replaceFirst(ControllerConstants.REDIRECT_PREFIX, ""));
                 return;
             }
-            logger.trace("Forwarding to: {}", page);
+            logger.info("Forwarding to: {}", page);
             req.getRequestDispatcher(page).forward(req, resp);
         } else {
             logger.error("Unknown url: {}", path);

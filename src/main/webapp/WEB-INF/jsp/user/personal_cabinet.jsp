@@ -17,20 +17,20 @@
     <p>${first_name}: ${user.firstName}</p>
     <p>${last_name}: ${user.lastName}</p>
     <p>${login}: ${user.login}</p>
+    <c:set var="displayedCourses" value="${pageContext.request.getParameter(\"displayedCourses\")}"/>
     <c:if test="${user.role eq \"STUDENT\"}">
         <form method="GET">
             <input type="hidden" name="command" value="displayStudentsCourses">
             <label for="courses-select">${display_courses}: </label>
             <select name="displayedCourses" id="courses-select" class="form-select mb-3">
-                <option value="not_started">${not_started}</option>
-                <option value="ongoing">${ongoing}</option>
-                <option value="completed">${completed}</option>
+                <option value="not_started" <c:if test="${displayedCourses eq 'not_started'}">selected</c:if> >${not_started}</option>
+                <option value="ongoing" <c:if test="${displayedCourses eq 'ongoing'}">selected</c:if> >${ongoing}</option>
+                <option value="completed" <c:if test="${displayedCourses eq 'completed'}">selected</c:if> >${completed}</option>
             </select>
             <button type="submit" class="btn btn-primary">${display}</button>
         </form>
 
         <c:set var="studentsCoursesListSize">${fn:length(studentsCourses)}</c:set>
-        <c:set var="displayedCourses" value="${pageContext.request.getParameter(\"displayedCourses\")}"/>
         <c:choose>
             <c:when test="${studentsCoursesListSize > 0}">
                 <table class="table table-bordered border-primary mt-3">

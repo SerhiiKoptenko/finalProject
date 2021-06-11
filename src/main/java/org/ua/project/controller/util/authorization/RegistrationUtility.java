@@ -9,15 +9,16 @@ import org.ua.project.model.exception.EntityAlreadyExistsException;
 import org.ua.project.model.service.UserService;
 import org.ua.project.model.service.util.encryption.EncryptionUtil;
 
-public final class RegistrationUtility {
+public class RegistrationUtility {
     private static final Logger logger = LogManager.getLogger(RegistrationUtility.class);
     private static final String REG_SUCCESS = "registrationResult=success";
     private static final String REG_FAILED_USER_EXISTS = "&registrationResult=userExists";
     private static final String REG_FAILED_INVALID_DATA = "&registrationResult=invalidData";
 
-
-
-    private RegistrationUtility(){}
+    //suppress default constructor
+    private RegistrationUtility(){
+        throw new AssertionError();
+    }
 
     public static String registerUser(User user, String redirectUrl) {
         logger.info("Attempting to register user {}", user.getLogin());

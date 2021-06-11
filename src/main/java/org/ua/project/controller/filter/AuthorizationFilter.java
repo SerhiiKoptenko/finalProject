@@ -19,32 +19,32 @@ public class AuthorizationFilter extends HttpFilter {
 
     @Override
     public void init() throws ServletException {
-       allUrls.add("/admin/manage_students");
-       allUrls.add("/admin/manage_courses");
-       allUrls.add("/admin/manage_courses?command=addCourse");
-       allUrls.add("/admin/manage_courses?command=addTheme");
-       allUrls.add("/admin/manage_courses?command=removeTheme");
-       allUrls.add("/admin/edit_course");
-       allUrls.add("/admin/edit_course?command=updateCourse");
-       allUrls.add("/admin/delete_course");
-       allUrls.add("/admin/manage_courses?command=deleteCourse");
-       allUrls.add("/admin/manage_students?command=updateUserBlockedStatus");
-       allUrls.add("/admin/register_tutor");
-       allUrls.add("/admin/register_tutor?command=register");
-       allUrls.add("/registration_page");
-       allUrls.add("/sign_in_page");
-       allUrls.add("/registration_page?command=register");
-       allUrls.add("/signIn_page?command=signIn");
-       allUrls.add("/main_page");
-       allUrls.add("/main_page?command=enroll");
-       allUrls.add("/user/enroll");
-       allUrls.add("/user/personal_cabinet");
-       allUrls.add("/user/personal_cabinet?command=displayTutorsCourses");
-       allUrls.add("/user/personal_cabinet?command=displayStudentsCourses");
-       allUrls.add("/user/personal_cabinet/journal");
-       allUrls.add("/user/personal_cabinet?command=updateMark");
-       allUrls.add("/user/personal_cabinet/leave_course");
-       allUrls.add("/user/personal_cabinet/leave_course?command=leaveCourse");
+        allUrls.add("/admin/manage_students");
+        allUrls.add("/admin/manage_courses");
+        allUrls.add("/admin/manage_courses?command=addCourse");
+        allUrls.add("/admin/manage_courses?command=addTheme");
+        allUrls.add("/admin/manage_courses?command=removeTheme");
+        allUrls.add("/admin/edit_course");
+        allUrls.add("/admin/edit_course?command=updateCourse");
+        allUrls.add("/admin/delete_course");
+        allUrls.add("/admin/manage_courses?command=deleteCourse");
+        allUrls.add("/admin/manage_students?command=updateUserBlockedStatus");
+        allUrls.add("/admin/register_tutor");
+        allUrls.add("/admin/register_tutor?command=register");
+        allUrls.add("/registration_page");
+        allUrls.add("/sign_in_page");
+        allUrls.add("/registration_page?command=register");
+        allUrls.add("/signIn_page?command=signIn");
+        allUrls.add("/main_page");
+        allUrls.add("/main_page?command=enroll");
+        allUrls.add("/user/enroll");
+        allUrls.add("/user/personal_cabinet");
+        allUrls.add("/user/personal_cabinet?command=displayTutorsCourses");
+        allUrls.add("/user/personal_cabinet?command=displayStudentsCourses");
+        allUrls.add("/user/personal_cabinet/journal");
+        allUrls.add("/user/personal_cabinet?command=updateMark");
+        allUrls.add("/user/personal_cabinet/leave_course");
+        allUrls.add("/user/personal_cabinet/leave_course?command=leaveCourse");
 
         List<String> guestUrls = new ArrayList<>();
         guestUrls.add("/main_page");
@@ -73,6 +73,7 @@ public class AuthorizationFilter extends HttpFilter {
         List<String> tutorUrls = new ArrayList<>();
         tutorUrls.add("/user/personal_cabinet/journal");
         tutorUrls.add("/user/personal_cabinet");
+        tutorUrls.add("/main_page");
         accessMap.put(User.Role.TUTOR, tutorUrls);
     }
 
@@ -81,11 +82,14 @@ public class AuthorizationFilter extends HttpFilter {
         final HttpServletRequest request = (HttpServletRequest) req;
         final HttpServletResponse response = (HttpServletResponse) res;
 
-        String url = request.getRequestURI() + request.getParameter("command");
-        Optional<User> userOpt = Optional.ofNullable((User) request.getSession().getAttribute(ControllerConstants.USER_ATTR));
-        if (userOpt.isPresent() && allUrls.contains(url)
-                && !accessMap.get(userOpt.get().getRole())
-                .contains(url)) {
+        String url = request.getRequestURI();
+        Optional<String> command = Optional.ofNullable(request.getParameter("command"));
+        if (command.isPresent()) {
+            url += "?" + command.get();
+        }
+        User user = (User) request.getSession().getAttribute(ControllerConstants.USER_ATTR);
+
+        if (allUrls.contains(url) && !accessMap.get(user.getRole()).contains(url)) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
         } else {
             chain.doFilter(req, res);

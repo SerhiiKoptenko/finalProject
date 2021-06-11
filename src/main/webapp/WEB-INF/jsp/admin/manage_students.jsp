@@ -22,7 +22,7 @@
             <c:set var="count" value="0"/>
             <c:forEach items="${users}" var="user">
             <tr>
-                <td>${count}</td>
+                <td>${count + 1}</td>
                 <td>${user.firstName}</td>
                 <td>${user.lastName}</td>
                 <td>${user.login}</td>

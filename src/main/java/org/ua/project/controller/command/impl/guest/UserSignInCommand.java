@@ -73,7 +73,15 @@ public class UserSignInCommand implements Command {
         }
 
         AuthorizationUtility.saveUserToSession(req, user);
-        logger.trace("User successfully signed in.");
-        return GO_TO_MAIN_PAGE;
+        logger.info("User {} successfully signed in.", user.getLogin());
+
+        if (User.Role.TUTOR.equals(user.getRole())) {
+            return ControllerConstants.REDIRECT_TO_PERSONAL_CABINET ;
+        }
+
+        if (User.Role.ADMIN.equals(user.getRole())) {
+            return ControllerConstants.REDIRECT_TO_MANAGE_COURSES_PAGE;
+        }
+        return ControllerConstants.REDIRECT_TO_MAIN_PAGE;
     }
 }

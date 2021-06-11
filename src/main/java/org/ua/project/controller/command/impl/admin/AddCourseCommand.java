@@ -44,7 +44,8 @@ public class AddCourseCommand implements Command {
        try {
            service.createCourse(course);
        } catch (EntityNotFoundException e) {
-           //TODO: handle case where there's no specified tutor or theme
+            req.setAttribute("error", "no_theme_or_tutor");
+            return ControllerConstants.FORWARD_TO_ERROR_PAGE;
        }
        url += ADD_RESULT + SUCCESS;
        return PaginationUtil.appendPageFromRequest(url, req);

@@ -159,32 +159,37 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
 
     @Override
     public List<Course> getFilteredCourses(CourseSortParameter sortParameter, CourseFilterOption filterOption) throws DBException {
-        List<Course> courses = new ArrayList<>();
+
         String filterByStatus = getFilterByStatusStatement(filterOption);
         String sql = String.format(GET_FILTERED_COURSES, filterByStatus, getOrderByStatement(sortParameter));
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             prepareFilterStatement(filterOption, preparedStatement);
 
             ResultSet resultSet = preparedStatement.executeQuery();
-            CourseMapper courseMapper = new CourseMapper();
-            UserMapper userMapper = new UserMapper();
-            ThemeMapper themeMapper = new ThemeMapper();
-
-            Map<Integer, Theme> themeCache = new HashMap<>();
-            Map<Integer, User> tutorCache = new HashMap<>();
-            while (resultSet.next()) {
-                Course course = courseMapper.extract(resultSet);
-                User tutor = userMapper.makeUnique(tutorCache, course.getTutor());
-                Theme theme = themeMapper.makeUnique(themeCache, course.getTheme());
-                course.setTheme(theme);
-                course.setTutor(tutor);
-                courses.add(course);
-            }
-            return courses;
+            return extractCoursesAsList(resultSet);
         } catch (SQLException e) {
             logger.error(e);
             throw new DBException(e);
         }
+    }
+
+    private List<Course> extractCoursesAsList(ResultSet resultSet) throws SQLException {
+        List<Course> courses = new ArrayList<>();
+        CourseMapper courseMapper = new CourseMapper();
+        UserMapper userMapper = new UserMapper();
+        ThemeMapper themeMapper = new ThemeMapper();
+
+        Map<Integer, Theme> themeCache = new HashMap<>();
+        Map<Integer, User> tutorCache = new HashMap<>();
+        while (resultSet.next()) {
+            Course course = courseMapper.extract(resultSet);
+            User tutor = userMapper.makeUnique(tutorCache, course.getTutor());
+            Theme theme = themeMapper.makeUnique(themeCache, course.getTheme());
+            course.setTheme(theme);
+            course.setTutor(tutor);
+            courses.add(course);
+        }
+        return courses;
     }
 
     private void prepareFilterStatement(CourseFilterOption filterOption, PreparedStatement preparedStatement) throws SQLException {
@@ -194,7 +199,7 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
 
         Optional<Theme> themeOpt = Optional.ofNullable(filterOption.getTheme());
         Optional<User> tutorOpt = Optional.ofNullable(filterOption.getTutor());
-        Optional<User> studOpt = Optional.ofNullable(filterOption.getStudent());
+        Optional<User> studOpt = Optional.ofNullable(filterOption.getAvailableForStudent());
 
         if (themeOpt.isPresent()) {
             themeId = themeOpt.get().getId();
@@ -217,7 +222,6 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
     @Override
     public List<Course> getFilteredCourses(int offset, int numberOfItems,
                                            CourseSortParameter sortParameter, CourseFilterOption filterOption) throws DBException {
-        List<Course> page = new ArrayList<>();
         String filterByStatus = getFilterByStatusStatement(filterOption);
         String sql = String.format(GET_FILTERED_COURSE_PAGE, filterByStatus, getOrderByStatement(sortParameter));
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -227,21 +231,7 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
             preparedStatement.setInt(8, numberOfItems);
 
             ResultSet resultSet = preparedStatement.executeQuery();
-            CourseMapper courseMapper = new CourseMapper();
-            UserMapper userMapper = new UserMapper();
-            ThemeMapper themeMapper = new ThemeMapper();
-
-            Map<Integer, Theme> themeCache = new HashMap<>();
-            Map<Integer, User> tutorCache = new HashMap<>();
-            while (resultSet.next()) {
-                Course course = courseMapper.extract(resultSet);
-                User tutor = userMapper.makeUnique(tutorCache, course.getTutor());
-                Theme theme = themeMapper.makeUnique(themeCache, course.getTheme());
-                course.setTheme(theme);
-                course.setTutor(tutor);
-                page.add(course);
-            }
-            return page;
+            return extractCoursesAsList(resultSet);
         } catch (SQLException e) {
             logger.error(e);
             throw new DBException(e);

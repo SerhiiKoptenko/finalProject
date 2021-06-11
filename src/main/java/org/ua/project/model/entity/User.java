@@ -1,12 +1,8 @@
 package org.ua.project.model.entity;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 
-public class User implements Entity, Serializable {
-    private static final long serialVersionUID = 1394355768393479048L;
+public class User implements Entity {
 
     private int id;
     private String firstName;

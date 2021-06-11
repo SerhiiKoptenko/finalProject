@@ -137,6 +137,7 @@
                     <th>${tutor_login}</th>
                     <th>${tutor_first_name}</th>
                     <th>${tutor_last_name}</th>
+                    <th>${students_enrolled}</th>
                     <th colspan="2" class="text-center">${action}</th>
                 </tr>
                 </thead>
@@ -154,6 +155,7 @@
                         <td>${course.tutor.login}</td>
                         <td>${course.tutor.firstName}</td>
                         <td>${course.tutor.lastName}</td>
+                        <td>${course.studentCount}</td>
                         <td>
                             <form action="edit_course" class="text-center" method="POST">
                                 <input type="hidden" name="page" value="${currentPage}">

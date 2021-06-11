@@ -7,12 +7,6 @@
 <c:if test="${not empty sessionScope.locale}">
     <fmt:setLocale value="${sessionScope.locale}"/>
 </c:if>
-
-
-<c:if test="${not empty sessionScope.locale}">
-    <fmt:setLocale value="${locale}"/>
-</c:if>
-
 <fmt:setBundle basename="i18n.app"/>
 <fmt:message key="home" var="home"></fmt:message>
 <fmt:message key="register" var="register"/>

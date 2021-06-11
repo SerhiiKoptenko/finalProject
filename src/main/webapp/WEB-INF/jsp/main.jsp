@@ -25,6 +25,7 @@
 <fmt:message key="enroll" var="enroll"/>
 <fmt:message key="all" var="all"/>
 <fmt:message key="create_stud_account" var="create_stud_account"/>
+<fmt:message key="no_courses_to_display" var="no_courses_to_display"/>
 
 <main class="container mx-auto">
     <h2 class="text-center">${available_courses}</h2>
@@ -86,6 +87,8 @@
                 </form>
             </div>
             <c:set var="coursesPageSize">${fn:length(coursesPage)}</c:set>
+            <c:choose>
+                <c:when test="${coursesPageSize > 0}">
             <table class="table table-bordered border-primary ">
                 <thead>
                 <tr>
@@ -172,6 +175,11 @@
                     </li>
                 </ul>
             </nav>
+                </c:when>
+                <c:otherwise>
+                    ${no_courses_to_display}
+                </c:otherwise>
+            </c:choose>
         </div>
     </div>
     <%@include file="footer.jsp"%>

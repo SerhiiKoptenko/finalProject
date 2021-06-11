@@ -3,7 +3,7 @@ package org.ua.project.model.entity;
 public class CourseFilterOption {
     private User tutor;
     private Theme theme;
-    private User student;
+    private User availableForStudent;
     private CourseStatus courseStatus;
 
     public CourseFilterOption() {
@@ -12,7 +12,7 @@ public class CourseFilterOption {
     public CourseFilterOption(User tutor, Theme theme, User user, CourseStatus courseStatus) {
         this.tutor = tutor;
         this.theme = theme;
-        this.student = user;
+        this.availableForStudent = user;
         this.courseStatus = courseStatus;
     }
 
@@ -32,12 +32,12 @@ public class CourseFilterOption {
         this.theme = theme;
     }
 
-    public User getStudent() {
-        return student;
+    public User getAvailableForStudent() {
+        return availableForStudent;
     }
 
-    public void setStudent(User student) {
-        this.student = student;
+    public void setAvailableForStudent(User availableForStudent) {
+        this.availableForStudent = availableForStudent;
     }
 
     public CourseStatus getCourseStatus() {
@@ -91,7 +91,7 @@ public class CourseFilterOption {
         return "CourseFilterOption{" +
                 "tutor=" + tutor +
                 ", theme=" + theme +
-                ", student=" + student +
+                ", student=" + availableForStudent +
                 ", courseStatus=" + courseStatus +
                 '}';
     }

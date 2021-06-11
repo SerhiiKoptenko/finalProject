@@ -1,13 +1,17 @@
 package org.ua.project.controller.constants;
 
 public class ControllerConstants {
-    public static final String REDIRECT_PREFIX = "redirect:";
 
+    //suppress default constructor
+   private ControllerConstants() {
+       throw new AssertionError();
+   }
+
+    public static final String REDIRECT_PREFIX = "redirect:";
 
     public static final String USER_ATTR = "user";
     public static final String USER_ROLE_ATTR = "userRole";
     public static final String LOGGED_USERS_ATTR = "loggedUsers";
-
 
     public static final String REDIRECT_TO_REGISTER_TUTOR_PAGE = REDIRECT_PREFIX + "/admin/register_tutor";
     public static final String REDIRECT_TO_MANAGE_COURSES_PAGE = REDIRECT_PREFIX + "/admin/manage_courses";
@@ -30,7 +34,7 @@ public class ControllerConstants {
     public static final String FORWARD_TO_JOURNAL = "/WEB-INF/jsp/user/journal.jsp";
 
     public static final String ERROR_500_PAGE = "/WEB-INF/error500";
+    public static final String FORWARD_TO_ERROR_PAGE = "/error.jsp";
 
     public static final int ITEMS_PER_PAGE = 3;
-    private ControllerConstants() {}
 }

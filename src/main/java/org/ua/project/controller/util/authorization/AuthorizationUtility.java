@@ -7,8 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Set;
 
-public final class AuthorizationUtility {
-   private AuthorizationUtility(){}
+public class AuthorizationUtility {
+    //suppress default constructor
+    private AuthorizationUtility(){
+        throw new AssertionError();
+    }
 
     public static void saveUserToSession(HttpServletRequest req, User user) {
        req.getSession().setAttribute(ControllerConstants.USER_ATTR, user);

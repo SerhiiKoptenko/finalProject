@@ -7,9 +7,9 @@ public class StudentCourse {
     private Course course;
     private int mark;
 
-    public StudentCourse(User studIt, Course courseId, int mark) {
-        this.student = studIt;
-        this.course = courseId;
+    public StudentCourse(User student, Course course, int mark) {
+        this.student = student;
+        this.course = course;
         this.mark = mark;
     }
 
