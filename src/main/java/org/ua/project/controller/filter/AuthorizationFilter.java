@@ -19,77 +19,75 @@ public class AuthorizationFilter extends HttpFilter {
 
     @Override
     public void init() throws ServletException {
-        allUrls.add("/admin/manage_students");
-        allUrls.add("/admin/manage_courses");
-        allUrls.add("/admin/manage_courses?command=addCourse");
-        allUrls.add("/admin/manage_courses?command=addTheme");
-        allUrls.add("/admin/manage_courses?command=removeTheme");
-        allUrls.add("/admin/edit_course");
-        allUrls.add("/admin/edit_course?command=updateCourse");
-        allUrls.add("/admin/delete_course");
-        allUrls.add("/admin/manage_courses?command=deleteCourse");
-        allUrls.add("/admin/manage_students?command=updateUserBlockedStatus");
-        allUrls.add("/admin/register_tutor");
-        allUrls.add("/admin/register_tutor?command=register");
-        allUrls.add("/registration_page");
-        allUrls.add("/sign_in_page");
-        allUrls.add("/registration_page?command=register");
-        allUrls.add("/signIn_page?command=signIn");
-        allUrls.add("/main_page");
-        allUrls.add("/main_page?command=enroll");
-        allUrls.add("/user/enroll");
-        allUrls.add("/user/personal_cabinet");
-        allUrls.add("/user/personal_cabinet?command=displayTutorsCourses");
-        allUrls.add("/user/personal_cabinet?command=displayStudentsCourses");
-        allUrls.add("/user/personal_cabinet/journal");
-        allUrls.add("/user/personal_cabinet?command=updateMark");
-        allUrls.add("/user/personal_cabinet/leave_course");
-        allUrls.add("/user/personal_cabinet/leave_course?command=leaveCourse");
 
         List<String> guestUrls = new ArrayList<>();
-        guestUrls.add("/main_page");
-        guestUrls.add("/sign_in_page");
         guestUrls.add("/registration_page");
+        guestUrls.add("/sign_in_page");
+        guestUrls.add("/registration_page?command=register");
+        guestUrls.add("/signIn_page?command=signIn");
+        guestUrls.add("/main_page");
         accessMap.put(User.Role.GUEST, guestUrls);
 
-
         List<String> studentUrls = new ArrayList<>();
-        studentUrls.add("/user/personal_cabinet");
         studentUrls.add("/main_page");
-        studentUrls.add("/user/personal_cabinet/leave_course");
         studentUrls.add("/main_page?command=enroll");
         studentUrls.add("/user/enroll");
+        studentUrls.add("/user/personal_cabinet");
+        studentUrls.add("/user/personal_cabinet?command=displayStudentsCourses");
+        studentUrls.add("/user/personal_cabinet/leave_course");
+        studentUrls.add("/user/personal_cabinet/leave_course?command=leaveCourse");
         accessMap.put(User.Role.STUDENT, studentUrls);
 
         List<String> adminUrls = new ArrayList<>();
-        adminUrls.add("/admin/manage_courses");
-        adminUrls.add("/admin/edit_course");
-        adminUrls.add("/admin/register_tutor");
-        adminUrls.add("/admin/delete_course");
         adminUrls.add("/admin/manage_students");
-        adminUrls.add("/main_page");
+        adminUrls.add("/admin/manage_courses");
+        adminUrls.add("/admin/manage_courses?command=addCourse");
+        adminUrls.add("/admin/manage_courses?command=addTheme");
+        adminUrls.add("/admin/manage_courses?command=removeTheme");
+        adminUrls.add("/admin/edit_course");
+        adminUrls.add("/admin/edit_course?command=updateCourse");
+        adminUrls.add("/admin/delete_course");
+        adminUrls.add("/admin/manage_courses?command=deleteCourse");
+        adminUrls.add("/admin/manage_students?command=updateUserBlockedStatus");
+        adminUrls.add("/admin/register_tutor");
+        adminUrls.add("/admin/register_tutor?command=register");
+
         accessMap.put(User.Role.ADMIN, adminUrls);
 
         List<String> tutorUrls = new ArrayList<>();
+        tutorUrls.add("/user/personal_cabinet?command=displayTutorsCourses");
         tutorUrls.add("/user/personal_cabinet/journal");
-        tutorUrls.add("/user/personal_cabinet");
-        tutorUrls.add("/main_page");
+        tutorUrls.add("/user/personal_cabinet?command=updateMark");
         accessMap.put(User.Role.TUTOR, tutorUrls);
+
+        allUrls.addAll(guestUrls);
+        allUrls.addAll(studentUrls);
+        allUrls.addAll(tutorUrls);
+        allUrls.addAll(adminUrls);
     }
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        final HttpServletRequest request = (HttpServletRequest) req;
-        final HttpServletResponse response = (HttpServletResponse) res;
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
 
         String url = request.getRequestURI();
         Optional<String> command = Optional.ofNullable(request.getParameter("command"));
         if (command.isPresent()) {
-            url += "?" + command.get();
+            url += "?command=" + command.get();
         }
-        User user = (User) request.getSession().getAttribute(ControllerConstants.USER_ATTR);
+        Optional<User> userOpt = Optional.ofNullable((User) request.getSession().getAttribute(ControllerConstants.USER_ATTR));
+        User.Role role;
+        boolean isUserBlocked = false;
+        if (userOpt.isPresent()) {
+            User user =  userOpt.get();
+            role = user.getRole();
+            isUserBlocked = user.isBlocked();
+        } else {
+            role = User.Role.GUEST;
+        }
 
-        if (allUrls.contains(url) && !accessMap.get(user.getRole()).contains(url)) {
+        if (allUrls.contains(url) && (!accessMap.get(role).contains(url) || isUserBlocked)) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
         } else {
             chain.doFilter(req, res);

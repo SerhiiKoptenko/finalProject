@@ -21,32 +21,19 @@ public class GoToDeleteCourseCommand implements Command {
     
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Optional<String> courseIdOpt = Optional.ofNullable(req.getParameter(Parameter.COURSE_ID.getValue()));
-        if (!courseIdOpt.isPresent()) {
-            logger.error("no course id");
-            //TODO: go to error page
-            return null;
-        }
-
         int courseId;
-        try {
-            courseId = Integer.parseInt(courseIdOpt.get());
-        } catch (NumberFormatException e) {
-            logger.error(e);
-            //TODO: go to error page
-            return null;
-        }
-
-        CourseService courseService = new CourseService();
-        Course course;
-        try {
-            course = courseService.findCourseById(courseId);
-        } catch (EntityNotFoundException e) {
-            logger.error(e);
-            //TODO: go to error page
-            return null;
-        }
-
+         try {
+            courseId = Integer.parseInt(req.getParameter(Parameter.COURSE_ID.getValue()));
+         } catch (NumberFormatException e) {
+             logger.error(e);
+             req.setAttribute(ControllerConstants.ERROR_ATR, "invalid_request_parameter");
+             return ControllerConstants.FORWARD_TO_ERROR_PAGE;
+         }
+        String courseName = req.getParameter(Parameter.COURSE_NAME.getValue());
+        Course course = new Course.Builder()
+                .setName(courseName)
+                .setId(courseId)
+                .build();
         req.setAttribute("deletedCourse", course);
         String url = ControllerConstants.FORWARD_TO_DELETE_COURSE_PAGE + "?" + Parameter.COURSE_ID + "=" + courseId;
         return  PaginationUtil.appendPageFromRequest(url, req);

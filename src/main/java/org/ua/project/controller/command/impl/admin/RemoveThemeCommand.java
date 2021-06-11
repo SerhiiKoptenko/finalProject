@@ -1,5 +1,7 @@
 package org.ua.project.controller.command.impl.admin;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ua.project.controller.command.Command;
 import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.constants.Parameter;
@@ -14,9 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class RemoveThemeCommand implements Command {
-    private static final String ERROR_NO_SUCH_THEME = "noSuchTheme";
+    private static final Logger logger = LogManager.getLogger(RemoveThemeCommand.class);
+
     private static final String ERROR_CANT_BE_DELETED = "cantBeDeleted";
-    private static final String PREV_THEME_NAME = "&prevRemoveThemeName=";
     private static final String SUCCESS =  "success";
 
     @Override
@@ -27,13 +29,16 @@ public class RemoveThemeCommand implements Command {
         ThemeService themeService = new ThemeService();
         try {
             themeService.deleteTheme(themeId);
+            logger.info("Attempt to remove theme with id {}", themeId);
         } catch (EntityNotFoundException e) {
-            url += ERROR_NO_SUCH_THEME;
-            return PaginationUtil.appendPageFromRequest(url, req);
+            logger.error(e);
+            req.setAttribute(ControllerConstants.ERROR_ATR, "no_specified_theme");
+            return ControllerConstants.FORWARD_TO_ERROR_PAGE;
         } catch (IllegalDeletionException e) {
             url += ERROR_CANT_BE_DELETED;
             return PaginationUtil.appendPageFromRequest(url, req);
         }
+        logger.info("Theme removed successfully");
         url += SUCCESS;
         return PaginationUtil.appendPageFromRequest(url, req);
     }

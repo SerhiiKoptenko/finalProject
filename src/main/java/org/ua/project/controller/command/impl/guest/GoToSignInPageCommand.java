@@ -1,6 +1,7 @@
 package org.ua.project.controller.command.impl.guest;
 
 import org.ua.project.controller.command.Command;
+import org.ua.project.controller.constants.ControllerConstants;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -8,10 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class GoToSignInPageCommand implements Command {
-    private static final String LOGIN_PAGE = "/WEB-INF/jsp/signIn.jsp";
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        return LOGIN_PAGE;
+        return ControllerConstants.FORWARD_TO_SIGN_IN;
     }
 }

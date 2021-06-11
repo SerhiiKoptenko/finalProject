@@ -22,9 +22,6 @@ import java.util.Optional;
 public class UserSignInCommand implements Command {
     private static final Logger logger = LogManager.getLogger(UserSignInCommand.class);
 
-    private static final String GO_TO_MAIN_PAGE = "/index.jsp";
-    private static final String GO_TO_LOGIN_PAGE = "/sign_in_page?";
-
     public static final String LOGIN_FAILED_USER_BLOCKED = "signInError=userBlocked";
     private static final String LOGIN_FAILED_INVALID_DATA = "signInError=invalidData";
     private static final String LOGIN_FAILED_ALREADY_SIGNED_IN = "signInError=alreadySignedIn";
@@ -34,13 +31,10 @@ public class UserSignInCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String errorUrl = ControllerConstants.REDIRECT_PREFIX + GO_TO_LOGIN_PAGE;
+        String errorUrl = ControllerConstants.REDIRECT_TO_SIGN_IN_PAGE + "?";
 
-        final String LOGIN_PARAMETER = Parameter.LOGIN.getValue();
-        final String PASSWORD_PARAMETER = Parameter.PASSWORD.getValue();
-
-        String login = Optional.ofNullable(req.getParameter(LOGIN_PARAMETER)).orElse("");
-        String password = Optional.ofNullable(req.getParameter(PASSWORD_PARAMETER)).orElse("");
+        String login = Optional.ofNullable(req.getParameter(Parameter.LOGIN.getValue())).orElse("");
+        String password = Optional.ofNullable(req.getParameter(Parameter.PASSWORD.getValue())).orElse("");
 
         Validator validator = Validator.getInstance();
         ValidationResult result =  validator.validateSignInData(login, password);
@@ -82,6 +76,7 @@ public class UserSignInCommand implements Command {
         if (User.Role.ADMIN.equals(user.getRole())) {
             return ControllerConstants.REDIRECT_TO_MANAGE_COURSES_PAGE;
         }
+
         return ControllerConstants.REDIRECT_TO_MAIN_PAGE;
     }
 }

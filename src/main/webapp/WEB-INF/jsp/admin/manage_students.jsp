@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="../header.jsp" %>
+<c:set var="pageTitle" scope="page" value="Manage students"/>
 <fmt:message key="role" var="role"/>
 <fmt:message key="block" var="block"/>
 <fmt:message key="unblock" var="unblock"/>

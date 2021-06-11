@@ -21,6 +21,9 @@
 <fmt:message key="close" var="close"/>
 <fmt:message key="add" var="add"/>
 <fmt:message key="enter_theme_name" var="enter_theme_name"/>
+<fmt:message key="enter_theme_name" var="enter_theme_name"/>
+<fmt:message key="cant_delete_course" var="cant_delete_course"/>
+<fmt:message key="cant_delete_theme" var="cant_delete_theme"/>
 <main class="container mx-auto">
     <div class="row">
         <form id="add-course-form" action="/admin/manage_courses" method="POST" class="d-none">
@@ -124,6 +127,11 @@
                 ${course_delete_success}
             </div>
         </c:if>
+        <c:if test="${pageContext.request.getParameter('deleteResult') eq 'cantDelete'}">
+            <div class="alert alert-danger mt-2 mb-2" role="alert">
+                    ${cant_delete_course}
+            </div>
+        </c:if>
         <div class="p-1 ">
             <table class="table table-bordered border-primary ">
                 <thead>
@@ -164,8 +172,8 @@
                             </form>
                         </td>
                         <td>
-                            <form action="delete_course" class="text-center" method="POST">
-                                <input type="hidden" name="page" value="${currentPage}">
+                            <form action="delete_course" class="text-center" method="GET">
+                                <input type="hidden" name="courseName" value="${course.name}">
                                 <input type="hidden" name="courseId" value="${course.id}">
                                 <button type="submit" class="btn btn-outline-danger">${delete}</button>
                             </form>
@@ -243,7 +251,7 @@
                             </c:forEach>
                         </select>
                     <div id="cant-delete-theme-message" class="cant-delete-theme-message alert alert-danger mt-2 d-none" role="alert">
-                        Theme cannot be deleted. Delete courses associated with this theme first.
+                        ${cant_delete_theme}
                     </div>
             </div>
             <div class="modal-footer">

@@ -1,5 +1,7 @@
 package org.ua.project.controller.command.impl.user.tutor;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.ua.project.controller.command.Command;
 import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.constants.Parameter;
@@ -14,21 +16,25 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class UpdateStudentsMarkCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(UpdateStudentsMarkCommand.class);
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        int mark = Integer.parseInt(req.getParameter(Parameter.MARK.getValue()));
-        int studId = Integer.parseInt(req.getParameter(Parameter.STUDENT_ID.getValue()));
-        int courseId = Integer.parseInt(req.getParameter(Parameter.COURSE_ID.getValue()));
-        if (mark < 1 || mark  > 100) {
-            throw new IllegalArgumentException();
+        int mark;
+        int studId;
+        int courseId;
+
+        try {
+            mark = Integer.parseInt(req.getParameter(Parameter.MARK.getValue()));
+            studId = Integer.parseInt(req.getParameter(Parameter.STUDENT_ID.getValue()));
+            courseId = Integer.parseInt(req.getParameter(Parameter.COURSE_ID.getValue()));
+        } catch (NumberFormatException e) {
+            logger.error(e);
+            req.setAttribute(ControllerConstants.ERROR_ATR, "invalid_request_parameter");
+            return ControllerConstants.FORWARD_TO_ERROR_PAGE;
         }
-        if (studId < 0) {
-            throw new IllegalArgumentException();
-        }
-        if (courseId < 0) {
-            throw new IllegalArgumentException();
-        }
+
+
         User student = new User.Builder()
                 .setId(studId)
                 .build();

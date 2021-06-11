@@ -1,9 +1,11 @@
 package org.ua.project.model.entity;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 public class User implements Entity {
 
+    private static final long serialVersionUID = -7704312194658555099L;
     private int id;
     private String firstName;
     private String lastName;
@@ -156,7 +158,7 @@ public class User implements Entity {
                 '}';
     }
 
-    public enum Role {
+    public enum Role implements Serializable  {
         STUDENT, TUTOR, ADMIN, GUEST;
     }
 }

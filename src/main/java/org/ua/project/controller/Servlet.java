@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ua.project.controller.command.Command;
 import org.ua.project.controller.command.impl.GoToMainPageCommand;
-import org.ua.project.controller.command.impl.LocalizationCommand;
 import org.ua.project.controller.command.impl.admin.*;
 import org.ua.project.controller.command.impl.guest.GoToRegistrationPageCommand;
 import org.ua.project.controller.command.impl.guest.GoToSignInPageCommand;

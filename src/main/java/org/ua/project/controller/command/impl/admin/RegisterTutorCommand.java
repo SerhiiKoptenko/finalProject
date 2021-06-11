@@ -1,7 +1,5 @@
 package org.ua.project.controller.command.impl.admin;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.ua.project.controller.command.Command;
 import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.constants.Parameter;
@@ -14,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class RegisterTutorCommand implements Command {
-    private static final Logger logger = LogManager.getLogger(RegisterTutorCommand.class);
 
 
     @Override

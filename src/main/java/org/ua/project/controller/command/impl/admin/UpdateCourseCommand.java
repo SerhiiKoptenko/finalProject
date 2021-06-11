@@ -5,12 +5,14 @@ import org.apache.logging.log4j.Logger;
 import org.ua.project.controller.command.Command;
 import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.constants.Parameter;
+import org.ua.project.controller.exception.InvalidRequestParameterException;
 import org.ua.project.controller.exception.UnparseableDateException;
 import org.ua.project.controller.util.ControllerUtil;
 import org.ua.project.controller.util.PaginationUtil;
 import org.ua.project.controller.util.validation.ValidationResult;
 import org.ua.project.controller.util.validation.Validator;
 import org.ua.project.model.entity.Course;
+import org.ua.project.model.exception.EntityNotFoundException;
 import org.ua.project.model.service.CourseService;
 
 import javax.servlet.ServletException;
@@ -31,34 +33,15 @@ public class UpdateCourseCommand implements Command {
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Course course;
 
-
-        Optional<String> courseIdOpt = Optional.ofNullable(req.getParameter("courseId"));
-        if (!courseIdOpt.isPresent()) {
-            logger.error("no couse id specified");
-
-        }
-
-        int courseId;
         try {
-            courseId = Integer.parseInt(courseIdOpt.get());
-        } catch (NumberFormatException e) {
-            logger.error("can't parse course id");
-            return null;
-        }
-
-        try {
-            if (courseId < 1) {
-                logger.error("course id < 1");
-                return ControllerConstants.ERROR_500_PAGE;
-            }
             course = ControllerUtil.extractCourseFromRequest(req);
-            course.setId(courseId);
         } catch (UnparseableDateException e) {
             return ControllerConstants.REDIRECT_TO_EDIT_COURSE_PAGE + UPDATE_RESULT + ERROR_INVALID_DATA
                     + "&invalid_" + Parameter.COURSE_START_DATE_OR_END_DATE.getValue();
-        } catch (NumberFormatException e) {
-            logger.error("can't parse theme id");
-            return ControllerConstants.ERROR_500_PAGE;
+        } catch (InvalidRequestParameterException e) {
+            logger.error(e);
+            req.setAttribute(ControllerConstants.ERROR_ATR, "invalid_request_parameter");
+            return ControllerConstants.FORWARD_TO_ERROR_PAGE;
         }
 
         Validator validator = Validator.getInstance();
@@ -67,15 +50,17 @@ public class UpdateCourseCommand implements Command {
         if (!validationResult.isSuccessful()) {
             String url = ControllerConstants.REDIRECT_TO_EDIT_COURSE_PAGE;
             url += UPDATE_RESULT + ERROR_INVALID_DATA + validationResult.getInvalidParametersString();
-            url += COURSE_ID + courseId;
+            url += COURSE_ID + course.getId();
             return url;
         }
 
         CourseService courseService = new CourseService();
        try {
            courseService.updateCourse(course);
-       } catch (Exception e) {
-           //TODO: handle
+       } catch (EntityNotFoundException e) {
+           logger.error(e);
+           req.setAttribute(ControllerConstants.ERROR_ATR, "no_specified_course");
+           return ControllerConstants.FORWARD_TO_ERROR_PAGE;
        }
 
         String url = ControllerConstants.REDIRECT_TO_MANAGE_COURSES_PAGE + UPDATE_RESULT + SUCCESS;

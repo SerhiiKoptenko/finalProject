@@ -11,9 +11,8 @@
     <c:set var="prevLastName" scope="page" value="${pageContext.request.getParameter(\"prevLastName\")}"/>
     <c:set var="prevLogin" scope="page" value="${pageContext.request.getParameter(\"prevLogin\")}"/>
     <c:if test="${\"success\" ne regResult}">
-        <!--Registration form-->
+        <h3 class="text-center">${register}</h3>
         <%@include file="registration_form.jsp"%>
-        <!--Registration form-->
     </c:if>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">

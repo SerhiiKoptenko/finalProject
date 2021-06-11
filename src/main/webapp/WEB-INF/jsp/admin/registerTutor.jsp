@@ -1,17 +1,17 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<c:set var="pageTitle" scope="page" value="Registration tutor"/>
+<c:set var="pageTitle" scope="page" value="Register tutor"/>
 <%@ include file="../header.jsp" %>
 <fmt:message key="tutor_reg_success" var="tutor_reg_success"/>
+<fmt:message key="register_tutor" var="register_tutor"/>
 <main>
     <c:set var="regResult" scope="page" value="${pageContext.request.getParameter(\"registrationResult\")}"/>
     <c:set var="prevFirstName" scope="page" value="${pageContext.request.getParameter(\"prevFirstName\")}"/>
     <c:set var="prevLastName" scope="page" value="${pageContext.request.getParameter(\"prevLastName\")}"/>
     <c:set var="prevLogin" scope="page" value="${pageContext.request.getParameter(\"prevLogin\")}"/>
     <c:if test="${\"success\" ne regResult}">
-        <!--Registration form-->
+        <h3 class="text-center mt-3">${register_tutor}</h3>
         <%@include file="../registration_form.jsp"%>
-        <!--Registration form-->
     </c:if>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">

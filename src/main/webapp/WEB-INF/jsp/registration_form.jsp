@@ -4,7 +4,6 @@
 <fmt:message key="invalid_last_name" var="invalid_last_name"/>
 <fmt:message key="registration" var="registration"/>
 <div class="registrationForm container mx-auto p-5 rounded ">
-    <h3 class="text-center">${registration}</h3>
     <form action="registration_page" method="post">
         <input type="hidden" name="command" value="register">
         <div class="mb-3">

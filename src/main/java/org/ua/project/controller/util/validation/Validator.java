@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.Properties;
 
 public class Validator {
- private static final String VALIDATION_PROPERTIES = "validation/validation.properties";
+    private static final String VALIDATION_PROPERTIES = "validation/validation.properties";
     private final Properties properties = new Properties();
 
     private static volatile Validator instance;
@@ -24,7 +24,7 @@ public class Validator {
         }
     }
 
-    public static Validator getInstance()  {
+    public static Validator getInstance() {
         if (instance == null) {
             synchronized (Validator.class) {
                 if (instance == null) {
@@ -75,7 +75,8 @@ public class Validator {
         LocalDate startDate = course.getStartDate();
         LocalDate endDate = course.getEndDate();
 
-        if (startDate.isAfter(endDate) || startDate.isEqual(endDate)) {
+        if (startDate.isAfter(endDate) || startDate.isEqual(endDate)
+                || startDate.isBefore(LocalDate.now())) {
             validationResult.addInvalidParameter(Parameter.COURSE_START_DATE_OR_END_DATE);
             validationResult.setSuccessful(false);
         }

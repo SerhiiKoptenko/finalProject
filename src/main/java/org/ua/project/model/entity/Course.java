@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Course implements Entity {
+    private static final long serialVersionUID = -190484666951896577L;
     private int id;
     private String name;
     private Theme theme;

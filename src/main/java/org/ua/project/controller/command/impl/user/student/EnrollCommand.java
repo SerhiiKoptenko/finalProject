@@ -8,6 +8,7 @@ import org.ua.project.controller.constants.Parameter;
 import org.ua.project.model.entity.Course;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.exception.EntityNotFoundException;
+import org.ua.project.model.exception.IllegalInsertionException;
 import org.ua.project.model.service.CourseService;
 import org.ua.project.model.service.UserService;
 
@@ -20,7 +21,7 @@ import java.util.Optional;
 ;
 
 public class EnrollCommand implements Command {
-    private static Logger logger = LogManager.getLogger(EnrollCommand.class);
+    private static final Logger logger = LogManager.getLogger(EnrollCommand.class);
     private static final String UNEXPECTED_ERROR = "unexpectedError";
     private static final String SUCCESS = "success";
 
@@ -28,33 +29,26 @@ public class EnrollCommand implements Command {
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String url = ControllerConstants.REDIRECT_TO_ENROLL_PAGE + "?enrollResult=";
         HttpSession session = req.getSession();
-        User user = (User) session.getAttribute(ControllerConstants.USER_ATTR);
-        if (User.Role.GUEST.equals(user.getRole())) {
-            return ControllerConstants.REDIRECT_PREFIX + "/sign_in_page?signInError=needToLogin";
-        }
-
-
-        Optional<User> studentOpt = Optional.ofNullable((User) session.getAttribute(ControllerConstants.USER_ATTR));
-        Optional<String> courseIdOpt = Optional.ofNullable(req.getParameter(Parameter.COURSE_ID.getValue()));
-        if (!courseIdOpt.isPresent() || !studentOpt.isPresent()) {
-            return url + UNEXPECTED_ERROR;
-        }
-
         int courseId;
         try {
-            courseId = Integer.parseInt(courseIdOpt.get());
+            courseId = Integer.parseInt(req.getParameter(Parameter.COURSE_ID.getValue()));
         } catch (NumberFormatException e) {
-            return url + UNEXPECTED_ERROR;
+            logger.error(e);
+            req.setAttribute(ControllerConstants.ERROR_ATR, "invalid_request_parameter");
+            return ControllerConstants.FORWARD_TO_ERROR_PAGE;
         }
 
-
-        User student = studentOpt.get();
+        User student = (User) session.getAttribute(ControllerConstants.USER_ATTR);
         UserService userService = new UserService();
         logger.debug("user {} attempts to enroll in course with id {}",  student.getLogin(), courseId);
         try {
-            userService.enrollStudent(studentOpt.get().getId(), courseId);
-        } catch (Exception e) {
-            //TODO: handle
+            userService.enrollStudent(student.getId(), courseId);
+        } catch (EntityNotFoundException e) {
+            logger.error(e);
+            req.setAttribute(ControllerConstants.ERROR_ATR, "no_specified_course");
+        } catch (IllegalInsertionException e) {
+            logger.error(e);
+            req.setAttribute(ControllerConstants.ERROR_ATR, "cant_enroll_in_started_course");
         }
 
         return url + SUCCESS;

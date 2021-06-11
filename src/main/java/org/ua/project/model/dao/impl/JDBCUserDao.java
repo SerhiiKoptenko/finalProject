@@ -103,11 +103,13 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     }
 
     @Override
-    public boolean updateUserBlockedStatus(User user) throws DBException {
+    public boolean updateUserBlockedStatus(User user) throws DBException, EntityNotFoundException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(CHANGE_USER_BLOCK_STATUS)) {
             preparedStatement.setBoolean(1, user.isBlocked());
             preparedStatement.setInt(2, user.getId());
-            preparedStatement.executeUpdate();
+            if (preparedStatement.executeUpdate() < 1) {
+                throw new EntityNotFoundException();
+            }
             return true;
         } catch (SQLException e) {
             logger.error(e);

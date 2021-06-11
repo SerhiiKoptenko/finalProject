@@ -17,5 +17,5 @@ public interface UserDao extends Dao {
 
     User getUserByLogin(String login) throws DBException, EntityNotFoundException;
 
-    boolean updateUserBlockedStatus(User user) throws DBException;
+    boolean updateUserBlockedStatus(User user) throws DBException, EntityNotFoundException;
 }

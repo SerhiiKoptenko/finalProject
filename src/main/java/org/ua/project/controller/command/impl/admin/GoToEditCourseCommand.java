@@ -26,8 +26,14 @@ public class GoToEditCourseCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        int id = Integer.parseInt(req.getParameter(Parameter.COURSE_ID.getValue()));
-
+        int id;
+        try {
+            id = Integer.parseInt(req.getParameter(Parameter.COURSE_ID.getValue()));
+        } catch (NumberFormatException e) {
+            logger.error(e);
+            req.setAttribute(ControllerConstants.ERROR_ATR, "invalid_request_parameter");
+            return ControllerConstants.FORWARD_TO_ERROR_PAGE;
+        }
 
         CourseService courseService = new CourseService();
         ThemeService themeService = new ThemeService();
@@ -40,13 +46,14 @@ public class GoToEditCourseCommand implements Command {
             course = courseService.findCourseById(id);
         } catch (EntityNotFoundException e) {
             logger.error(e);
-            return ControllerConstants.ERROR_500_PAGE;
+            req.setAttribute(ControllerConstants.ERROR_ATR, "no_specified_course");
+            return ControllerConstants.FORWARD_TO_ERROR_PAGE;
         }
 
         course.setId(id);
         themes.remove(course.getTheme());
         Optional<User> tutorOpt = Optional.ofNullable(course.getTutor());
-        tutorOpt.ifPresent(tutor -> tutors.removeIf(user -> user.getLogin().equals(tutor.getLogin())));
+        tutorOpt.ifPresent(tutor -> tutors.removeIf(t -> t.getLogin().equals(tutor.getLogin())));
         req.setAttribute("editedCourse", course);
         req.setAttribute("tutors", tutors);
         req.setAttribute("themes", themes);

@@ -31,7 +31,7 @@ public class UserService {
         }
     }
 
-    public boolean updateUserBlockedStatus(User user) {
+    public boolean updateUserBlockedStatus(User user) throws EntityNotFoundException {
         try (UserDao jdbcUserDao = new JDBCDaoFactory().createUserDao()) {
             return jdbcUserDao.updateUserBlockedStatus(user);
         } catch (DBException e) {
