@@ -23,7 +23,6 @@ public class SessionListener implements HttpSessionListener {
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         User user = (User) se.getSession().getAttribute(ControllerConstants.USER_ATTR);
-        user.setRole(User.Role.GUEST);
         String login = user.getLogin();
         Set<String> userLogins = (Set<String>) se.getSession().getServletContext().getAttribute(ControllerConstants.LOGGED_USERS_ATTR);
         userLogins.remove(login);

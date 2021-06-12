@@ -1,4 +1,7 @@
-package org.ua.project.model.entity;
+package org.ua.project.model.entity.filter;
+
+import org.ua.project.model.entity.Theme;
+import org.ua.project.model.entity.User;
 
 public class CourseFilterOption {
     private User tutor;

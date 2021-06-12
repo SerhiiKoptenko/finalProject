@@ -28,6 +28,7 @@ public class EnrollCommand implements Command {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String url = ControllerConstants.REDIRECT_TO_ENROLL_PAGE + "?enrollResult=";
+        String courseName = req.getParameter(Parameter.COURSE_NAME.getValue());
         HttpSession session = req.getSession();
         int courseId;
         try {
@@ -46,11 +47,13 @@ public class EnrollCommand implements Command {
         } catch (EntityNotFoundException e) {
             logger.error(e);
             req.setAttribute(ControllerConstants.ERROR_ATR, "no_specified_course");
+            return ControllerConstants.FORWARD_TO_ERROR_PAGE;
         } catch (IllegalInsertionException e) {
             logger.error(e);
             req.setAttribute(ControllerConstants.ERROR_ATR, "cant_enroll_in_started_course");
+            return ControllerConstants.FORWARD_TO_ERROR_PAGE;
         }
 
-        return url + SUCCESS;
+        return url + SUCCESS + "&courseName=" + courseName;
     }
 }

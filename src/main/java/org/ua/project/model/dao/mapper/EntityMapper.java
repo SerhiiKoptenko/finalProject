@@ -20,11 +20,4 @@ public interface EntityMapper<T extends Entity> {
 
     T extract(ResultSet resultSet) throws SQLException;
 
-    default T setGeneratedId(PreparedStatement preparedStatement, T entity) throws SQLException{
-        ResultSet keys = preparedStatement.getGeneratedKeys();
-        keys.next();
-        int id = keys.getInt(1);
-        entity.setId(id);
-        return entity;
-    }
 }

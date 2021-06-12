@@ -40,6 +40,7 @@ public class DeleteCourseCommand implements Command {
         } catch (EntityNotFoundException e) {
             logger.error(e);
             req.setAttribute(ControllerConstants.ERROR_ATR, "no_specified_course");
+            return ControllerConstants.FORWARD_TO_ERROR_PAGE;
         }
 
         return url + "success";

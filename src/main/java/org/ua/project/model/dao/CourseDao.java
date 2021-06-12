@@ -1,9 +1,8 @@
 package org.ua.project.model.dao;
 
 import org.ua.project.model.entity.Course;
-import org.ua.project.model.entity.CourseFilterOption;
-import org.ua.project.model.entity.CourseSortParameter;
-import org.ua.project.model.entity.Theme;
+import org.ua.project.model.entity.filter.CourseFilterOption;
+import org.ua.project.model.entity.filter.CourseSortParameter;
 import org.ua.project.model.exception.DBException;
 import org.ua.project.model.exception.EntityNotFoundException;
 import org.ua.project.model.exception.IllegalDeletionException;

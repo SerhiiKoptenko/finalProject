@@ -4,6 +4,8 @@ import org.ua.project.controller.command.Command;
 import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.util.PaginationUtil;
 import org.ua.project.model.entity.*;
+import org.ua.project.model.entity.filter.CourseFilterOption;
+import org.ua.project.model.entity.filter.CourseSortParameter;
 import org.ua.project.model.service.CourseService;
 import org.ua.project.model.service.ThemeService;
 import org.ua.project.model.service.UserService;

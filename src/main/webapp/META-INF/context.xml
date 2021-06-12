@@ -9,9 +9,14 @@
     <!--
     <Manager pathname="" />
     -->
-    <Resource name="jdbc/TestDB" auth="Container" type="javax.sql.DataSource"
+    <Resource name="jdbc/university" auth="Container" type="javax.sql.DataSource"
               factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
               maxTotal="100" maxIdle="30" maxWaitMillis="10000"
               username="user-1111" password="1111" driverClassName="com.mysql.cj.jdbc.Driver"
               url="jdbc:mysql://localhost:3306/university"/>
+    <Resource name="jdbc/test_db" auth="Container" type="javax.sql.DataSource"
+              factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+              maxTotal="100" maxIdle="30" maxWaitMillis="10000"
+              username="user-1111" password="1111" driverClassName="com.mysql.cj.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/test_db"/>
 </Context>

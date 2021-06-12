@@ -14,7 +14,6 @@
                 <th>${first_name}</th>
                 <th>${last_name}</th>
                 <th>${login}</th>
-                <th>${role}</th>
                 <th class="text-center">${action}</th>
             </tr>
         </thead>
@@ -23,14 +22,15 @@
             <c:set var="count" value="0"/>
             <c:forEach items="${users}" var="user">
             <tr>
-                <td>${count + 1}</td>
+                <c:set var="count" value="${count + 1}"/>
+                <td>${count}</td>
                 <td>${user.firstName}</td>
                 <td>${user.lastName}</td>
                 <td>${user.login}</td>
-                <td>${user.role}</td>
                 <form method="POST">
                     <input type="hidden" name="command" value="updateUserBlockedStatus">
                     <input type="hidden" name="userId" value="${user.id}">
+                    <input type="hidden" name="login" value="${user.login}">
                 <c:if test="${user.blocked == false}">
                     <td class="text-center"><button type="submit" name="block" class="btn btn-danger" value="true">${block}</button></td>
                 </c:if>

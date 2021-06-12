@@ -6,7 +6,7 @@ import org.ua.project.model.dao.StudentCourseDao;
 import org.ua.project.model.dao.mapper.CourseMapper;
 import org.ua.project.model.dao.mapper.UserMapper;
 import org.ua.project.model.entity.Course;
-import org.ua.project.model.entity.CourseFilterOption;
+import org.ua.project.model.entity.filter.CourseFilterOption;
 import org.ua.project.model.entity.StudentCourse;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.exception.DBException;
@@ -119,6 +119,7 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
     @Override
     public void enrollStudent(int studId, int courseId) throws DBException, EntityNotFoundException, IllegalInsertionException {
         try (PreparedStatement enrollStudentStatement = connection.prepareStatement(ENROLL_USER)) {
+            connection.setAutoCommit(false);
             JDBCCourseDao courseDao = new JDBCCourseDao(connection);
             Course course = courseDao.findCourseById(courseId);
             if (course.getEndDate().compareTo(LocalDate.now()) < 0) {
@@ -127,9 +128,21 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
             enrollStudentStatement.setInt(1, studId);
             enrollStudentStatement.setInt(2, courseId);
             enrollStudentStatement.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
+           try {
+               connection.rollback();
+           } catch (SQLException excep) {
+               logger.error(excep);
+           }
             logger.error(e);
             throw new DBException(e);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                logger.error(e);
+            }
         }
     }
 

@@ -36,7 +36,7 @@ public class Servlet extends HttpServlet {
         servletConfig.getServletContext()
                 .setAttribute(ControllerConstants.LOGGED_USERS_ATTR, new HashSet<String>());
 
-        commands.put("/admin/manage_students", new GoToManageUsersCommand());
+        commands.put("/admin/manage_students", new GoToManageStudentsCommand());
         commands.put("/admin/manage_courses", new GoToManageCoursesPageCommand());
         commands.put("/admin/manage_courses?command=addCourse", new AddCourseCommand());
         commands.put("/admin/manage_courses?command=addTheme", new AddThemeCommand());

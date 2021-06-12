@@ -126,7 +126,6 @@ public class Course implements Entity {
         private LocalDate endDate;
         private User tutor;
         private String description;
-        private List<User> students;
         private int studentCount;
 
         public Builder setId(int id) {

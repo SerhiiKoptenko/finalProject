@@ -13,7 +13,7 @@ public class ConnectionPoolHolder {
             synchronized (ConnectionPoolHolder.class) {
                 try {
                     InitialContext initialContext = new InitialContext();
-                    DataSource temp = (DataSource) initialContext.lookup("java:comp/env/jdbc/TestDB");
+                    DataSource temp = (DataSource) initialContext.lookup("java:comp/env/jdbc/university");
                     dataSource = temp;
                 } catch (NamingException e) {
                     throw new RuntimeException(e);

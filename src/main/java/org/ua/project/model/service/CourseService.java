@@ -5,6 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.ua.project.model.dao.CourseDao;
 import org.ua.project.model.dao.impl.JDBCDaoFactory;
 import org.ua.project.model.entity.*;
+import org.ua.project.model.entity.filter.CourseFilterOption;
+import org.ua.project.model.entity.filter.CourseSortParameter;
 import org.ua.project.model.exception.DBException;
 import org.ua.project.model.exception.EntityNotFoundException;
 import org.ua.project.model.exception.IllegalDeletionException;

@@ -1,12 +1,11 @@
 package org.ua.project.model.dao.impl;
 
-import com.sun.xml.internal.bind.v2.model.core.ID;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.ua.project.model.dao.StudentCourseDao;
 import org.ua.project.model.entity.*;
-import org.ua.project.model.exception.DBException;
+import org.ua.project.model.entity.filter.CourseFilterOption;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

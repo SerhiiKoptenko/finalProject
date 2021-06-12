@@ -1,8 +1,10 @@
 package org.ua.project.model.entity;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class StudentCourse {
+public class StudentCourse implements Serializable {
+    private static final long serialVersionUID = 5289992206095326260L;
     private User student;
     private Course course;
     private int mark;

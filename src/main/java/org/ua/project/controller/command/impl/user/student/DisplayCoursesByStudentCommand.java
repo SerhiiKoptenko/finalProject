@@ -3,7 +3,7 @@ package org.ua.project.controller.command.impl.user.student;
 import org.ua.project.controller.command.Command;
 import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.constants.Parameter;
-import org.ua.project.model.entity.CourseFilterOption;
+import org.ua.project.model.entity.filter.CourseFilterOption;
 import org.ua.project.model.entity.StudentCourse;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.service.StudentCourseService;
@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 public class DisplayCoursesByStudentCommand implements Command {

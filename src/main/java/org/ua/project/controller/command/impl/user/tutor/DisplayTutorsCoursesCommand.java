@@ -4,8 +4,8 @@ import org.ua.project.controller.command.Command;
 import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.constants.Parameter;
 import org.ua.project.model.entity.Course;
-import org.ua.project.model.entity.CourseFilterOption;
-import org.ua.project.model.entity.CourseSortParameter;
+import org.ua.project.model.entity.filter.CourseFilterOption;
+import org.ua.project.model.entity.filter.CourseSortParameter;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.service.CourseService;
 

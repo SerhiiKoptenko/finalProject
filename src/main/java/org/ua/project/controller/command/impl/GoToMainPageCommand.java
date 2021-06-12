@@ -7,6 +7,8 @@ import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.constants.Parameter;
 import org.ua.project.controller.util.PaginationUtil;
 import org.ua.project.model.entity.*;
+import org.ua.project.model.entity.filter.CourseFilterOption;
+import org.ua.project.model.entity.filter.CourseSortParameter;
 import org.ua.project.model.service.CourseService;
 import org.ua.project.model.service.ThemeService;
 import org.ua.project.model.service.UserService;
@@ -52,6 +54,8 @@ public class GoToMainPageCommand implements Command {
                         .build();
             } catch (NumberFormatException e) {
                 logger.error(e);
+                req.setAttribute(ControllerConstants.ERROR_ATR, "invalid_request_parameter");
+                return ControllerConstants.FORWARD_TO_ERROR_PAGE;
             }
         }
         if (!themeStr.isEmpty()) {
@@ -62,6 +66,8 @@ public class GoToMainPageCommand implements Command {
                         .build();
             } catch (NumberFormatException e) {
                 logger.error(e);
+                req.setAttribute(ControllerConstants.ERROR_ATR, "invalid_request_parameter");
+                return ControllerConstants.FORWARD_TO_ERROR_PAGE;
             }
         }
 

@@ -56,7 +56,7 @@ public class UserSignInCommandTest {
         when(httpServletRequestMock.getSession()).thenReturn(httpSessionMock);
 
         String url = new UserSignInCommand().execute(httpServletRequestMock, httpServletResponseMock);
-        assertEquals("/index.jsp", url);
+        assertEquals("redirect:/main_page", url);
         assertTrue(loggedUsers.contains(userLogin));
     }
 }

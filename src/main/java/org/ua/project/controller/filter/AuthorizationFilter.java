@@ -77,20 +77,24 @@ public class AuthorizationFilter extends HttpFilter {
             url += "?command=" + command.get();
         }
         Optional<User> userOpt = Optional.ofNullable((User) request.getSession().getAttribute(ControllerConstants.USER_ATTR));
-        User.Role role;
-        boolean isUserBlocked = false;
-        if (userOpt.isPresent()) {
-            User user =  userOpt.get();
-            role = user.getRole();
-            isUserBlocked = user.isBlocked();
-        } else {
-            role = User.Role.GUEST;
-        }
+        User user = userOpt.orElse(new User.Builder()
+                .setRole(User.Role.GUEST)
+                .build());
 
-        if (allUrls.contains(url) && (!accessMap.get(role).contains(url) || isUserBlocked)) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN);
-        } else {
-            chain.doFilter(req, res);
+        if (allUrls.contains(url)) {
+            if (!User.Role.GUEST.equals(user.getRole())) {
+                Set<String> loggedUsers = (Set<String>) request.getSession().getServletContext().getAttribute(ControllerConstants.LOGGED_USERS_ATTR);
+                if (!loggedUsers.contains(user.getLogin())) {
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                    request.getSession().invalidate();
+                    return;
+                }
+            }
+            if (!accessMap.get(user.getRole()).contains(url)) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
         }
+        chain.doFilter(req, res);
     }
 }

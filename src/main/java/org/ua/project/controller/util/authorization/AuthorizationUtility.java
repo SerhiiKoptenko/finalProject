@@ -28,7 +28,6 @@ public class AuthorizationUtility {
                .build();
        HttpSession session = req.getSession();
        session.setAttribute(ControllerConstants.USER_ATTR, user);
-       session.setAttribute(ControllerConstants.USER_ROLE_ATTR, User.Role.GUEST);
        Set<String> loggedUsers = (Set<String>) session.getServletContext().getAttribute(ControllerConstants.LOGGED_USERS_ATTR);
        loggedUsers.remove(userLogin);
    }

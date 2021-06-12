@@ -1,4 +1,4 @@
-package org.ua.project.model.entity;
+package org.ua.project.model.entity.filter;
 
 import org.ua.project.controller.constants.Parameter;
 

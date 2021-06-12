@@ -6,7 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.ua.project.model.entity.*;
-import org.ua.project.model.exception.DBException;
+import org.ua.project.model.entity.filter.CourseFilterOption;
+import org.ua.project.model.entity.filter.CourseSortParameter;
 
 import java.sql.*;
 import java.time.LocalDate;
