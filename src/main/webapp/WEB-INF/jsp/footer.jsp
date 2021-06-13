@@ -2,7 +2,7 @@
     <hr class="featurette-divider"/>
     &copy; 2021 Company, Inc.
     <div style="float:right;" class="display-inline">
-        <form action="${lastRequest}" class="localization-form" method="post">
+        <form action="${lastRequest}" id="localization-form" method="post">
             <button type="submit" name="locale" value="en">En</button>
             <button type="submit" name="locale" value="ru">Ru</button>
         </form>

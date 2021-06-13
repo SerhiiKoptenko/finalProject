@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<c:set var="pageTitle" scope="page" value="Admin basis"/>
+<c:set var="pageTitle" scope="page" value="delete_course"/>
 <%@ include file="../header.jsp"%>
 <fmt:message key="delete_course_confirmation" var="delete_course_confirmation"/>
 <body>

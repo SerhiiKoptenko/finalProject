@@ -1,8 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html lang="en">
+<c:set var="pageTitle" value="main_page"/>
 <%@ include file="header.jsp" %>
-<c:set var="pageTitle" scope="page" value="Main page"/>
 <fmt:message key="available_courses" var="available_courses"/>
 <fmt:message key="filter" var="filter"/>
 <fmt:message key="apply_filter" var="apply_filter"/>
@@ -39,7 +39,7 @@
                     <label>${filter}</label>
                     <select id="tutor-filter" name="tutorId" class="form-select mb-1" id="tutor-filter">
                         <option value="" disabled selected>${by_tutor}</option>
-                        <option value="">All</option>
+                        <option value="">${all}</option>
                         <c:forEach items="${tutors}" var="tutor">
                             <option
                                     <c:if test="${selectedTutorId eq tutor.id}">selected</c:if>
@@ -111,16 +111,22 @@
                 <c:forEach items="${coursesPage}" var="course">
                     <tr>
                         <c:set var="count" value="${count + 1}"/>
-                        <c:set var="isStartDateAfterToday"><cust:isDateAfterToday date="${course.startDate}"/></c:set>
-                        <c:set var="isEndDateAfterToday"><cust:isDateAfterToday date="${course.endDate}"/></c:set>
                         <td>${count}</td>
                         <td>${course.name}</td>
                         <td>${course.theme.name}</td>
                         <td><tags:formatLocalDate date="${course.startDate}"/></td>
                         <td><tags:formatLocalDate date="${course.endDate}"/></td>
                         <td>${course.description}</td>
-                        <td>${course.tutor.firstName}</td>
-                        <td>${course.tutor.lastName}</td>
+                        <c:choose>
+                            <c:when test="${course.tutor ne null}">
+                                <td>${course.tutor.firstName}</td>
+                                <td>${course.tutor.lastName}</td>
+                            </c:when>
+                            <c:otherwise>
+                                <td colspan="2" class="text-center">${no_tutor_assigned}</td>
+                            </c:otherwise>
+                        </c:choose>
+
                         <td>${course.studentCount}</td>
                         <td>
                             <c:choose >

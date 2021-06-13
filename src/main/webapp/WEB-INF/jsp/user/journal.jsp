@@ -1,12 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<!DOCTYPE html>
-<html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="cust" uri="/WEB-INF/tags.tld" %>
+<c:set var="pageTitle" scope="page" value="journal"/>
 <%@ include file="../header.jsp" %>
 <fmt:message key="journal_for" var="journal_for"/>
 <fmt:message key="no_students_to_display" var="no_students_to_display"/>
-<body>
+<fmt:message key="update_mark" var="update_mark"/>
 <main class="container">
-    <h2 class="text-center">${journal_for} ${pageContext.request.getParameter("courseName")}</h2>
+    <h2 class="text-center">${journal_for} ${course.name}</h2>
     <c:set var="studentsByCourseSize">${fn:length(studentsByCourse)}</c:set>
     <c:choose>
         <c:when test="${studentsByCourseSize > 0}">
@@ -28,19 +29,34 @@
                         <td>${count}</td>
                         <td>${studentByCourse.student.firstName}</td>
                         <td>${studentByCourse.student.lastName}</td>
-                        <form action="?firstName=${studentByCourse.student.firstName}&lastName=${studentByCourse.student.lastName}">
-                            <input name="command" type="hidden" value="updateMark"/>
-                            <input name="studId" type="hidden" value="${studentByCourse.student.id}">
-                            <input name="courseId" type="hidden" value="${studentByCourse.course.id}">
-                            <td><c:if test="${studentByCourse.mark != 0}">
-                                <c:set var="mark" value="${studentByCourse.mark}"/>
-                            </c:if>
-                                <input name="mark" size="1" type="number" min="1" max="100" value="${mark}">
-                            </td>
-                            <td class="text-center">
-                                <button type="submit" class="btn btn-primary">Update mark</button>
-                            </td>
-                        </form>
+
+
+                            <c:set var="endDateAfterToday" scope="page">
+                                <cust:isDateAfterToday date="${course.endDate}"/>
+                            </c:set>
+                            <c:choose>
+                                <c:when test="${endDateAfterToday}">
+                                    <td class="text-center">-</td>
+                                    <td class="text-center">-</td>
+                                </c:when>
+                                <c:otherwise>
+                                    <form id="update-mark" method="post">
+                                    <td class="text-center"><c:if test="${studentByCourse.mark != 0}">
+                                        <c:set var="mark" value="${studentByCourse.mark}"/>
+                                    </c:if>
+                                        <input class="text-center" name="mark" size="1" type="number" min="1" max="100" value="${mark}">
+                                    </td>
+                                    <td class="text-center">
+
+                                            <input name="command" type="hidden" value="updateMark"/>
+                                            <input name="studId" type="hidden" value="${studentByCourse.student.id}">
+                                            <input name="courseId" type="hidden" value="${studentByCourse.course.id}">
+                                        <button type="submit" class="btn btn-primary">${update_mark}</button>
+                                    </td>
+                                    </form>
+                                </c:otherwise>
+                            </c:choose>
+
                     </tr>
                 </c:forEach>
                 </tbody>

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="pageTitle" scope="page" value="manage_students"/>
 <%@ include file="../header.jsp" %>
-<c:set var="pageTitle" scope="page" value="Manage students"/>
 <fmt:message key="role" var="role"/>
 <fmt:message key="block" var="block"/>
 <fmt:message key="unblock" var="unblock"/>

@@ -35,6 +35,12 @@ public class UpdateStudentsMarkCommand implements Command {
             return ControllerConstants.FORWARD_TO_ERROR_PAGE;
         }
 
+        if (mark < 1 || mark > 100) {
+            logger.error("Invalid mark value {}", mark);
+            req.setAttribute(ControllerConstants.ERROR_ATR, "invalid_request_parameter");
+            return ControllerConstants.FORWARD_TO_ERROR_PAGE;
+        }
+
 
         User student = new User.Builder()
                 .setId(studId)
@@ -49,6 +55,6 @@ public class UpdateStudentsMarkCommand implements Command {
                 .build();
         StudentCourseService studentCourseService = new StudentCourseService();
         studentCourseService.updateStudentsMark(studentCourse);
-        return ControllerConstants.REDIRECT_TO_JOURNAL + "?command=displayTutorsJournal&courseId=" + courseId;
+        return ControllerConstants.REDIRECT_TO_JOURNAL + "?courseId=" + courseId;
     }
 }

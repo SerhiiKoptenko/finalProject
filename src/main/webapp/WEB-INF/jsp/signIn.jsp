@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
-<c:set var="pageTitle" scope="page" value="Sign in page"/>
+<c:set var="pageTitle" scope="page" value="sign_in_page"/>
 <body id="sign_in_page">
 <%@ include file="header.jsp" %>
 <fmt:message key="wrong_password_or_login" var="wrong_password_or_login"/>

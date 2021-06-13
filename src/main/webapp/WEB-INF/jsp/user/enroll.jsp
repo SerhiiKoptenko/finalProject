@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
+    <c:set var="pageTitle" scope="page" value="enroll_page"/>
     <%@ include file="../header.jsp"%>
     <fmt:message key="go_back_to_available_courses" var="go_back_to_available_courses"/>
     <fmt:message key="enroll_success" var="enroll_success"/>

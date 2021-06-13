@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<!DOCTYPE html>
-<html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="pageTitle" scope="page" value="personal_cabinet"/>
 <%@ include file="../header.jsp" %>
 <fmt:message key="display_courses" var="display_courses"/>
 <fmt:message key="not_started" var="not_started"/>
@@ -62,8 +62,15 @@
                             <td><tags:formatLocalDate date="${studentsCourse.course.startDate}"/></td>
                             <td><tags:formatLocalDate date="${studentsCourse.course.endDate}"/></td>
                             <td>${studentsCourse.course.description}</td>
-                            <td>${studentsCourse.course.tutor.firstName}</td>
-                            <td>${studentsCourse.course.tutor.lastName}</td>
+                            <c:choose>
+                            <c:when test="${studentsCourse.course.tutor ne null}">
+                                <td>${studentsCourse.course.tutor.firstName}</td>
+                                <td>${studentsCourse.course.tutor.lastName}</td>
+                            </c:when>
+                            <c:otherwise>
+                                <td colspan="2" class="text-center">${no_tutor_assigned}</td>
+                            </c:otherwise>
+                        </c:choose>
                             <td>${studentsCourse.course.studentCount}</td>
                             <td class="text-center"><c:choose>
                                 <c:when test="${studentsCourse.mark != 0}">${studentsCourse.mark}</c:when>
@@ -107,14 +114,14 @@
         <form method="GET">
             <input type="hidden" name="command" value="displayTutorsCourses">
             <label for="tutors-courses-select">${display_courses}: </label>
+            <c:set var="displayedCourses" value="${pageContext.request.getParameter(\"displayCourses\")}"/>
             <select name="displayCourses" id="tutors-courses-select" class="form-select mb-3">
-                <option value="not_started">${not_started}</option>
-                <option value="ongoing">${ongoing}</option>
-                <option value="completed">${completed}</option>
+                <option value="not_started" <c:if test="${displayedCourses eq 'not_started'}">selected</c:if> >${not_started}</option>
+                <option value="ongoing" <c:if test="${displayedCourses eq 'ongoing'}">selected</c:if> >${ongoing}</option>
+                <option value="completed" <c:if test="${displayedCourses eq 'completed'}">selected</c:if> >${completed}</option>
             </select>
             <button type="submit" class="btn btn-primary mb-3">${display}</button>
         </form>
-        <c:set var="displayedCourses" value="${pageContext.request.getParameter(\"displayCourses\")}"/>
         <c:set var="tutorsCoursesListSize">${fn:length(tutorsCourses)}</c:set>
         <c:choose>
             <c:when test="${tutorsCoursesListSize > 0}">
@@ -128,9 +135,7 @@
                         <th>${end_date}</th>
                         <th>${description}</th>
                         <th>${students_enrolled}</th>
-                        <c:if test="${displayedCourses eq \"completed\"}">
                             <th class="text-center">${action}</th>
-                        </c:if>
                     </tr>
                     </thead>
                     <tbody>
@@ -145,7 +150,6 @@
                             <td><tags:formatLocalDate date="${tutorsCourse.endDate}"/></td>
                             <td>${tutorsCourse.description}</td>
                             <td>${tutorsCourse.studentCount}</td>
-                            <c:if test="${displayedCourses eq \"completed\"}">
                                 <td>
                                     <form method="GET" class="text-center" action="personal_cabinet/journal">
                                         <button class="btn btn-outline-success" type="submit">${display_journal}</button>
@@ -153,7 +157,6 @@
                                         <input type="hidden" name="courseName" value="${tutorsCourse.name}">
                                     </form>
                                 </td>
-                            </c:if>
                         </tr>
                     </c:forEach>
                     </tbody>

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<c:set var="pageTitle" scope="page" value="Manage courses"/>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="pageTitle" scope="page" value="edit_course"/>
 <%@ include file="../header.jsp" %>
 <fmt:message key="add_new_theme" var="add_new_theme"/>
 <fmt:message key="add_course_name" var="add_course_name"/>
@@ -20,7 +20,6 @@
 <fmt:message key="close" var="close"/>
 <fmt:message key="add" var="add"/>
 <fmt:message key="enter_theme_name" var="enter_theme_name"/>
-<fmt:message key="edit_course" var="edit_course"/>
 <fmt:message key="update_success" var="update_success"/>
 <main class="container mx-auto">
     <form id="edit-course-form" action="edit_course" method="POST">
@@ -28,7 +27,7 @@
         <input type="hidden" name="command" value="updateCourse">
         <input type="hidden" name="courseId" value="${editedCourse.id}">
         <div class="mb-2">
-            <h1 class="text-center mt-3">${edit_course}</h1>
+            <h1 class="text-center mt-3">${edit_course_msg}</h1>
 
             <label for="course-name" class="mt-5 mx-2 py-1">${course_name}:</label>
             <div class="input-group mb-2">
@@ -81,19 +80,14 @@
         </div>
         <button type="submit" class="btn btn-primary col-lg-2 offset-lg-5 mt-2 mb-2">${update}</button>
     </form>
-    <c:if test="${pageContext.request.getParameter(\"result\") eq \"errorInvalidData\"}">
+    <c:if test="${pageContext.request.getParameter(\"updateResult\") eq \"errorInvalidData\"}">
         <div class="alert alert-danger mt-2 mb-2" role="alert">
             <c:if test="${pageContext.request.getParameter(\"invalid_courseName\") ne null}">
-                ${invalid_course_name}.<br>
+                ${invalid_course_name}<br>
             </c:if>
             <c:if test="${pageContext.request.getParameter(\"invalid_startDateOrEndDate\") ne null}">
-                ${invalid_course_date}.<br>
+                ${invalid_course_date}<br>
             </c:if>
-        </div>
-    </c:if>
-    <c:if test="${pageContext.request.getParameter(\"result\") eq \"success\"}">
-        <div class="alert alert-success mt-2 mb-2" role="alert">
-                ${update_success}.
         </div>
     </c:if>
 </main>

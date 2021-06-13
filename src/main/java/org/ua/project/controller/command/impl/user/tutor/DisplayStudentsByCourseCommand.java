@@ -7,6 +7,8 @@ import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.constants.Parameter;
 import org.ua.project.model.entity.Course;
 import org.ua.project.model.entity.StudentCourse;
+import org.ua.project.model.exception.EntityNotFoundException;
+import org.ua.project.model.service.CourseService;
 import org.ua.project.model.service.StudentCourseService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,14 +32,19 @@ public class DisplayStudentsByCourseCommand implements Command {
             req.setAttribute(ControllerConstants.ERROR_ATR, "invalid_request_parameter");
             return ControllerConstants.FORWARD_TO_ERROR_PAGE;
         }
-
-        Course course = new Course.Builder()
-                .setId(courseId)
-                .build();
+        Course course;
+       try {
+           course = new CourseService().findCourseById(courseId);
+       } catch (EntityNotFoundException e) {
+           logger.error(e);
+           req.setAttribute(ControllerConstants.ERROR_ATR, "no_specified_course");
+           return ControllerConstants.FORWARD_TO_ERROR_PAGE;
+       }
 
         StudentCourseService studentCourseService = new StudentCourseService();
         List<StudentCourse> studentsByCourse = studentCourseService.getStudentsByCourse(course);
         req.setAttribute("studentsByCourse", studentsByCourse);
+        req.setAttribute("course", course);
         return ControllerConstants.FORWARD_TO_JOURNAL;
     }
 }

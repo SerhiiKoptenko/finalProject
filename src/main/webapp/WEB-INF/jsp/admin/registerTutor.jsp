@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<c:set var="pageTitle" scope="page" value="Register tutor"/>
+<c:set var="pageTitle" scope="page" value="register_tutor"/>
 <%@ include file="../header.jsp" %>
 <fmt:message key="tutor_reg_success" var="tutor_reg_success"/>
 <fmt:message key="register_tutor" var="register_tutor"/>

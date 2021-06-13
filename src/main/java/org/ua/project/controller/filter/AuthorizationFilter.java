@@ -63,7 +63,8 @@ public class AuthorizationFilter extends HttpFilter {
         List<String> tutorUrls = new ArrayList<>();
         tutorUrls.add("/user/personal_cabinet?command=displayTutorsCourses");
         tutorUrls.add("/user/personal_cabinet/journal");
-        tutorUrls.add("/user/personal_cabinet?command=updateMark");
+        tutorUrls.add("/user/personal_cabinet");
+        tutorUrls.add("/user/personal_cabinet/journal?command=updateMark");
         accessMap.put(User.Role.TUTOR, tutorUrls);
 
         allUrls.addAll(guestUrls);

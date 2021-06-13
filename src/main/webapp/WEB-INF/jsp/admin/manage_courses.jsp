@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<c:set var="pageTitle" scope="page" value="Manage courses"/>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="pageTitle" scope="page" value="manage_courses"/>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="../header.jsp" %>
 <fmt:message key="add_new_theme" var="add_new_theme"/>
@@ -160,9 +160,17 @@
                         <td><tags:formatLocalDate date="${course.startDate}"/></td>
                         <td><tags:formatLocalDate date="${course.endDate}"/></td>
                         <td>${course.description}</td>
-                        <td>${course.tutor.login}</td>
-                        <td>${course.tutor.firstName}</td>
-                        <td>${course.tutor.lastName}</td>
+
+                        <c:choose>
+                            <c:when test="${course.tutor ne null}">
+                                <td>${course.tutor.login}</td>
+                                <td>${course.tutor.firstName}</td>
+                                <td>${course.tutor.lastName}</td>
+                            </c:when>
+                            <c:otherwise>
+                                <td colspan="3" class="text-center">${no_tutor_assigned}</td>
+                            </c:otherwise>
+                        </c:choose>
                         <td>${course.studentCount}</td>
                         <td>
                             <form action="edit_course" class="text-center" method="POST">

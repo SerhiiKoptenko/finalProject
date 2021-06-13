@@ -25,7 +25,7 @@ public class UpdateCourseCommand implements Command {
     Logger logger = LogManager.getLogger(UpdateCourseCommand.class);
 
     private static final String UPDATE_RESULT = "?updateResult=";
-    private static final String ERROR_INVALID_DATA = "errorInvalidData?";
+    private static final String ERROR_INVALID_DATA = "errorInvalidData";
     private static final String SUCCESS = "success";
     private static final String COURSE_ID = "&" + Parameter.COURSE_ID.getValue() + "=";
 

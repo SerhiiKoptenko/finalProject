@@ -67,7 +67,7 @@ public class Servlet extends HttpServlet {
 
         commands.put("/user/personal_cabinet?command=displayStudentsCourses", new DisplayCoursesByStudentCommand());
         commands.put("/user/personal_cabinet/journal", new DisplayStudentsByCourseCommand());
-        commands.put("/user/personal_cabinet?journal?command=updateMark", new UpdateStudentsMarkCommand());
+        commands.put("/user/personal_cabinet/journal?command=updateMark", new UpdateStudentsMarkCommand());
         commands.put("/user/personal_cabinet/leave_course", new GoToLeaveCourseCommand());
         commands.put("/user/personal_cabinet/leave_course?command=leaveCourse", new LeaveCourseCommand());
 
