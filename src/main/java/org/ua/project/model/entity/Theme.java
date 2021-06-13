@@ -1,6 +1,9 @@
 package org.ua.project.model.entity;
 import java.util.Objects;
 
+/**
+ * Theme entity.
+ */
 public class Theme implements Entity {
     private static final long serialVersionUID = 2589053999558277164L;
     private int id;

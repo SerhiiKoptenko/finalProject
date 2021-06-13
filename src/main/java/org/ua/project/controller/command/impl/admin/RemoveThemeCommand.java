@@ -10,11 +10,12 @@ import org.ua.project.model.exception.EntityNotFoundException;
 import org.ua.project.model.exception.IllegalDeletionException;
 import org.ua.project.model.service.ThemeService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
+/**
+ * Command which attempts to delete existing theme.
+ */
 public class RemoveThemeCommand implements Command {
     private static final Logger logger = LogManager.getLogger(RemoveThemeCommand.class);
 
@@ -22,7 +23,7 @@ public class RemoveThemeCommand implements Command {
     private static final String SUCCESS =  "success";
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         String url = ControllerConstants.REDIRECT_TO_MANAGE_COURSES_PAGE + "?themeRemoved=";
 
         int themeId = Integer.parseInt(req.getParameter(Parameter.COURSE_THEME_ID.getValue()));

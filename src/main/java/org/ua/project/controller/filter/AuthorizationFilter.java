@@ -13,12 +13,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Web filter which controls access to resources and commands.
+ */
 public class AuthorizationFilter extends HttpFilter {
     private static final Map<User.Role, List<String>> accessMap = new HashMap<>();
     private static final List<String> allUrls = new ArrayList<>();
 
+    /**
+     * Adds urls to access map and to list containing all urls available in application.
+     */
     @Override
-    public void init() throws ServletException {
+    public void init() {
 
         List<String> guestUrls = new ArrayList<>();
         guestUrls.add("/registration_page");
@@ -66,6 +72,15 @@ public class AuthorizationFilter extends HttpFilter {
         allUrls.addAll(adminUrls);
     }
 
+    /**
+     * Verifies that the user is logged in and has rights to view request resource/execute command.
+     *
+     * @param req - the request to process.
+     * @param res - the response associated with request.
+     * @param chain - to pass request and response for further processing.
+     * @throws IOException - if an exception has occurred that interferes with the filterChain's normal operation.
+     * @throws ServletException - if an I/O related error has occurred during the processing.
+     */
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
@@ -82,13 +97,10 @@ public class AuthorizationFilter extends HttpFilter {
                 .build());
 
         if (allUrls.contains(url)) {
-            if (!User.Role.GUEST.equals(user.getRole())) {
-                Set<String> loggedUsers = (Set<String>) request.getSession().getServletContext().getAttribute(ControllerConstants.LOGGED_USERS_ATTR);
-                if (!loggedUsers.contains(user.getLogin())) {
-                    response.sendError(HttpServletResponse.SC_FORBIDDEN);
-                    request.getSession().invalidate();
-                    return;
-                }
+            if (!User.Role.GUEST.equals(user.getRole()) && !verifyUserLoggedIn(request, user)) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                request.getSession().invalidate();
+                return;
             }
             if (!accessMap.get(user.getRole()).contains(url)) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
@@ -96,5 +108,10 @@ public class AuthorizationFilter extends HttpFilter {
             }
         }
         chain.doFilter(req, res);
+    }
+
+    private boolean verifyUserLoggedIn(HttpServletRequest request, User user) {
+        Set<String> loggedUsers = (Set<String>) request.getSession().getServletContext().getAttribute(ControllerConstants.LOGGED_USERS_ATTR);
+        return loggedUsers.contains(user.getLogin());
     }
 }

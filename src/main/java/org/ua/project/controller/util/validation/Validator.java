@@ -9,6 +9,9 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Properties;
 
+/**
+ * Class for validation of input parameters.
+ */
 public class Validator {
     private static final String VALIDATION_PROPERTIES = "validation/validation.properties";
     private final Properties properties = new Properties();
@@ -24,6 +27,10 @@ public class Validator {
         }
     }
 
+    /**
+     * Return Validator instance.
+     * @return Validator instance.
+     */
     public static Validator getInstance() {
         if (instance == null) {
             synchronized (Validator.class) {
@@ -36,6 +43,11 @@ public class Validator {
         return instance;
     }
 
+    /**
+     * Validates user entity.
+     * @param user - user to be validated.
+     * @return validation result.
+     */
     public ValidationResult validateUser(User user) {
         ValidationResult result = new ValidationResult();
 
@@ -46,6 +58,11 @@ public class Validator {
         return result;
     }
 
+    /**
+     * Validates course entity.
+     * @param course - course to be validated.
+     * @return validation result.
+     */
     public ValidationResult validateCourse(Course course) {
         ValidationResult result = new ValidationResult();
 
@@ -54,6 +71,12 @@ public class Validator {
         return result;
     }
 
+    /**
+     * Validates sign in data.
+     * @param login - login to be validated.
+     * @param password - password to be validated.
+     * @return validation result.
+     */
     public ValidationResult validateSignInData(String login, String password) {
         ValidationResult result = new ValidationResult();
 
@@ -62,7 +85,7 @@ public class Validator {
         return result;
     }
 
-    public void validateParameter(String value, Parameter parameter, ValidationResult result) {
+    private void validateParameter(String value, Parameter parameter, ValidationResult result) {
         String regex = properties.getProperty(parameter.getValue() + ".regex");
 
         if (value == null || !value.matches(regex)) {

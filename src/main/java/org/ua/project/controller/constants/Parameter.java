@@ -40,7 +40,7 @@ public enum Parameter {
 
     BLOCK("block");
 
-    private String value;
+    private final String value;
 
 
     Parameter(String value) {

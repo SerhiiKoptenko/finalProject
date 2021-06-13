@@ -3,6 +3,9 @@ package org.ua.project.model.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Object representing student and course many to many relationship and containing students mark.
+ */
 public class StudentCourse implements Serializable {
     private static final long serialVersionUID = 5289992206095326260L;
     private User student;

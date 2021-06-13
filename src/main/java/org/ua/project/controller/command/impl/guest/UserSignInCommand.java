@@ -13,12 +13,13 @@ import org.ua.project.model.exception.EntityNotFoundException;
 import org.ua.project.model.service.UserService;
 import org.ua.project.model.service.exception.WrongPasswordException;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * Command which attempts to sign in user.
+ */
 public class UserSignInCommand implements Command {
     private static final Logger logger = LogManager.getLogger(UserSignInCommand.class);
 
@@ -30,7 +31,7 @@ public class UserSignInCommand implements Command {
 
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         String errorUrl = ControllerConstants.REDIRECT_TO_SIGN_IN_PAGE + "?";
 
         String login = Optional.ofNullable(req.getParameter(Parameter.LOGIN.getValue())).orElse("");

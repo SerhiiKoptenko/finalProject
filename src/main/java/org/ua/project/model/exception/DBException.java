@@ -1,5 +1,8 @@
 package org.ua.project.model.exception;
 
+/**
+ * Thrown if unexpected database error occurs.
+ */
 public class DBException extends Exception {
 
     public DBException(){}

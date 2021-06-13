@@ -7,17 +7,18 @@ import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.util.authorization.AuthorizationUtility;
 import org.ua.project.model.entity.User;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * Command which attempts to sign out user.
+ */
 public class UserSignOutCommand implements Command {
     private static final Logger logger = LogManager.getLogger(UserSignOutCommand.class);
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         Optional<User> userOpt = Optional.ofNullable((User) req.getSession().getAttribute(ControllerConstants.USER_ATTR));
         if (!userOpt.isPresent()) {
             return ControllerConstants.REDIRECT_TO_SIGN_IN_PAGE;

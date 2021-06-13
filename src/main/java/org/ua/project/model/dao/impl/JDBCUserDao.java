@@ -14,6 +14,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * JDBC UserDao implementation.
+ */
 public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     private static final Logger logger = LogManager.getLogger(JDBCUserDao.class);
 
@@ -38,7 +41,7 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     }
 
     @Override
-    public List<User> getUsersByRole(User.Role role) throws DBException {
+    public List<User> findUsersByRole(User.Role role) throws DBException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_USERS_BY_ROLE)) {
             preparedStatement.setString(1, role.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -72,7 +75,7 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     }
 
     @Override
-    public User getUserByLogin(String login) throws DBException, EntityNotFoundException {
+    public User findUserByLogin(String login) throws DBException, EntityNotFoundException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_LOGIN)) {
             preparedStatement.setString(1, login);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -103,14 +106,13 @@ public class JDBCUserDao extends JDBCAbstractDao implements UserDao {
     }
 
     @Override
-    public boolean updateUserBlockedStatus(User user) throws DBException, EntityNotFoundException {
+    public void updateUserBlockedStatus(User user) throws DBException, EntityNotFoundException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(CHANGE_USER_BLOCK_STATUS)) {
             preparedStatement.setBoolean(1, user.isBlocked());
             preparedStatement.setInt(2, user.getId());
             if (preparedStatement.executeUpdate() < 1) {
                 throw new EntityNotFoundException();
             }
-            return true;
         } catch (SQLException e) {
             logger.error(e);
             throw new DBException();

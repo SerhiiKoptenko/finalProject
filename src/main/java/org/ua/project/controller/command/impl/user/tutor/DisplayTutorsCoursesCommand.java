@@ -9,18 +9,19 @@ import org.ua.project.model.entity.filter.CourseSortParameter;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.service.CourseService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Command which displays courses associated with tutor.
+ */
 public class DisplayTutorsCoursesCommand implements Command {
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp){
         String url = ControllerConstants.FORWARD_TO_PERSONAL_CABINET;
 
         HttpSession session = req.getSession();

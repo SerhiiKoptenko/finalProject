@@ -5,11 +5,14 @@ import org.ua.project.controller.constants.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Contains result of validation and list of invalid parameters, if any.
+ */
 public final class ValidationResult {
     private boolean isSuccessful = true;
     private final List<Parameter> invalidParameters = new ArrayList<>();
 
-    protected ValidationResult(){};
+    protected ValidationResult(){}
 
     public boolean isSuccessful() {
         return isSuccessful;
@@ -27,6 +30,9 @@ public final class ValidationResult {
        invalidParameters.add(parameter);
     }
 
+    /**
+     * @return string containing all invalid parameters of validation.
+     */
     public String  getInvalidParametersString() {
         StringBuilder sb = new StringBuilder();
         for (Parameter parameter : invalidParameters) {

@@ -14,6 +14,9 @@ import org.ua.project.model.service.exception.ServiceException;
 
 import java.util.List;
 
+/**
+ * Service for course entities.
+ */
 public class CourseService {
     Logger logger = LogManager.getLogger(CourseService.class);
 

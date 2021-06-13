@@ -7,11 +7,11 @@ import org.ua.project.model.entity.Theme;
 import org.ua.project.model.exception.EntityAlreadyExistsException;
 import org.ua.project.model.service.ThemeService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
+/**
+ * Command to create new course theme.
+ */
 public class AddThemeCommand implements Command {
 
     private static final String ERROR_EMPTY_NAME = "empty";
@@ -21,7 +21,7 @@ public class AddThemeCommand implements Command {
 
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         String url = ControllerConstants.REDIRECT_TO_MANAGE_COURSES_PAGE + "?themeAdded=";
 
         String themeName = req.getParameter("themeName");

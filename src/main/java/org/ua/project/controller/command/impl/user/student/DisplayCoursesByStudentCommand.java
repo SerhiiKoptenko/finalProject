@@ -8,17 +8,18 @@ import org.ua.project.model.entity.StudentCourse;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.service.StudentCourseService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Commands which displays courses in which students has enrolled.
+ */
 public class DisplayCoursesByStudentCommand implements Command {
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         String url = ControllerConstants.FORWARD_TO_PERSONAL_CABINET;
         User user = (User) req.getSession().getAttribute(ControllerConstants.USER_ATTR);
         Optional<String> courseStatusOpt = Optional.ofNullable(req.getParameter(Parameter.DISPLAY_STUDENTS_COURSES.getValue()));

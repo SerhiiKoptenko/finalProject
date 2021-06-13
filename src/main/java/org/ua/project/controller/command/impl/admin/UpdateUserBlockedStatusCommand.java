@@ -9,17 +9,18 @@ import org.ua.project.model.entity.User;
 import org.ua.project.model.exception.EntityNotFoundException;
 import org.ua.project.model.service.UserService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Set;
 
+/**
+ * Command which updates user blocked status.
+ */
 public class UpdateUserBlockedStatusCommand implements Command {
     private static final Logger logger = LogManager.getLogger(UpdateUserBlockedStatusCommand.class);
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         boolean blocked = Boolean.parseBoolean(req.getParameter(Parameter.BLOCK.getValue()));
         String userLogin = req.getParameter(Parameter.LOGIN.getValue());
         int userId = Integer.parseInt(req.getParameter(Parameter.USER_ID.getValue()));

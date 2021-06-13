@@ -10,16 +10,17 @@ import org.ua.project.model.entity.StudentCourse;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.service.StudentCourseService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
+/**
+ * Command which attempts to update students mark.
+ */
 public class UpdateStudentsMarkCommand implements Command {
     private static final Logger logger = LogManager.getLogger(UpdateStudentsMarkCommand.class);
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         int mark;
         int studId;
         int courseId;

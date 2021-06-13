@@ -1,7 +1,5 @@
 package org.ua.project.controller.util;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.ua.project.controller.constants.Parameter;
 import org.ua.project.controller.exception.InvalidRequestParameterException;
 import org.ua.project.controller.exception.UnparseableDateException;
@@ -14,10 +12,23 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
+/**
+ * Utility class for controller use.
+ */
 public final class ControllerUtil {
 
-    private ControllerUtil(){}
+    //suppress default constructor
+    private ControllerUtil(){
+        throw new AssertionError();
+    }
 
+    /**
+     * Attempts to extract course entity from request parameters.
+     * @param req - HttpServletRequest from which course should be extracted.
+     * @return extracted course entity.
+     * @throws UnparseableDateException - if course start date or/and end date cannot be converted to LocalDate instance.
+     * @throws InvalidRequestParameterException - if request contains invalid course parameter.
+     */
     public static Course extractCourseFromRequest(HttpServletRequest req) throws UnparseableDateException, InvalidRequestParameterException {
         String courseName = req.getParameter(Parameter.COURSE_NAME.getValue());
 
@@ -44,7 +55,6 @@ public final class ControllerUtil {
             startDate = LocalDate.parse(req.getParameter(Parameter.COURSE_START_DATE.getValue()));
             endDate = LocalDate.parse(req.getParameter(Parameter.COURSE_END_DATE.getValue()));
         } catch (DateTimeParseException e) {
-
             throw new UnparseableDateException();
         }
 

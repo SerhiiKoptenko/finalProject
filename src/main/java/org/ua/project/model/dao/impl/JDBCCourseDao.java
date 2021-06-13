@@ -1,4 +1,5 @@
 package org.ua.project.model.dao.impl;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ua.project.model.dao.CourseDao;
@@ -17,6 +18,9 @@ import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 
+/**
+ * JDBC CourseDao implementation.
+ */
 public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
     private static final Logger logger = LogManager.getLogger(JDBCCourseDao.class);
 
@@ -77,6 +81,7 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
         createCourseStatement.setInt(4, course.getTheme().getId());
         createCourseStatement.setString(5, course.getDescription());
     }
+
 
     @Override
     public void createCourse(Course course) throws DBException, EntityNotFoundException {
@@ -157,7 +162,6 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
             throw new DBException(e);
         }
     }
-
 
     @Override
     public List<Course> getFilteredCourses(CourseSortParameter sortParameter, CourseFilterOption filterOption) throws DBException {

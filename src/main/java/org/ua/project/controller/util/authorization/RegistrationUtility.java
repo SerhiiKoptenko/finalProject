@@ -7,8 +7,10 @@ import org.ua.project.controller.util.validation.Validator;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.exception.EntityAlreadyExistsException;
 import org.ua.project.model.service.UserService;
-import org.ua.project.model.service.util.encryption.EncryptionUtil;
 
+/**
+ * Utility class for user registration.
+ */
 public class RegistrationUtility {
     private static final Logger logger = LogManager.getLogger(RegistrationUtility.class);
     private static final String REG_SUCCESS = "registrationResult=success";
@@ -20,6 +22,12 @@ public class RegistrationUtility {
         throw new AssertionError();
     }
 
+    /**
+     * Attempts to register user. Appends registration result and invalid parameters (if any) to redirect url.
+     * @param user - user to be registered.
+     * @param redirectUrl - url to append registration result to.
+     * @return redirectUrl with appended registration result.
+     */
     public static String registerUser(User user, String redirectUrl) {
         logger.info("Attempting to register user {}", user.getLogin());
         Validator validator = Validator.getInstance();
@@ -32,11 +40,9 @@ public class RegistrationUtility {
             return redirectUrl;
         }
 
-        user.setPassword(EncryptionUtil.encrypt(user.getPassword()));
-
         try {
             UserService userService = new UserService();
-            userService.addUser(user);
+            userService.registerUser(user);
         } catch (EntityAlreadyExistsException e) {
             redirectUrl += REG_FAILED_USER_EXISTS;
             redirectUrl = includePreviousValues(redirectUrl, user);

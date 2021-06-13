@@ -3,6 +3,9 @@ package org.ua.project.model.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * User entity.
+ */
 public class User implements Entity {
 
     private static final long serialVersionUID = -7704312194658555099L;

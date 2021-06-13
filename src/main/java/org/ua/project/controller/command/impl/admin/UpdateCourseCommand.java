@@ -15,12 +15,12 @@ import org.ua.project.model.entity.Course;
 import org.ua.project.model.exception.EntityNotFoundException;
 import org.ua.project.model.service.CourseService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Optional;
 
+/**
+ * Command which attempts to update existing course.
+ */
 public class UpdateCourseCommand implements Command {
     Logger logger = LogManager.getLogger(UpdateCourseCommand.class);
 
@@ -30,7 +30,7 @@ public class UpdateCourseCommand implements Command {
     private static final String COURSE_ID = "&" + Parameter.COURSE_ID.getValue() + "=";
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         Course course;
 
         try {

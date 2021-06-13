@@ -2,6 +2,9 @@ package org.ua.project.model.entity.filter;
 
 import org.ua.project.controller.constants.Parameter;
 
+/**
+ * Contains sorting options for course entities.
+ */
 public enum CourseSortParameter {
     BY_NAME_ASC,
     BY_NAME_DESC,

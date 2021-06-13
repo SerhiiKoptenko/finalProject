@@ -15,11 +15,12 @@ import org.ua.project.model.entity.Course;
 import org.ua.project.model.exception.EntityNotFoundException;
 import org.ua.project.model.service.CourseService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
+/**
+ * Command to create new course.
+ */
 public class AddCourseCommand implements Command {
     private static final Logger logger = LogManager.getLogger(AddCourseCommand.class);
 
@@ -28,7 +29,7 @@ public class AddCourseCommand implements Command {
     private static final String SUCCESS = "success";
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         String url = ControllerConstants.REDIRECT_TO_MANAGE_COURSES_PAGE;
         Course course;
         try {

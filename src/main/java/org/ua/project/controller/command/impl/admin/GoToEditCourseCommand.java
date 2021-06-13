@@ -13,19 +13,20 @@ import org.ua.project.model.service.CourseService;
 import org.ua.project.model.service.ThemeService;
 import org.ua.project.model.service.UserService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Command which forwards to edit course page and sets necessary request attributes.
+ */
 public class GoToEditCourseCommand implements Command {
     private static final Logger logger = LogManager.getLogger(GoToEditCourseCommand.class);
 
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         int id;
         try {
             id = Integer.parseInt(req.getParameter(Parameter.COURSE_ID.getValue()));

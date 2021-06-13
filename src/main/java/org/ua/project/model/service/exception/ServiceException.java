@@ -1,5 +1,8 @@
 package org.ua.project.model.service.exception;
 
+/**
+ * Thrown if unexpected service error occurs.
+ */
 public class ServiceException extends RuntimeException {
     public ServiceException() {
         super();

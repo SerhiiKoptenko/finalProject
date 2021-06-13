@@ -5,22 +5,19 @@ import org.apache.logging.log4j.Logger;
 import org.ua.project.controller.command.Command;
 import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.constants.Parameter;
-import org.ua.project.model.entity.Course;
-import org.ua.project.model.entity.StudentCourse;
-import org.ua.project.model.entity.User;
 import org.ua.project.model.service.StudentCourseService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
-import java.io.IOException;
 
+/**
+ * Command which attempts to deregister student from specified course.
+ */
 public class LeaveCourseCommand implements Command {
     private static final Logger logger = LogManager.getLogger(LeaveCourseCommand.class);
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         String courseName = req.getParameter(Parameter.COURSE_NAME.getValue());
         int studId;
         int courseId;

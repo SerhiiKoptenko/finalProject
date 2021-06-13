@@ -5,9 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.ua.project.model.dao.UserDao;
 import org.ua.project.model.entity.User;
-import org.ua.project.model.exception.DBException;
 
-import java.lang.ref.PhantomReference;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -74,7 +72,7 @@ public class JDBCUserDaoTest {
                 .build();
         try (Connection connection = TestConnectionProvider.getConnection()) {
             JDBCUserDao jdbcUserDao = new JDBCUserDao(connection);
-            User actual = jdbcUserDao.getUserByLogin(expected.getLogin());
+            User actual = jdbcUserDao.findUserByLogin(expected.getLogin());
             assertEquals(expected, actual);
         }
     }
@@ -148,7 +146,7 @@ public class JDBCUserDaoTest {
         List<User> expectedList = new ArrayList<>(Arrays.asList(expected));
         try (Connection connection = TestConnectionProvider.getConnection()) {
             UserDao userDao = new JDBCUserDao(connection);
-            List<User> actualList = userDao.getUsersByRole(User.Role.TUTOR);
+            List<User> actualList = userDao.findUsersByRole(User.Role.TUTOR);
             assertEquals(expectedList, actualList);
         }
     }

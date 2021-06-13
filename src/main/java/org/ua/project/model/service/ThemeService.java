@@ -13,11 +13,18 @@ import org.ua.project.model.service.exception.ServiceException;
 
 import java.util.List;
 
+/**
+ * Service for theme entities.
+ */
 public class ThemeService {
     private static final Logger logger = LogManager.getLogger(ThemeService.class);
 
-
-    public Theme createTheme(Theme theme) throws EntityAlreadyExistsException {
+    /**
+     * Creates theme specified by Theme entity.
+     * @param theme - theme to be created.
+     * @throws EntityAlreadyExistsException - if theme already exists.
+     */
+    public void createTheme(Theme theme) throws EntityAlreadyExistsException {
         try (ThemeDao themeDao = new JDBCDaoFactory().createThemeDao()) {
             themeDao.createTheme(theme);
         } catch (EntityAlreadyExistsException e) {
@@ -26,9 +33,12 @@ public class ThemeService {
             logger.error(e);
             throw new ServiceException(e);
         }
-        return theme;
     }
 
+    /**
+     * Finds all themes.
+     * @return list of all themes.
+     */
     public List<Theme> findAllThemes() {
         try (ThemeDao themeDao = new JDBCDaoFactory().createThemeDao()) {
             return themeDao.findAllThemes();
@@ -38,11 +48,15 @@ public class ThemeService {
         }
     }
 
+    /**
+     * Deletes theme with specified id.
+     * @param id - id of theme to be deleted.
+     * @throws EntityNotFoundException - if there is no theme with such id.
+     * @throws IllegalDeletionException - if theme cannot be deleted.
+     */
     public void deleteTheme(int id) throws EntityNotFoundException, IllegalDeletionException {
         try (ThemeDao themeDao = new JDBCDaoFactory().createThemeDao()) {
             themeDao.deleteTheme(id);
-        } catch (EntityNotFoundException | IllegalDeletionException e) {
-            throw e;
         } catch (DBException e) {
             logger.error(e);
             throw new ServiceException(e);

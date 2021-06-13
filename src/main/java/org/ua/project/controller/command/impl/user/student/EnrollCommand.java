@@ -5,28 +5,25 @@ import org.apache.logging.log4j.Logger;
 import org.ua.project.controller.command.Command;
 import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.constants.Parameter;
-import org.ua.project.model.entity.Course;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.exception.EntityNotFoundException;
 import org.ua.project.model.exception.IllegalInsertionException;
-import org.ua.project.model.service.CourseService;
+import org.ua.project.model.service.StudentCourseService;
 import org.ua.project.model.service.UserService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.Optional;
-;
 
+/**
+ * Command which attempts to enroll student in specified course.
+ */
 public class EnrollCommand implements Command {
     private static final Logger logger = LogManager.getLogger(EnrollCommand.class);
-    private static final String UNEXPECTED_ERROR = "unexpectedError";
     private static final String SUCCESS = "success";
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         String url = ControllerConstants.REDIRECT_TO_ENROLL_PAGE + "?enrollResult=";
         String courseName = req.getParameter(Parameter.COURSE_NAME.getValue());
         HttpSession session = req.getSession();
@@ -40,10 +37,10 @@ public class EnrollCommand implements Command {
         }
 
         User student = (User) session.getAttribute(ControllerConstants.USER_ATTR);
-        UserService userService = new UserService();
+        StudentCourseService studentCourseService = new StudentCourseService();
         logger.debug("user {} attempts to enroll in course with id {}",  student.getLogin(), courseId);
         try {
-            userService.enrollStudent(student.getId(), courseId);
+            studentCourseService.enrollStudent(student.getId(), courseId);
         } catch (EntityNotFoundException e) {
             logger.error(e);
             req.setAttribute(ControllerConstants.ERROR_ATR, "no_specified_course");

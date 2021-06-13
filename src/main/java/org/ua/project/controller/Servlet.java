@@ -7,7 +7,7 @@ import org.ua.project.controller.command.impl.GoToMainPageCommand;
 import org.ua.project.controller.command.impl.admin.*;
 import org.ua.project.controller.command.impl.guest.GoToRegistrationPageCommand;
 import org.ua.project.controller.command.impl.guest.GoToSignInPageCommand;
-import org.ua.project.controller.command.impl.guest.UserRegistrationCommand;
+import org.ua.project.controller.command.impl.guest.StudentRegistrationCommand;
 import org.ua.project.controller.command.impl.guest.UserSignInCommand;
 import org.ua.project.controller.command.impl.user.GoToPersonalCabinetCommand;
 import org.ua.project.controller.command.impl.user.student.*;
@@ -28,6 +28,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * HTTP servlet which acts as a main controller.
+ */
 public class Servlet extends HttpServlet {
     private static final Map<String, Command> commands = new HashMap<>();
     private static final Logger logger = LogManager.getLogger(Servlet.class);
@@ -51,7 +54,7 @@ public class Servlet extends HttpServlet {
 
         commands.put("/registration_page", new GoToRegistrationPageCommand());
         commands.put("/sign_in_page", new GoToSignInPageCommand());
-        commands.put("/registration_page?command=register", new UserRegistrationCommand());
+        commands.put("/registration_page?command=register", new StudentRegistrationCommand());
         commands.put("/signIn_page?command=signIn", new UserSignInCommand());
         commands.put("/signOut", new UserSignOutCommand());
 
@@ -82,6 +85,13 @@ public class Servlet extends HttpServlet {
         processRequest(req, resp);
     }
 
+    /**
+     * Processes request by finding and executing associated command.
+     * @param req - HttpServletRequest to be processed.
+     * @param resp - HttpServletResponse for sending redirects and errors.
+     * @throws ServletException - if forward target throws ServletException.
+     * @throws IOException - if an input or output exception occurs.
+     */
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = req.getRequestURI();
         Optional<String> commandParameter = Optional.ofNullable(req.getParameter("command"));

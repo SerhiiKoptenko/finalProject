@@ -15,20 +15,21 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * JDBC ThemeDao implementation.
+ */
 public class JDBCThemeDao extends JDBCAbstractDao implements ThemeDao {
     private static final Logger logger = LogManager.getLogger(JDBCThemeDao.class);
 
     private static final String FIND_ALL_THEMES;
     private static final String CREATE_THEME;
     private static final String DELETE_THEME;
-    private static final String FIND_THEME_BY_ID;
 
     static {
         SqlStatementLoader loader = SqlStatementLoader.getInstance();
         FIND_ALL_THEMES = loader.getSqlStatement("findAllThemes");
         CREATE_THEME = loader.getSqlStatement("createTheme");
         DELETE_THEME = loader.getSqlStatement("deleteTheme");
-        FIND_THEME_BY_ID = loader.getSqlStatement("findThemeById");
     }
 
     public JDBCThemeDao(Connection connection) {

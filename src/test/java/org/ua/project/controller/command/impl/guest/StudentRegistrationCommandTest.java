@@ -1,6 +1,5 @@
 package org.ua.project.controller.command.impl.guest;
 
-import org.easymock.internal.matchers.Any;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
@@ -20,8 +19,8 @@ import static org.powermock.api.mockito.PowerMockito.*;
 
 @PowerMockIgnore("javax.management.*")
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({UserRegistrationCommand.class, RegistrationUtility.class})
-public class UserRegistrationCommandTest {
+@PrepareForTest({StudentRegistrationCommand.class, RegistrationUtility.class})
+public class StudentRegistrationCommandTest {
 
     @Test
     public void testExecute() throws Exception {
@@ -49,9 +48,9 @@ public class UserRegistrationCommandTest {
         UserService userServiceMock = mock(UserService.class);
         whenNew(UserService.class).withNoArguments().thenReturn(userServiceMock);
 
-        doNothing().when(userServiceMock).addUser(user);
+        doNothing().when(userServiceMock).registerUser(user);
 
         String expected = ControllerConstants.REDIRECT_TO_REGISTRATION_PAGE + "?registrationResult=success";
-        assertEquals(expected, new UserRegistrationCommand().execute(httpServletRequestMock, httpServletResponseMock));
+        assertEquals(expected, new StudentRegistrationCommand().execute(httpServletRequestMock, httpServletResponseMock));
     }
 }

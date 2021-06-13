@@ -22,6 +22,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * JDBC StudentCourseDao implementation.
+ */
 public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCourseDao {
     private static final Logger logger = LogManager.getLogger(JDBCStudentCourseDao.class);
 
@@ -51,7 +54,6 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
     protected JDBCStudentCourseDao(Connection connection) {
         super(connection);
     }
-
 
     public List<StudentCourse> findCoursesByStudent(User student, CourseFilterOption courseFilterOption) throws DBException {
         CourseFilterOption.CourseStatus courseStatus = courseFilterOption.getCourseStatus();
@@ -147,7 +149,7 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
     }
 
     @Override
-    public boolean updateStudentsMark(StudentCourse studentCourse) throws DBException {
+    public void updateStudentsMark(StudentCourse studentCourse) throws DBException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_STUDENTS_MARK)) {
             preparedStatement.setInt(1, studentCourse.getMark());
             preparedStatement.setInt(2, studentCourse.getCourse().getId());
@@ -157,16 +159,14 @@ public class JDBCStudentCourseDao extends JDBCAbstractDao implements StudentCour
             logger.error(e);
             throw new DBException(e);
         }
-        return true;
     }
 
     @Override
-    public boolean removeStudentFromCourse(int studId, int courseId) throws DBException {
+    public void removeStudentFromCourse(int studId, int courseId) throws DBException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_STUDENT_FROM_COURSE)) {
             preparedStatement.setInt(1, studId);
             preparedStatement.setInt(2, courseId);
             preparedStatement.executeUpdate();
-            return true;
         } catch (SQLException e) {
             logger.error(e);
             throw new DBException(e);

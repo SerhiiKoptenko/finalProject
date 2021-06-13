@@ -2,9 +2,11 @@ package org.ua.project.model.entity;
 
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 
+/**
+ * Course entity.
+ */
 public class Course implements Entity {
     private static final long serialVersionUID = -190484666951896577L;
     private int id;

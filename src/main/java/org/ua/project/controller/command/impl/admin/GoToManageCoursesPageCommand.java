@@ -10,18 +10,19 @@ import org.ua.project.model.service.CourseService;
 import org.ua.project.model.service.ThemeService;
 import org.ua.project.model.service.UserService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
+/**
+ * Command which extracts necessary page of courses and forwards to manage courses page.
+ */
 public class GoToManageCoursesPageCommand implements Command {
 
     private static final String MANAGE_COURSES_PAGE = "/WEB-INF/jsp/admin/manage_courses.jsp";
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         UserService userService = new UserService();
         ThemeService themeService = new ThemeService();
         CourseService courseService = new CourseService();

@@ -7,6 +7,9 @@ import org.ua.project.model.exception.DBException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * JDBC abstract dao.
+ */
 public abstract class JDBCAbstractDao implements Dao {
     protected Connection connection;
 

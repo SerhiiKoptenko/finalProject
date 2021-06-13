@@ -13,18 +13,19 @@ import org.ua.project.model.service.CourseService;
 import org.ua.project.model.service.ThemeService;
 import org.ua.project.model.service.UserService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Command which fetches courses page based on filter and sorting criteria, and forwards to main page.
+ */
 public class GoToMainPageCommand implements Command {
     private static Logger logger = LogManager.getLogger();
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    public String execute(HttpServletRequest req, HttpServletResponse resp) {
         UserService userService = new UserService();
         ThemeService themeService = new ThemeService();
         CourseService courseService = new CourseService();
