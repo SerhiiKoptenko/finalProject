@@ -21,3 +21,4 @@
     <%@include file="../footer.jsp"%>
 </main>
 </body>
+</html>

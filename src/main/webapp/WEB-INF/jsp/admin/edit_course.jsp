@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="pageTitle" scope="page" value="edit_course"/>
+<html lang="en">
 <%@ include file="../header.jsp" %>
 <fmt:message key="add_new_theme" var="add_new_theme"/>
 <fmt:message key="add_course_name" var="add_course_name"/>
