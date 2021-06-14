@@ -8,6 +8,7 @@
 </c:if>
 <fmt:setBundle basename="i18n.app"/>
 <fmt:message key="${pageTitle}" var="localizedTitle"/>
+
 <fmt:message key="home" var="home"/>
 <fmt:message key="register" var="register"/>
 <fmt:message key="registration_success" var="registration_success"/>

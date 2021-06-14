@@ -4,6 +4,7 @@ import org.ua.project.controller.constants.Parameter;
 import org.ua.project.model.entity.Course;
 import org.ua.project.model.entity.User;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -35,8 +36,7 @@ public class Validator {
         if (instance == null) {
             synchronized (Validator.class) {
                 if (instance == null) {
-                    Validator temp = new Validator();
-                    instance = temp;
+                    instance = new Validator();
                 }
             }
         }
