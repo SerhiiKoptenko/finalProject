@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <html>
-<c:set var="pageTitle" scope="page" value="leave_course_page"/>
 <%@ include file="../header.jsp" %>
+<c:set var="pageTitle" scope="page" value="leave_course_page"/>
 <fmt:message key="leave_course_confirmation" var="leave_course_confirmation"/>
 <body>
 <main class="container">
