@@ -199,17 +199,12 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
     }
 
     private void prepareFilterStatement(CourseFilterOption filterOption, PreparedStatement preparedStatement) throws SQLException {
-        int themeId = 0;
-        int tutorId = 0;
-        int studId = 0;
-
-        Optional<Theme> themeOpt = Optional.ofNullable(filterOption.getTheme());
+        int themeId = Optional.ofNullable(filterOption.getTheme()).map(Theme::getId).orElse(0);
+        int tutorId = Optional.ofNullable(filterOption.getTutor()).map(User::getId).orElse(0);
+        int studId = Optional.ofNullable(filterOption.getAvailableForStudent()).map(User::getId).orElse(0);
         Optional<User> tutorOpt = Optional.ofNullable(filterOption.getTutor());
         Optional<User> studOpt = Optional.ofNullable(filterOption.getAvailableForStudent());
 
-        if (themeOpt.isPresent()) {
-            themeId = themeOpt.get().getId();
-        }
         if (tutorOpt.isPresent()) {
             tutorId = tutorOpt.get().getId();
         }
