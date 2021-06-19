@@ -87,9 +87,9 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
     public void createCourse(Course course) throws DBException, EntityNotFoundException {
         try (PreparedStatement createCourseStatement = connection.prepareStatement(CREATE_COURSE)) {
             setCourseParameters(course, createCourseStatement);
-            Optional<User> tutor = Optional.ofNullable(course.getTutor());
-            if (tutor.isPresent()) {
-                createCourseStatement.setInt(6, tutor.get().getId());
+            User tutor = course.getTutor();
+            if (tutor != null) {
+                createCourseStatement.setInt(6, tutor.getId());
             } else {
                 createCourseStatement.setNull(6, Types.INTEGER);
             }
@@ -120,9 +120,9 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
     public void updateCourse(Course course) throws DBException, EntityNotFoundException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_COURSE)) {
             setCourseParameters(course, preparedStatement);
-            Optional<User> tutor = Optional.ofNullable(course.getTutor());
-            if (tutor.isPresent()) {
-                preparedStatement.setInt(6, tutor.get().getId());
+            User tutor = course.getTutor();
+            if (tutor != null) {
+                preparedStatement.setInt(6, tutor.getId());
             } else {
                 preparedStatement.setNull(6, Types.INTEGER);
             }
@@ -202,15 +202,6 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
         int themeId = Optional.ofNullable(filterOption.getTheme()).map(Theme::getId).orElse(0);
         int tutorId = Optional.ofNullable(filterOption.getTutor()).map(User::getId).orElse(0);
         int studId = Optional.ofNullable(filterOption.getAvailableForStudent()).map(User::getId).orElse(0);
-        Optional<User> tutorOpt = Optional.ofNullable(filterOption.getTutor());
-        Optional<User> studOpt = Optional.ofNullable(filterOption.getAvailableForStudent());
-
-        if (tutorOpt.isPresent()) {
-            tutorId = tutorOpt.get().getId();
-        }
-        if (studOpt.isPresent()) {
-            studId = studOpt.get().getId();
-        }
 
         preparedStatement.setInt(1, themeId);
         preparedStatement.setInt(2, themeId);
@@ -258,16 +249,8 @@ public class JDBCCourseDao extends JDBCAbstractDao implements CourseDao {
         String sql = String.format(COUNT_COURSES_FILTERED, filterByStatusStatement);
         logger.debug("constructed query: {}", sql);
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            Optional<Theme> themeOpt = Optional.ofNullable(courseFilterOption.getTheme());
-            Optional<User> tutorOpt = Optional.ofNullable(courseFilterOption.getTutor());
-            int themeId = 0;
-            int tutorId = 0;
-            if (themeOpt.isPresent()) {
-                themeId = themeOpt.get().getId();
-            }
-            if (tutorOpt.isPresent()) {
-                tutorId = tutorOpt.get().getId();
-            }
+            int themeId = Optional.ofNullable(courseFilterOption.getTheme()).map(Theme::getId).orElse(0);
+            int tutorId = Optional.ofNullable(courseFilterOption.getTutor()).map(User::getId).orElse(0);
             preparedStatement.setInt(1, themeId);
             preparedStatement.setInt(2, themeId);
             preparedStatement.setInt(3, tutorId);
