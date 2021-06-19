@@ -2,7 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html lang="en">
 <c:set var="pageTitle" scope="page" value="manage_courses"/>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="cust" uri="/WEB-INF/tags.tld" %>
 <%@ include file="../header.jsp" %>
 <fmt:message key="add_new_theme" var="add_new_theme"/>
 <fmt:message key="add_course_name" var="add_course_name"/>
@@ -153,7 +154,7 @@
                 <tbody>
                 <c:set var="count" value="${fn:length(coursesPage) * (currentPage - 1)}"></c:set>
                 <c:forEach items="${coursesPage}" var="course">
-                    <tr>
+                    <>
                         <c:set var="count" value="${count + 1}"></c:set>
                         <td>${count}</td>
                         <td>${course.name}</td>

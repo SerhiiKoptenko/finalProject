@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="pageTitle" scope="page" value="edit_course"/>
 <html lang="en">
 <%@ include file="../header.jsp" %>
@@ -22,6 +22,7 @@
 <fmt:message key="add" var="add"/>
 <fmt:message key="enter_theme_name" var="enter_theme_name"/>
 <fmt:message key="update_success" var="update_success"/>
+<c:set var="isNotYetStarted"><cust:isDateAfterToday date="${editedCourse.startDate}"/></c:set>
 <main class="container mx-auto">
     <form id="edit-course-form" action="edit_course" method="POST">
         <input type="hidden" name="page" value="${pageContext.request.getParameter("page")}">
@@ -29,7 +30,7 @@
         <input type="hidden" name="courseId" value="${editedCourse.id}">
         <div class="mb-2">
             <h1 class="text-center mt-3">${edit_course_msg}</h1>
-
+            <c:if test="${isNotYetStarted}">
             <label for="course-name" class="mt-5 mx-2 py-1">${course_name}:</label>
             <div class="input-group mb-2">
                 <input id="course-name" name="courseName" type="text" class="form-control" value="${editedCourse.name}">
@@ -45,7 +46,7 @@
                 </select>
             </div>
         </div>
-        </div>
+
 
         <label for="start-date" class="mx-2 py-1 ">${start_date}:</label>
         <div class="input-group mb-2">
@@ -56,29 +57,34 @@
         <div class="input-group mb-2">
             <input id="end-date" name="endDate" type="date" class="form-control" value="${editedCourse.endDate}">
         </div>
+        </c:if>
 
 
         <c:set var="isTutorSet" value="${editedCourse.tutor ne null}"/>
         <label for="tutor" class="mx-2 py-1">${add_tutor}: </label>
         <div class="input-group mb-2 ">
             <select name="tutorId" class="form-select" id="tutor">
-                    <c:if test="${isTutorSet}">$
-                <option value="${edit_course.tutor.id}"
-                        selected>${editedCourse.tutor.firstName} ${editedCourse.tutor.lastName}
-                    (${editedCourse.tutor.login})
-                </option>
+                <c:if test="${isTutorSet}">$
+                    <option value="${edit_course.tutor.id}"
+                            selected>${editedCourse.tutor.firstName} ${editedCourse.tutor.lastName}
+                        (${editedCourse.tutor.login})
+                    </option>
                 </c:if>
                 </option>
-                <option <c:if test="${!isTutorSet}>">selected</c:if> value="">No tutor</option>
+                <option
+                        <c:if test="${!isTutorSet}>">selected</c:if> value="">No tutor
+                </option>
                 <c:forEach items="${tutors}" var="tutor">
                     <option value="${tutor.id}">${tutor.firstName} ${tutor.lastName} (${tutor.login})</option>
                 </c:forEach>
             </select>
         </div>
+        <c:if test="${isNotYetStarted}">
         <label for="description" class="mx-2 py-1">${course_description}: </label>
         <div class="input-group ">
             <textarea id="description" name="description" class="form-control">${editedCourse.description}</textarea>
         </div>
+        </c:if>
         <button type="submit" class="btn btn-primary col-lg-2 offset-lg-5 mt-2 mb-2">${update}</button>
     </form>
     <c:if test="${pageContext.request.getParameter(\"updateResult\") eq \"errorInvalidData\"}">
