@@ -61,9 +61,8 @@ public class UserSignInCommand implements Command {
             return errorUrl;
         }
 
-        Set<String> users = (Set<String>) req.getSession().getServletContext().getAttribute(ControllerConstants.LOGGED_USERS_ATTR);
-        users.add(user.getLogin());
-        if (!users.add(user.getLogin())) {
+        Set<String> usersLogins = (Set<String>) req.getSession().getServletContext().getAttribute(ControllerConstants.LOGGED_USERS_ATTR);
+        if (!usersLogins.add(user.getLogin())) {
             errorUrl += LOGIN_FAILED_ALREADY_SIGNED_IN;
             errorUrl += PREV_LOGIN + login;
             return errorUrl;
