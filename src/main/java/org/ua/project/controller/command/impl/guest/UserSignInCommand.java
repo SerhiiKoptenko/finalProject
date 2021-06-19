@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.ua.project.controller.command.Command;
 import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.constants.Parameter;
-import org.ua.project.controller.util.authorization.AuthorizationUtility;
 import org.ua.project.controller.util.validation.ValidationResult;
 import org.ua.project.controller.util.validation.Validator;
 import org.ua.project.model.entity.User;
@@ -16,6 +15,7 @@ import org.ua.project.model.service.exception.WrongPasswordException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Command which attempts to sign in user.
@@ -61,13 +61,15 @@ public class UserSignInCommand implements Command {
             return errorUrl;
         }
 
-        if (!AuthorizationUtility.signInUser(req, user.getLogin())) {
+        Set<String> users = (Set<String>) req.getSession().getServletContext().getAttribute(ControllerConstants.LOGGED_USERS_ATTR);
+        users.add(user.getLogin());
+        if (!users.add(user.getLogin())) {
             errorUrl += LOGIN_FAILED_ALREADY_SIGNED_IN;
             errorUrl += PREV_LOGIN + login;
             return errorUrl;
         }
 
-        AuthorizationUtility.saveUserToSession(req, user);
+        req.getSession().setAttribute(ControllerConstants.USER_ATTR, user);
         logger.info("User {} successfully signed in.", user.getLogin());
 
         if (User.Role.TUTOR.equals(user.getRole())) {

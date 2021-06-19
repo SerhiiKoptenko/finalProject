@@ -3,7 +3,7 @@ package org.ua.project.controller.command.impl.admin;
 import org.ua.project.controller.command.Command;
 import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.constants.Parameter;
-import org.ua.project.controller.util.authorization.RegistrationUtility;
+import org.ua.project.controller.util.RegistrationUtility;
 import org.ua.project.model.entity.User;
 
 import javax.servlet.http.HttpServletRequest;

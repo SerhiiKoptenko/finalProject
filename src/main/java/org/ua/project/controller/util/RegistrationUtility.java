@@ -1,4 +1,4 @@
-package org.ua.project.controller.util.authorization;
+package org.ua.project.controller.util;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

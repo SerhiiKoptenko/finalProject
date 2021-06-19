@@ -7,7 +7,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.ua.project.controller.constants.ControllerConstants;
 import org.ua.project.controller.constants.Parameter;
-import org.ua.project.controller.util.authorization.RegistrationUtility;
+import org.ua.project.controller.util.RegistrationUtility;
 import org.ua.project.model.entity.User;
 import org.ua.project.model.service.UserService;
 
